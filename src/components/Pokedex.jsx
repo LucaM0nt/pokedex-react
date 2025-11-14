@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { useGetAllPokemonQuery } from "../store/pokeApiSlice";
+import PokemonListItem from "./PokemonListItem";
 
 export default function Pokedex() {
   const [pokemonList, setPokemonList] = useState([]);
-  const [url, setUrl] = useState({ limit: 50, offset: 0 });
+  const [url, setUrl] = useState({ limit: 30, offset: 0 });
   const containerRef = useRef(null);
 
   const { data, error, isLoading } = useGetAllPokemonQuery(url);
@@ -50,9 +51,7 @@ export default function Pokedex() {
     <div ref={containerRef} className="flex-1 overflow-y-auto p-4 bg-gray-100">
       <ul className="space-y-2">
         {pokemonList.map((pokemon) => (
-          <li key={pokemon.name} className="p-2 bg-white rounded shadow">
-            {pokemon.name}
-          </li>
+          <PokemonListItem pokemon={pokemon} />
         ))}
         {isLoading && <li>Loading...</li>}
         {error && <li>Error loading Pokémon</li>}
