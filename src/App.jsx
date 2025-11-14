@@ -1,21 +1,21 @@
-import { useGetAllPokemonQuery } from "./store/pokeApiSlice";
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import siteRoutes from "./siteRoutes"
+
+import './App.css'
 
 function App() {
-  const { data, error, isLoading } = useGetAllPokemonQuery(); 
-
-  if (isLoading) return <div>Loading...</div>; 
-  if (error) return <div>Error: {error.message}</div>; 
+  const routes = createBrowserRouter(siteRoutes)
 
   return (
-    <div>
-      <h1>Pokémon List</h1>
+    <>
+      <RouterProvider router={routes} />
       <ul>
         {data.results.map((pokemon) => (
           <li key={pokemon.name}>{pokemon.name}</li>
         ))}
       </ul>
-    </div>
-  );
+    </>
+  )
 }
 
 export default App;
