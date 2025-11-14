@@ -3,7 +3,7 @@ import { useGetAllPokemonQuery } from "../store/pokeApiSlice";
 
 export default function Pokedex() {
   const [pokemonList, setPokemonList] = useState([]);
-  const [url, setUrl] = useState({ limit: 50, offset: 0 });
+  const [url, setUrl] = useState({ limit: 30, offset: 0 });
   const containerRef = useRef(null);
 
   const { data, error, isLoading } = useGetAllPokemonQuery(url);
