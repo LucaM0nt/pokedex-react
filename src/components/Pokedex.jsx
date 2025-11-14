@@ -50,9 +50,11 @@ export default function Pokedex() {
   return (
     <div ref={containerRef} className="flex-1 overflow-y-auto p-4 bg-gray-100">
       <ul className="space-y-2">
-        {pokemonList.map((pokemon) => (
-          <PokemonListItem pokemon={pokemon} />
-        ))}
+        {pokemonList.map((pokemon) => {
+          const id = Number(pokemon.url.replace(/\/$/, "").split("/").pop());
+          return <PokemonListItem key={id} pkmnId={id} />;
+        })}
+
         {isLoading && <li>Loading...</li>}
         {error && <li>Error loading Pokémon</li>}
       </ul>
