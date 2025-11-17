@@ -1,4 +1,5 @@
 import { useGetPokemonQuery, useGetPokemonSpeciesQuery } from "../store/pokeApiSlice";
+import TypeTag from "./TypeTag";
 import React, { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
 
@@ -114,6 +115,13 @@ export default function PokedexEntry() {
                 <h2 className="text-3xl font-bold capitalize">
                     #{pokemonData.id} {pokemonData.name}
                 </h2>
+
+                {/* Pokémon Types */}
+                <div className="mt-4 text-sm capitalize">
+                    {pokemonData.types?.map((t) => (
+                        <TypeTag key={t.type.name} type={t.type.name} />
+                    ))}
+                </div>
 
                 {/* Pokédex Entry */}
                 <div className="mt-4 text-sm text-gray-600">
