@@ -7,7 +7,7 @@ export default function Pokedex() {
   const [url, setUrl] = useState({ limit: 30, offset: 0 });
   const containerRef = useRef(null);
 
-  const { data, error, isLoading } = useGetAllPokemonQuery(url);
+  const { data, error, isLoading, isFetching } = useGetAllPokemonQuery(url);
 
   // Accumula i Pokémon
   useEffect(() => {
@@ -16,22 +16,18 @@ export default function Pokedex() {
     }
   }, [data]);
 
-  // Lazy loading con scroll interno
+  // Lazy loading: ascoltiamo lo scroll sul container stesso (Pokedex)
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    // Il container scrollabile vero è il main del layout (genitore).
-    // Se il div interno non è scrollabile (overflow sul genitore), ascoltiamo il genitore.
-    const scrollContainer = container.parentElement;
-    if (!scrollContainer) return;
-
     const handleScroll = () => {
       if (!data?.next) return;
+      if (isFetching) return; // evita richieste sovrapposte
 
       const nearBottom =
-        scrollContainer.scrollHeight - scrollContainer.scrollTop <=
-        scrollContainer.clientHeight + 100;
+        container.scrollHeight - container.scrollTop <=
+        container.clientHeight + 100;
       if (!nearBottom) return;
 
       const params = new URL(data.next).searchParams;
@@ -41,14 +37,12 @@ export default function Pokedex() {
       });
     };
 
-    scrollContainer.addEventListener("scroll", handleScroll);
-    // Eseguiamo una chiamata iniziale nel caso il contenuto sia già corto
-    handleScroll();
-    return () => scrollContainer.removeEventListener("scroll", handleScroll);
+    container.addEventListener("scroll", handleScroll);
+    return () => container.removeEventListener("scroll", handleScroll);
   }, [data]);
 
   return (
-    <div ref={containerRef} className="flex-1 overflow-y-auto p-4 bg-gray-100">
+    <div ref={containerRef} className="h-full overflow-y-auto p-4 bg-gray-100">
       <ul className="space-y-2">
         {pokemonList.map((pokemon) => {
           const id = Number(pokemon.url.replace(/\/$/, "").split("/").pop());

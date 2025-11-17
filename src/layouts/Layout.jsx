@@ -7,8 +7,8 @@ export default function Layout() {
     <div className="flex flex-col h-screen">
       <Header />
 
-      {/* Main occupa lo spazio rimanente */}
-      <main className="flex-1 overflow-y-auto container mx-auto mt-4">
+      {/* Main occupa lo spazio rimanente; lascia spazio per header e footer */}
+      <main className="flex-1 container mx-auto pt-16 pb-40 min-h-0">
         <Outlet />
       </main>
 
