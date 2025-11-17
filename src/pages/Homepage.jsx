@@ -8,7 +8,7 @@ export default function Homepage() {
                 <Pokedex />
             </div>
 
-            <aside className="md:w-2/5 h-auto sticky bg-amber-500">
+            <aside className="md:w-2/5 h-auto sticky">
                 <PokemonPreview id={1} />
             </aside>
         </div>
