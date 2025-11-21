@@ -1,169 +1,221 @@
-import { useGetPokemonQuery, useGetPokemonSpeciesQuery } from "../store/pokeApiSlice";
+import {
+  useGetPokemonQuery,
+  useGetPokemonSpeciesQuery,
+} from "../store/pokeApiSlice";
 import TypeTag from "./TypeTag";
 import React, { useState, useEffect } from "react";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 
-// Funzione per estrarre la catena evolutiva
-const fetchEvolutionChain = async (evolutionUrl) => {
-    const response = await fetch(evolutionUrl);
-    const data = await response.json();
-
-    return data;
-};
-
-const getEvolutions = (chain) => {
-    let evolutions = [];
-    let current = chain;
-
-    // Iteriamo attraverso la catena evolutiva
-    while (current) {
-        // Aggiungiamo la specie corrente alla lista delle evoluzioni
-        evolutions.push(current.species);
-        // Se ci sono evoluzioni, prendiamo la prima
-        current = current.evolves_to[0]; // Solo la prima evoluzione, possiamo modificarlo se vogliamo supportare rami
-    }
-
-    return evolutions;
-};
-
-// "Cleaning" globale di tutte le sequenze di caratteri non desiderati
-// Funzione che fa il parsing del testo, sostituendo \n e \f
+// ---------- TEXT PARSER ----------
 const parseText = (text) => {
-    if (!text) return null;
+  if (!text) return null;
+  let parsedText = text
+    .replace(/\n/g, " ")
+    .replace(/\f/g, " ")
+    .replace(/POKéMON/g, "Pokémon");
 
-    // Sostituisci i caratteri problematici
-    let parsedText = text
-        .replace(/\n/g, ' ')  // Sostituisci \n con ritorno a capo
-        .replace(/\f/g, ' ')   // Sostituisci \f con uno spazio
-        .replace(/POKéMON/g, 'Pokémon'); // Sostituisci POKéMON con la versione corretta
-
-    // Ora split il testo su ogni linea, creiamo un array con JSX che React gestirà
-    return parsedText.split('\n').map((line, index) => (
-        <React.Fragment key={index}>
-            {line}
-            {index < parsedText.split('\n').length - 1 && <br />}
-        </React.Fragment>
-    ));
+  return parsedText.split("\n").map((line, index) => (
+    <React.Fragment key={index}>
+      {line}
+      {index < parsedText.split("\n").length - 1 && <br />}
+    </React.Fragment>
+  ));
 };
 
-export default function PokedexEntry() {
-    // Otteniamo l'id del Pokémon dalla URL
-    const { id } = useParams();
+// ---------- EVOLUTION TREE BUILDING ----------
+const buildEvolutionTree = (node) => {
+  if (!node) return null;
+  return {
+    name: node.species.name,
+    url: node.species.url,
+    evolves_to: node.evolves_to.map((child) => buildEvolutionTree(child)),
+  };
+};
 
-    // Query per i dati del Pokémon
-    const { data: pokemonData, error: pokemonError, isLoading: isLoadingPokemon } = useGetPokemonQuery(id);
+const fetchEvolutionTree = async (url) => {
+  const res = await fetch(url);
+  const data = await res.json();
+  return buildEvolutionTree(data.chain);
+};
 
-    // Query per i dati della specie del Pokémon
-    const { data: speciesData, error: speciesError, isLoading: isLoadingSpecies } = useGetPokemonSpeciesQuery(id);
-
-    const [evolutionChain, setEvolutionChain] = useState(null);
-
-    // Carichiamo la catena evolutiva quando i dati della specie sono pronti
-    useEffect(() => {
-        if (speciesData?.evolution_chain) {
-            fetchEvolutionChain(speciesData.evolution_chain.url)
-                .then((data) => {
-                    const evolutions = getEvolutions(data.chain); // Otteniamo solo le evoluzioni
-                    console.log(evolutions);
-
-                    setEvolutionChain(evolutions); // Salviamo le evoluzioni
-                })
-                .catch(console.error);
-        }
-    }, [speciesData]);
-
-    // Gestione del loading
-    if (isLoadingPokemon || isLoadingSpecies) {
-        return (
-            <div className="p-4 bg-white rounded-lg shadow">
-                Loading...
-            </div>
-        );
-    }
-
-    // Gestione degli errori
-    if (pokemonError || speciesError) {
-        return (
-            <div className="p-4 bg-white rounded-lg shadow text-red-600">
-                Errore nel caricamento dei dati.
-            </div>
-        );
-    }
-
-    // Gestione del caso in cui i dati non sono disponibili
-    if (!pokemonData || !speciesData) {
-        return (
-            <div className="p-4 bg-white rounded-lg shadow">
-                Nessun dato disponibile.
-            </div>
-        );
-    }
-
-    const flavorText = speciesData.flavor_text_entries.find(entry => entry.language.name === 'en')?.flavor_text || '';
-
-    return (
-        <div className="p-6 bg-white rounded-lg shadow">
-            <div className="flex flex-col items-center text-center">
-                {/* Immagine del Pokémon */}
-                <img
-                    src={pokemonData.sprites.other["official-artwork"].front_default || pokemonData.sprites.front_default}
-                    alt={pokemonData.name}
-                    className="w-40 h-40 object-contain mb-4"
-                />
-
-                {/* Nome e numero del Pokémon */}
-                <h2 className="text-3xl font-bold capitalize">
-                    #{pokemonData.id} {pokemonData.name}
-                </h2>
-
-                {/* Pokémon Types */}
-                <div className="mt-4 text-sm capitalize">
-                    {pokemonData.types?.map((t) => (
-                        <TypeTag key={t.type.name} type={t.type.name} />
-                    ))}
-                </div>
-
-                {/* Pokédex Entry */}
-                <div className="mt-4 text-sm text-gray-600">
-                    <h3 className="font-semibold">Pokédex Entry</h3>
-                    <p>{parseText(flavorText)}</p>
-                </div>
-
-                {/* Altezza e peso */}
-                <div className="mt-4 text-sm text-gray-600">
-                    <div>Height: {pokemonData.height / 10} m</div>
-                    <div>Weight: {pokemonData.weight / 10} kg</div>
-                </div>
-
-                {/* Statistiche */}
-                <div className="mt-4">
-                    <h3 className="font-semibold">Statistics</h3>
-                    <ul className="mt-2 text-sm">
-                        {pokemonData.stats.map((stat) => (
-                            <li key={stat.stat.name} className="capitalize">
-                                {stat.stat.name}: {stat.base_stat}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-
-                {/* Catena evolutiva */}
-                {evolutionChain && evolutionChain.length > 0 && (
-                    <div className="mt-4">
-                        <h3 className="font-semibold">Evolution Chain</h3>
-                        <ul className="mt-2 text-sm">
-                            {/* Mostra le evoluzioni */}
-                            {evolutionChain.map((evolve) => (
-                                <li key={evolve.name} className="capitalize">
-                                    <a href={`/entry/${evolve.name}`} className="text-blue-500 hover:underline">
-                                        {evolve.name}
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
-            </div>
+// ---------- EVOLUTION NODE COMPONENT ----------
+const EvolutionNode = ({ evo }) => {
+  const evoId = evo.url.split("/").filter(Boolean).pop();
+  return (
+    <div className="flex flex-col items-center gap-2">
+      <a href={`/entry/${evo.name}`}>
+        <img
+          src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evoId}.png`}
+          alt={evo.name}
+          className="w-24 h-24 md:w-32 md:h-32 image-render-pixel"
+        />
+      </a>
+      <p className="capitalize text-gray-700 text-sm md:text-base text-center font-medium">
+        {evo.name} #{evoId}
+      </p>
+      {evo.types && (
+        <div className="flex justify-center gap-1 flex-wrap">
+          {evo.types.map((t) => (
+            <TypeTag key={t.type.name} type={t.type.name} className="text-sm" />
+          ))}
         </div>
+      )}
+
+      {evo.evolves_to.length > 0 && (
+        <div className="mt-4 flex flex-col md:flex-row gap-6 items-center">
+          {evo.evolves_to.map((child, i) => (
+            <div key={i} className="flex flex-col items-center">
+              <span className="text-3xl text-gray-500 mb-2 md:mb-0 md:mx-2">
+                ⬇️
+              </span>
+              <EvolutionNode evo={child} />
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ---------- MAIN COMPONENT ----------
+export default function PokedexEntry() {
+  const { id } = useParams();
+
+  const {
+    data: pokemonData,
+    error: pokemonError,
+    isLoading: isLoadingPokemon,
+  } = useGetPokemonQuery(id);
+
+  const {
+    data: speciesData,
+    error: speciesError,
+    isLoading: isLoadingSpecies,
+  } = useGetPokemonSpeciesQuery(id);
+
+  const [evolutionTree, setEvolutionTree] = useState(null);
+
+  // Load evolution tree
+  useEffect(() => {
+    if (speciesData?.evolution_chain?.url) {
+      fetchEvolutionTree(speciesData.evolution_chain.url)
+        .then((tree) => setEvolutionTree(tree))
+        .catch(console.error);
+    }
+  }, [speciesData]);
+
+  if (isLoadingPokemon || isLoadingSpecies)
+    return <div className="p-4 bg-white rounded-lg shadow">Loading...</div>;
+  if (pokemonError || speciesError)
+    return (
+      <div className="p-4 bg-white rounded-lg shadow text-red-600">
+        Loading error.
+      </div>
     );
+  if (!pokemonData || !speciesData)
+    return <div className="p-4 bg-white rounded-lg shadow">No data.</div>;
+
+  const flavorText =
+    speciesData.flavor_text_entries.find(
+      (entry) => entry.language.name === "en"
+    )?.flavor_text || "";
+
+  return (
+    <div className="max-w-6xl mx-auto p-6">
+      <div className="bg-red-700 rounded-2xl p-5 shadow-[0_0_20px_rgba(0,0,0,0.5)] border-4 border-black">
+        <div className="bg-gray-100 rounded-lg border-4 border-black p-6 flex flex-col gap-4">
+          {/* NAME + TYPES */}
+          <div className="text-center mb-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-wide text-gray-800">
+              #{pokemonData.id}
+              <span className="block">{pokemonData.name.toUpperCase()}</span>
+            </h2>
+            <div className="mt-2 flex justify-center flex-wrap gap-2">
+              {pokemonData.types.map((t) => (
+                <TypeTag key={t.type.name} type={t.type.name} />
+              ))}
+            </div>
+          </div>
+
+          {/* TOP: ARTWORK + INFO */}
+          <div className="flex flex-col md:flex-row gap-6 w-full">
+            <div className="flex flex-col items-center justify-center w-full md:w-1/2">
+              <img
+                src={
+                  pokemonData.sprites.other["official-artwork"].front_default ||
+                  pokemonData.sprites.front_default
+                }
+                alt={pokemonData.name}
+                className="w-60 h-60 object-contain"
+              />
+              <p className="text-gray-800 text-lg font-semibold text-center italic mt-3">
+                {speciesData.genera.find((g) => g.language.name === "en")
+                  ?.genus || "Unknown"}
+              </p>
+            </div>
+            <div className="w-full md:w-1/2">
+              <div className="bg-white p-4 border-4 border-gray-300 rounded-md shadow-inner text-center flex flex-col gap-5">
+                <div>
+                  <div className="flex items-center justify-center gap-2 font-bold">
+                    <span className="text-blue-600 text-xl">📏</span> Height
+                  </div>
+                  <p>{pokemonData.height / 10} m</p>
+                </div>
+                <div>
+                  <div className="flex items-center justify-center gap-2 font-bold">
+                    <span className="text-red-600 text-xl">🏋️</span> Weight
+                  </div>
+                  <p>{pokemonData.weight / 10} kg</p>
+                </div>
+                <div>
+                  <div className="flex items-center justify-center gap-2 font-bold">
+                    <span className="text-purple-600 text-xl">⚥</span> Gender
+                  </div>
+                  <p>
+                    {speciesData.gender_rate === -1
+                      ? "Genderless"
+                      : `${(8 - speciesData.gender_rate) * 12.5}% Male / ${
+                          speciesData.gender_rate * 12.5
+                        }% Female`}
+                  </p>
+                </div>
+                <div>
+                  <div className="flex items-center justify-center gap-2 font-bold">
+                    <span className="text-green-600 text-xl">✨</span> Abilities
+                  </div>
+                  <p>
+                    {pokemonData.abilities
+                      .map((a) => a.ability.name.replace("-", " "))
+                      .join(", ")}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* DESCRIPTION */}
+          <div className="mt-6 bg-white p-4 border-4 border-gray-300 rounded-md shadow-inner">
+            <h3 className="text-xl md:text-2xl font-bold mb-2 text-red-700">
+              Pokédex Entry
+            </h3>
+            <p className="text-gray-700 text-sm md:text-base leading-relaxed">
+              {parseText(flavorText)}
+            </p>
+          </div>
+
+          {/* EVOLUTION CHAIN */}
+          {evolutionTree && (
+            <div className="mt-6 bg-white p-4 border-4 border-gray-300 rounded-md shadow-inner">
+              <h3 className="text-xl md:text-2xl font-bold mb-3 text-purple-700">
+                Evolution Chain
+              </h3>
+              <div className="flex justify-center">
+                <EvolutionNode evo={evolutionTree} />
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 }
