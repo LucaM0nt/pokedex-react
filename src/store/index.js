@@ -3,6 +3,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { pokeApi } from "./pokeApiSlice.js";
 import userListsReducer from "./userListsSlice";
 
+// Funzione helper per leggere localStorage
 const load = (key, fallback) => {
   try {
     const raw = localStorage.getItem(key);
@@ -13,6 +14,7 @@ const load = (key, fallback) => {
   }
 };
 
+// Preloaded state
 const preloadedState = {
   userLists: {
     favorites: { byId: load("pokedex_favorites", {}) },
@@ -30,13 +32,19 @@ export const store = configureStore({
   preloadedState,
 });
 
-// Persist: save only byId maps immediately when state changes
+// Persist: salva solo le mappe byId su localStorage
 store.subscribe(() => {
   try {
     const state = store.getState();
     const lists = state.userLists ?? {};
-    localStorage.setItem("pokedex_favorites", JSON.stringify(lists.favorites?.byId ?? {}));
-    localStorage.setItem("pokedex_captures", JSON.stringify(lists.captures?.byId ?? {}));
+    localStorage.setItem(
+      "pokedex_favorites",
+      JSON.stringify(lists.favorites?.byId ?? {})
+    );
+    localStorage.setItem(
+      "pokedex_captures",
+      JSON.stringify(lists.captures?.byId ?? {})
+    );
   } catch (e) {
     console.warn("Impossibile salvare in localStorage", e);
   }
