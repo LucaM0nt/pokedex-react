@@ -2,49 +2,66 @@ import { useState, useEffect, useRef } from "react";
 import {
   useGetAllPokemonQuery,
   useGetAllPokemonFullListQuery,
+  useGetPokemonTypeQuery,
 } from "../store/pokeApiSlice";
 import PokemonListItem from "./PokemonListItem";
 
 export default function Pokedex({
   submittedSearchTerm,
+  selectedType,
   onHoverPokemon,
-  selectedTypes = [],
-  selectedGeneration = null,
-  sortOption = "id-asc",
 }) {
   const [pokemonList, setPokemonList] = useState([]);
   const [url, setUrl] = useState({ limit: 30, offset: 0 });
+  const [loadingType, setLoadingType] = useState(false); // nuovo stato per caricamento tipo
   const containerRef = useRef(null);
 
-  const { data, isLoading, isFetching } = useGetAllPokemonQuery(url);
+  const { data: pageData, isLoading, isFetching } = useGetAllPokemonQuery(url);
   const { data: fullListData } = useGetAllPokemonFullListQuery();
+
+  // Nuova query: Pokémon per tipo
+  const { data: typeData, isFetching: isTypeFetching } = useGetPokemonTypeQuery(
+    selectedType,
+    { skip: !selectedType }
+  );
 
   const isSearching = submittedSearchTerm.trim().length > 0;
 
-  // Accumula i Pokémon solo se non stai cercando
+  // Gestione stato loading per tipo
   useEffect(() => {
-    if (isSearching) return; // blocca lazy loading
+    if (!selectedType) return;
+    setLoadingType(true); // inizio caricamento
+  }, [selectedType]);
 
-    if (data?.results) {
+  useEffect(() => {
+    if (!selectedType) return;
+    if (!isTypeFetching) setLoadingType(false); // fine caricamento
+  }, [isTypeFetching, selectedType]);
+
+  // Lazy load paginato solo se non stiamo cercando e non c'è tipo selezionato
+  useEffect(() => {
+    if (isSearching || selectedType) return;
+
+    if (pageData?.results) {
       setPokemonList((prev) => {
-        const newItems = data.results.filter((p) => {
+        const newItems = pageData.results.filter((p) => {
           const id = Number(p.url.replace(/\/$/, "").split("/").pop());
           return !p.name.toLowerCase().includes("-mega") && id <= 10000;
         });
         return [...prev, ...newItems];
       });
     }
-  }, [data, isSearching]);
+  }, [pageData, isSearching, selectedType]);
 
-  // Lazy loading solo se non stai cercando
+  // Lazy loading scroll
   useEffect(() => {
-    if (isSearching) return;
+    if (isSearching || selectedType) return;
 
     const container = containerRef.current;
     if (!container) return;
 
     const handleScroll = () => {
-      if (!data?.next || isFetching) return;
+      if (!pageData?.next || isFetching) return;
 
       const nearBottom =
         container.scrollHeight - container.scrollTop <=
@@ -52,8 +69,7 @@ export default function Pokedex({
 
       if (!nearBottom) return;
 
-      const params = new URL(data.next).searchParams;
-
+      const params = new URL(pageData.next).searchParams;
       setUrl({
         offset: Number(params.get("offset")),
         limit: Number(params.get("limit")),
@@ -62,50 +78,28 @@ export default function Pokedex({
 
     container.addEventListener("scroll", handleScroll);
     return () => container.removeEventListener("scroll", handleScroll);
-  }, [data, isFetching, isSearching]);
+  }, [pageData, isFetching, isSearching, selectedType]);
 
-  // Lista finale, se stai cercando o applicando filtri
-  const filteredList = (isSearching ? fullListData?.results || [] : pokemonList)
-    .filter((p) => {
+  // Lista finale
+  const filteredList =
+    (selectedType
+      ? typeData
+      : isSearching
+      ? fullListData?.results
+      : pokemonList
+    )?.filter((p) => {
       const id = Number(p.url.replace(/\/$/, "").split("/").pop());
 
-      // filtro mega Pokémon e id limite
       if (p.name.toLowerCase().includes("-mega") || id > 10000) return false;
 
-      // filtro search
       if (
         isSearching &&
         !p.name.toLowerCase().includes(submittedSearchTerm.toLowerCase())
       )
         return false;
 
-      // filtro tipi
-      if (selectedTypes.length && p.types) {
-        const pokemonTypes = p.types.map((t) => t.type.name);
-        if (!selectedTypes.every((t) => pokemonTypes.includes(t))) return false;
-      }
-
-      // filtro generazione (se presente)
-      if (selectedGeneration && p.generation) {
-        if (p.generation !== selectedGeneration) return false;
-      }
-
       return true;
-    })
-    .sort((a, b) => {
-      switch (sortOption) {
-        case "id-asc":
-          return a.id - b.id;
-        case "id-desc":
-          return b.id - a.id;
-        case "name-asc":
-          return a.name.localeCompare(b.name);
-        case "name-desc":
-          return b.name.localeCompare(a.name);
-        default:
-          return 0;
-      }
-    });
+    }) || [];
 
   return (
     <div
@@ -113,15 +107,21 @@ export default function Pokedex({
       className="h-full overflow-y-auto px-0 py-4 bg-white"
     >
       <ul className="space-y-3 w-full">
-        {filteredList.map((pokemon) => {
-          const id = Number(pokemon.url.replace(/\/$/, "").split("/").pop());
-          return (
-            <PokemonListItem key={id} pkmnId={id} onHover={onHoverPokemon} />
-          );
-        })}
+        {/* Mostriamo loading quando stiamo caricando un tipo */}
+        {loadingType ? (
+          <li className="text-center py-4 text-gray-500">Loading...</li>
+        ) : (
+          filteredList.map((pokemon) => {
+            const id = Number(pokemon.url.replace(/\/$/, "").split("/").pop());
+            return (
+              <PokemonListItem key={id} pkmnId={id} onHover={onHoverPokemon} />
+            );
+          })
+        )}
 
-        {!isSearching && isLoading && (
-          <li className="text-center py-4">Loading...</li>
+        {/* Lazy load per lista principale */}
+        {!isSearching && !selectedType && isLoading && (
+          <li className="text-center py-4 text-gray-500">Loading...</li>
         )}
       </ul>
     </div>

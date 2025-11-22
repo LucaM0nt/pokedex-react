@@ -28,7 +28,9 @@ export const store = configureStore({
     userLists: userListsReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(pokeApi.middleware),
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }).concat(pokeApi.middleware),
   preloadedState,
 });
 

@@ -1,61 +1,112 @@
-import { useState, useEffect, useMemo, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useRef,
+  useCallback,
+} from "react";
 import { useSelector } from "react-redux";
+
+// Utility: estrai l'id dall'url (es: .../pokemon/25/)
+function getIdFromUrl(url) {
+  if (!url) return null;
+  const parts = url.replace(/\/$/, "").split("/");
+  return Number(parts[parts.length - 1]);
+}
 
 export default function Searchbar({ onSelectPokemon, onSearch }) {
   const [input, setInput] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
   const [isFocused, setIsFocused] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(-1);
+
   const formRef = useRef(null);
+  const inputRef = useRef(null);
+  const suggestionsRef = useRef(null);
 
+  // FIX: niente fallback dentro il selector → nessun warning
   const allPokemon = useSelector((state) => state.userLists.fullList);
+  const pokemonList = allPokemon ?? []; // fallback sicuro fuori dal selector
 
-  // Debounce: update searchTerm after 200ms
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setSearchTerm(input);
-    }, 200);
-    return () => clearTimeout(timeout);
-  }, [input]);
+  const query = input.trim().toLowerCase();
 
-  // Suggestions based on input
   const suggestions = useMemo(() => {
-    if (!input) return [];
-    return allPokemon
+    if (!query) return [];
+
+    return pokemonList
       .filter((p) => {
-        const id = Number(p.url.replace(/\/$/, "").split("/").pop());
+        const name = (p.name || "").toLowerCase();
+        const id = getIdFromUrl(p.url);
+
         return (
-          p.name.startsWith(input.toLowerCase()) &&
-          !p.name.toLowerCase().includes("-mega") &&
+          name.startsWith(query) &&
+          !name.includes("-mega") &&
+          Number.isFinite(id) &&
           id <= 10000
         );
       })
       .slice(0, 10);
-  }, [input, allPokemon]);
+  }, [query, pokemonList]);
 
-  const handleSelect = (pokemon) => {
-    setInput(pokemon.name);
-    setSearchTerm(pokemon.name);
-    const id = Number(pokemon.url.split("/").slice(-2)[0]);
-    onSearch(pokemon.name); // Submit the search
-    onSelectPokemon(id);
-  };
+  useEffect(() => {
+    setActiveIndex(-1);
+  }, [suggestions]);
+
+  const handleSelect = useCallback(
+    (pokemon) => {
+      if (!pokemon) return;
+      setInput(pokemon.name);
+      setIsFocused(false);
+
+      const id = getIdFromUrl(pokemon.url);
+      if (onSearch) onSearch(pokemon.name);
+      if (onSelectPokemon && Number.isFinite(id)) onSelectPokemon(id);
+    },
+    [onSearch, onSelectPokemon]
+  );
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSearch(searchTerm); // Submit on enter or button
+    if (!input.trim()) return;
+    if (onSearch) onSearch(input.trim());
+  };
+
+  const handleKeyDown = (e) => {
+    if (!suggestions.length) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActiveIndex((idx) => Math.min(idx + 1, suggestions.length - 1));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActiveIndex((idx) => Math.max(idx - 1, 0));
+    } else if (e.key === "Enter") {
+      if (activeIndex >= 0 && activeIndex < suggestions.length) {
+        e.preventDefault();
+        handleSelect(suggestions[activeIndex]);
+      }
+    } else if (e.key === "Escape") {
+      setIsFocused(false);
+      inputRef.current?.blur();
+    }
   };
 
   return (
     <form ref={formRef} onSubmit={handleSubmit} className="relative w-full">
       <div className="relative">
         <input
+          ref={inputRef}
           className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-500"
           placeholder="Cerca un Pokémon..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onFocus={() => setIsFocused(true)}
-          onBlur={() => setTimeout(() => setIsFocused(false), 150)}
+          onBlur={() => setIsFocused(false)}
+          onKeyDown={handleKeyDown}
+          aria-autocomplete="list"
+          aria-expanded={isFocused && suggestions.length > 0}
+          aria-haspopup="listbox"
         />
+
         <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
           <svg
             className="w-5 h-5 text-gray-400"
@@ -75,12 +126,20 @@ export default function Searchbar({ onSelectPokemon, onSearch }) {
       </div>
 
       {isFocused && suggestions.length > 0 && (
-        <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto mt-1">
-          {suggestions.map((s) => (
+        <ul
+          ref={suggestionsRef}
+          role="listbox"
+          className="absolute z-10 w-full bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto mt-1"
+        >
+          {suggestions.map((s, idx) => (
             <li
               key={s.name}
-              className="px-4 py-2 hover:bg-blue-50 cursor-pointer capitalize text-gray-900"
-              onClick={() => handleSelect(s)}
+              role="option"
+              aria-selected={activeIndex === idx}
+              onMouseDown={() => handleSelect(s)}
+              className={`px-4 py-2 cursor-pointer capitalize text-gray-900 hover:bg-blue-50 ${
+                activeIndex === idx ? "bg-blue-100" : ""
+              }`}
             >
               {s.name}
             </li>
