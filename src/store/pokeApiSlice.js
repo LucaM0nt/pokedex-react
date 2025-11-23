@@ -10,6 +10,7 @@ export const pokeApi = createApi({
     "pokemonTypes",
     "pokemonByName",
     "allPokemon",
+    "pokemonGeneration",
   ],
   endpoints: (builder) => ({
     // Paginated list
@@ -50,6 +51,16 @@ export const pokeApi = createApi({
       query: () => `pokemon?limit=20000&offset=0`,
       providesTags: ["allPokemon"],
     }),
+
+    getPokemonGeneration: builder.query({
+      query: (genId) => `generation/${genId}`,
+      transformResponse: (response) =>
+        response.pokemon_species.map((p) => ({
+          name: p.name,
+          url: p.url.replace("pokemon-species", "pokemon"), // convert species → pokemon
+        })),
+      providesTags: ["pokemonGeneration"],
+    }),
   }),
 });
 
@@ -60,4 +71,5 @@ export const {
   useGetPokemonTypeQuery,
   useSearchPokemonByNameQuery,
   useGetAllPokemonFullListQuery,
+  useGetPokemonGenerationQuery,
 } = pokeApi;

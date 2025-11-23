@@ -57,7 +57,7 @@ function PokemonListItem({ pkmnId, onHover }) {
     >
       <div className="flex items-center gap-4">
         <img
-          src={data.sprites.other.dream_world.front_default}
+          src={data.sprites.other.home.front_default}
           alt={data.name}
           className="w-16 h-16 object-contain"
         />

@@ -11,9 +11,11 @@ import SearchFilters from "../components/SearchFilters";
 
 export default function Homepage() {
   const [selectedType, setSelectedType] = useState(null);
+  const [selectedGen, setSelectedGen] = useState(null);
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState("");
   const [hoveredPokemonId, setHoveredPokemonId] = useState(null);
   const [lastHoveredId, setLastHoveredId] = useState(1);
+  const [resetSignal, setResetSignal] = useState(0);
 
   const dispatch = useDispatch();
   const { data } = useGetAllPokemonFullListQuery();
@@ -28,7 +30,16 @@ export default function Homepage() {
         <div className="w-full">
           <Searchbar onSearch={(t) => setSubmittedSearchTerm(t)} />
           <div className="mt-4">
-            <SearchFilters onSelectType={(type) => setSelectedType(type)} />
+            <SearchFilters
+              onSelectType={(type) => setSelectedType(type)}
+              onSelectGen={(gen) => setSelectedGen(gen)}
+              onResetFilters={() => {
+                setSelectedType(null);
+                setSelectedGen(null);
+                setSubmittedSearchTerm("");
+                setResetSignal((s) => s + 1);
+              }}
+            />
           </div>
         </div>
 
@@ -36,17 +47,22 @@ export default function Homepage() {
           <Pokedex
             submittedSearchTerm={submittedSearchTerm}
             selectedType={selectedType}
+            selectedGen={selectedGen}
             onHoverPokemon={(id) => {
               setHoveredPokemonId(id);
               if (id) setLastHoveredId(id);
             }}
+            scrollToTopSignal={resetSignal}
           />
         </div>
       </div>
 
       <aside className="md:w-2/5 min-h-0 h-full shrink-0">
         <div className="sticky top-4">
-          <PokemonPreview id={hoveredPokemonId || lastHoveredId} />
+          <PokemonPreview
+            key={hoveredPokemonId || lastHoveredId}
+            id={hoveredPokemonId || lastHoveredId}
+          />
         </div>
       </aside>
     </div>

@@ -1,129 +1,210 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import {
   useGetAllPokemonQuery,
   useGetAllPokemonFullListQuery,
   useGetPokemonTypeQuery,
+  useGetPokemonGenerationQuery,
 } from "../store/pokeApiSlice";
-import PokemonListItem from "./PokemonListItem";
+
+import PokemonList from "./PokemonList";
+
+const TYPE_PAGE_SIZE = 30; // quanti Pokémon per “pagina” nei tipi
 
 export default function Pokedex({
-  submittedSearchTerm,
-  selectedType,
+  submittedSearchTerm = "",
+  selectedType = null,
+  selectedGen = null,
   onHoverPokemon,
+  scrollToTopSignal = 0,
 }) {
-  const [pokemonList, setPokemonList] = useState([]);
+  const [pokemonList, setPokemonList] = useState([]); // lista paginata principale
+  const [scrollSignal, setScrollSignal] = useState(0);
   const [url, setUrl] = useState({ limit: 30, offset: 0 });
-  const [loadingType, setLoadingType] = useState(false); // nuovo stato per caricamento tipo
-  const containerRef = useRef(null);
+
+  const [typeList, setTypeList] = useState([]); // lista paginata per tipo
+  const [typePage, setTypePage] = useState(1); // pagina corrente per i tipi
+  const [genList, setGenList] = useState([]); // lista paginata per generazione
+  const [genPage, setGenPage] = useState(1); // pagina corrente per generazione
+
+  // API
+  const { data: genData, isFetching: isGenFetching } =
+    useGetPokemonGenerationQuery(selectedGen, { skip: !selectedGen });
+
+  const safeSearch = submittedSearchTerm ?? "";
+  const isSearching = safeSearch.trim().length > 0;
 
   const { data: pageData, isLoading, isFetching } = useGetAllPokemonQuery(url);
   const { data: fullListData } = useGetAllPokemonFullListQuery();
-
-  // Nuova query: Pokémon per tipo
   const { data: typeData, isFetching: isTypeFetching } = useGetPokemonTypeQuery(
     selectedType,
     { skip: !selectedType }
   );
 
-  const isSearching = submittedSearchTerm.trim().length > 0;
+  // --- Utility: normalizza e ordina per ID ---
+  const normalizeAndSort = (list) =>
+    (list ?? [])
+      .map((p) => ({
+        ...p,
+        id: Number(p.url.replace(/\/$/, "").split("/").pop()),
+      }))
+      .sort((a, b) => a.id - b.id);
 
-  // Gestione stato loading per tipo
+  // --- Reset tipo / generazione ---
   useEffect(() => {
-    if (!selectedType) return;
-    setLoadingType(true); // inizio caricamento
+    setTypePage(1);
+    setTypeList([]);
+    setScrollSignal((s) => s + 1);
   }, [selectedType]);
 
   useEffect(() => {
-    if (!selectedType) return;
-    if (!isTypeFetching) setLoadingType(false); // fine caricamento
-  }, [isTypeFetching, selectedType]);
+    setGenPage(1);
+    setGenList([]);
+    setScrollSignal((s) => s + 1);
+  }, [selectedGen]);
 
-  // Lazy load paginato solo se non stiamo cercando e non c'è tipo selezionato
   useEffect(() => {
-    if (isSearching || selectedType) return;
+    setScrollSignal((s) => s + 1);
+  }, [submittedSearchTerm, scrollToTopSignal]);
 
+  // --- Pagine tipo / generazione ---
+  useEffect(() => {
+    if (!selectedType || !typeData) return;
+    setTypeList(normalizeAndSort(typeData).slice(0, TYPE_PAGE_SIZE));
+    setTypePage(1);
+  }, [typeData, selectedType]);
+
+  useEffect(() => {
+    if (!selectedGen || !genData) return;
+    setGenList(normalizeAndSort(genData).slice(0, TYPE_PAGE_SIZE));
+    setGenPage(1);
+  }, [genData, selectedGen]);
+
+  // --- Lista principale ---
+  useEffect(() => {
+    if (isSearching || selectedType || selectedGen) return;
     if (pageData?.results) {
-      setPokemonList((prev) => {
-        const newItems = pageData.results.filter((p) => {
-          const id = Number(p.url.replace(/\/$/, "").split("/").pop());
-          return !p.name.toLowerCase().includes("-mega") && id <= 10000;
-        });
-        return [...prev, ...newItems];
-      });
+      setPokemonList((prev) => [
+        ...prev,
+        ...normalizeAndSort(pageData.results),
+      ]);
     }
-  }, [pageData, isSearching, selectedType]);
+  }, [pageData, isSearching, selectedType, selectedGen]);
 
-  // Lazy loading scroll
-  useEffect(() => {
-    if (isSearching || selectedType) return;
-
-    const container = containerRef.current;
-    if (!container) return;
-
-    const handleScroll = () => {
+  // --- Lazy load ---
+  const handleLoadMore = () => {
+    // Lista principale
+    if (!selectedType && !selectedGen && !isSearching) {
       if (!pageData?.next || isFetching) return;
-
-      const nearBottom =
-        container.scrollHeight - container.scrollTop <=
-        container.clientHeight + 100;
-
-      if (!nearBottom) return;
-
       const params = new URL(pageData.next).searchParams;
       setUrl({
         offset: Number(params.get("offset")),
         limit: Number(params.get("limit")),
       });
-    };
+      return;
+    }
 
-    container.addEventListener("scroll", handleScroll);
-    return () => container.removeEventListener("scroll", handleScroll);
-  }, [pageData, isFetching, isSearching, selectedType]);
+    // Tipo
+    if (selectedType && typeData && !selectedGen) {
+      const nextPage = typePage + 1;
+      const nextItems = normalizeAndSort(typeData).slice(
+        0,
+        nextPage * TYPE_PAGE_SIZE
+      );
+      setTypeList(nextItems);
+      setTypePage(nextPage);
+      return;
+    }
 
-  // Lista finale
-  const filteredList =
-    (selectedType
-      ? typeData
-      : isSearching
-      ? fullListData?.results
-      : pokemonList
-    )?.filter((p) => {
-      const id = Number(p.url.replace(/\/$/, "").split("/").pop());
+    // Generazione
+    if (selectedGen && genData && !selectedType) {
+      const nextPage = genPage + 1;
+      const nextItems = normalizeAndSort(genData).slice(
+        0,
+        nextPage * TYPE_PAGE_SIZE
+      );
+      setGenList(nextItems);
+      setGenPage(nextPage);
+      return;
+    }
 
-      if (p.name.toLowerCase().includes("-mega") || id > 10000) return false;
+    // Tipo + generazione combinati (usa sempre tutte le entry)
+    if (selectedType && selectedGen && typeData && genData) {
+      // Nessuna paginazione: mostra sempre l'incrocio completo
+      // (se vuoi paginare anche qui, serve logica più complessa)
+      setTypePage(1);
+      setGenPage(1);
+      return;
+    }
+  };
 
-      if (
-        isSearching &&
-        !p.name.toLowerCase().includes(submittedSearchTerm.toLowerCase())
-      )
-        return false;
+  // --- Seleziona dataset da mostrare ---
+  let rawList;
+  if (selectedType && selectedGen && typeData && genData) {
+    // Incrocia tutte le entry di tipo e generazione
+    const typeIds = new Set(normalizeAndSort(typeData).map((p) => p.id));
+    rawList = normalizeAndSort(genData).filter((p) => typeIds.has(p.id));
+  } else if (selectedType) {
+    rawList = typeList;
+  } else if (selectedGen && isSearching) {
+    rawList = normalizeAndSort(genData ?? []);
+  } else if (selectedGen) {
+    rawList = genList;
+  } else if (isSearching) {
+    rawList = normalizeAndSort(fullListData?.results ?? []);
+  } else {
+    rawList = pokemonList;
+  }
 
+  // --- Filtri comuni e deduplica ---
+  const filteredList = (() => {
+    // Filtro base
+    let list =
+      rawList?.filter((p) => {
+        if (!p || !p.url) return false;
+        const id = p.id;
+        if (p.name.includes("-mega") || id > 10000) return false;
+        if (
+          isSearching &&
+          !p.name.toLowerCase().includes(safeSearch.toLowerCase())
+        )
+          return false;
+        return true;
+      }) || [];
+    // Deduplica per id
+    const seen = new Set();
+    list = list.filter((p) => {
+      if (seen.has(p.id)) return false;
+      seen.add(p.id);
       return true;
-    }) || [];
+    });
+    return list;
+  })();
+
+  const loading = isLoading || isTypeFetching || isGenFetching;
+
+  let hasMore;
+  if (selectedType && !selectedGen) {
+    hasMore = typeList.length < (typeData?.length ?? 0);
+  } else if (selectedGen && !selectedType) {
+    hasMore = genList.length < (genData?.length ?? 0);
+  } else if (selectedType && selectedGen) {
+    const normalizedType = normalizeAndSort(typeData);
+    const normalizedGen = normalizeAndSort(genData);
+    const typeIds = new Set(normalizedType.map((p) => p.id));
+    const combined = normalizedGen.filter((p) => typeIds.has(p.id));
+    hasMore = combined.length > rawList.length;
+  } else {
+    hasMore = !isSearching && pageData?.next;
+  }
 
   return (
-    <div
-      ref={containerRef}
-      className="h-full overflow-y-auto px-0 py-4 bg-white"
-    >
-      <ul className="space-y-3 w-full">
-        {/* Mostriamo loading quando stiamo caricando un tipo */}
-        {loadingType ? (
-          <li className="text-center py-4 text-gray-500">Loading...</li>
-        ) : (
-          filteredList.map((pokemon) => {
-            const id = Number(pokemon.url.replace(/\/$/, "").split("/").pop());
-            return (
-              <PokemonListItem key={id} pkmnId={id} onHover={onHoverPokemon} />
-            );
-          })
-        )}
-
-        {/* Lazy load per lista principale */}
-        {!isSearching && !selectedType && isLoading && (
-          <li className="text-center py-4 text-gray-500">Loading...</li>
-        )}
-      </ul>
-    </div>
+    <PokemonList
+      items={filteredList}
+      loading={loading}
+      hasMore={Boolean(hasMore)}
+      onLoadMore={handleLoadMore}
+      onHoverPokemon={onHoverPokemon}
+      scrollSignal={scrollSignal}
+    />
   );
 }

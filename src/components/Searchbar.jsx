@@ -5,6 +5,7 @@ import React, {
   useRef,
   useCallback,
 } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 // Utility: estrai l'id dall'url (es: .../pokemon/25/)
@@ -15,6 +16,7 @@ function getIdFromUrl(url) {
 }
 
 export default function Searchbar({ onSelectPokemon, onSearch }) {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [input, setInput] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -66,8 +68,19 @@ export default function Searchbar({ onSelectPokemon, onSearch }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!input.trim()) return;
-    if (onSearch) onSearch(input.trim());
+    const searchValue = input.trim();
+    // Aggiorna solo il parametro 'search', mantenendo gli altri e ordinando: search, type, gen
+    const newParams = new URLSearchParams(searchParams);
+    const type = newParams.get("type");
+    const gen = newParams.get("gen");
+    newParams.delete("search");
+    newParams.delete("type");
+    newParams.delete("gen");
+    if (searchValue) newParams.append("search", searchValue);
+    if (type) newParams.append("type", type);
+    if (gen) newParams.append("gen", gen);
+    setSearchParams(newParams);
+    if (onSearch) onSearch(searchValue);
   };
 
   const handleKeyDown = (e) => {
