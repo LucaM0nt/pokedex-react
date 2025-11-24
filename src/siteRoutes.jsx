@@ -15,7 +15,7 @@ const siteRoutes = [{
       index: true,
       Component: Homepage,
       showInNav: true,
-      title: 'Pokedex'
+      title: 'Pokédex'
     },
     {
       path: 'entry/:id',
