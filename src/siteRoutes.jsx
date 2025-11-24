@@ -1,7 +1,7 @@
 import Layout from './layouts/Layout'
 import Homepage from './pages/Homepage'
 import Account from './pages/Account'
-import PokedexEntry from './components/PokedexEntry'
+import PokedexEntry from './components/PokedexEntry/PokedexEntry'
 // Subpages for Account: FavouritesPage and CaughtPage
 
 import About from './pages/About'
@@ -15,13 +15,13 @@ const siteRoutes = [{
       index: true,
       Component: Homepage,
       showInNav: true,
-      title: 'Pokedex'
+      title: 'Pokédex'
     },
     {
       path: 'entry/:id',
       Component: PokedexEntry,
-      //showInNav: false, // Hides this page from the navbar, it's only accessed through the Pokédex preview
-      showInNav: true,
+      showInNav: false, // Hides this page from the navbar, it's only accessed through the Pokédex preview
+      // showInNav: true,
       title: 'Scheda Pokémon'
     },
     {
