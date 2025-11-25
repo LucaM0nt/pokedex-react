@@ -22,7 +22,7 @@ export default function EvolutionChain({ tree }) {
         : "grid-cols-4"; // 4+ evolutions
 
     return (
-      <div className="flex flex-col items-center gap-1 min-w-40">
+      <div className="flex flex-col items-center gap-0 min-w-40">
         <a href={`/entry/${evo.name}`}>
           <img
             src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evoId}.png`}
@@ -31,7 +31,7 @@ export default function EvolutionChain({ tree }) {
           />
         </a>
 
-        <p className="capitalize text-gray-700 text-sm md:text-base text-center font-medium">
+        <p className="capitalize text-gray-700 text-sm md:text-base text-center font-medium -mt-1">
           #{evoId}
           <br />
           {evo.name}
@@ -69,8 +69,8 @@ export default function EvolutionChain({ tree }) {
   };
 
   return (
-    <div className="my-5 bg-white p-4 border-4 border-gray-300 rounded-md shadow-inner">
-      <h3 className="text-xl md:text-2xl font-bold mb-4 text-purple-700 text-center">
+    <div className="bg-gray-50 p-4 border border-gray-300 rounded-lg shadow">
+      <h3 className="text-xl font-semibold mb-4 text-gray-800 text-center">
         Evolution Chain
       </h3>
 
