@@ -6,7 +6,7 @@ export default function About() {
     <div className="min-h-screenpy-8 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Chi siamo */}
-        <section className="bg-white rounded-lg shadow-lg border border-gray-300 p-6 mb-6">
+        <section className="mt-6 bg-white rounded-lg shadow-lg border border-gray-300 p-6 mb-6">
           <h1 className="text-3xl font-semibold text-gray-900 mb-4">
             Chi siamo
           </h1>
