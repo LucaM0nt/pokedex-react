@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import { useGetPokemonQuery } from "../store/pokeApiSlice";
 import { store } from "../store/index.js";
@@ -7,15 +8,16 @@ import {
   toggleCapture,
   isFavorite,
   isCaptured,
-} from "../store/userListsSlice";
+} from "../store/userSlice";
 
 import TypeTag from "./TypeTag";
 
 function PokemonListItem({ pkmnId, onHover }) {
   const { data, error, isLoading } = useGetPokemonQuery(pkmnId);
   const dispatch = useDispatch();
-  const fav = useSelector((state) => isFavorite(state.userLists, pkmnId));
-  const cap = useSelector((state) => isCaptured(state.userLists, pkmnId));
+  const navigate = useNavigate();
+  const fav = useSelector((state) => isFavorite(state.user, pkmnId));
+  const cap = useSelector((state) => isCaptured(state.user, pkmnId));
 
   if (isLoading) {
     return (
@@ -38,31 +40,49 @@ function PokemonListItem({ pkmnId, onHover }) {
       <li className="p-3 bg-white rounded-lg shadow">Nessun dato trovato</li>
     );
   }
-  const handleToggleFavorite = () => {
+  const handleToggleFavorite = (e) => {
+    e.stopPropagation();
     dispatch(toggleFavorite(pkmnId));
     const lists = store.getState().userLists;
     console.log("favoritesById:", lists.favorites.byId);
   };
 
-  const handleToggleCapture = () => {
+  const handleToggleCapture = (e) => {
+    e.stopPropagation();
     dispatch(toggleCapture(pkmnId));
     const lists = store.getState().userLists;
     console.log("capturesById:", lists.captures.byId);
   };
 
+  const handleNavigate = () => {
+    navigate(`/entry/${pkmnId}`);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      handleNavigate();
+    }
+  };
+
   return (
     <li
-      className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl shadow-sm hover:shadow-lg hover:border-blue-300 transition-all duration-200 flex items-center gap-4 justify-between"
+      className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl shadow-sm hover:shadow-lg hover:border-blue-300 transition-all duration-200 flex items-center gap-4 justify-between cursor-pointer"
       onMouseEnter={() => onHover(pkmnId)}
+      onClick={handleNavigate}
+      role="button"
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+      aria-label={`Apri dettaglio di ${data.name}`}
     >
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 group">
         <img
           src={data.sprites.other.home.front_default}
           alt={data.name}
-          className="w-16 h-16 object-contain"
+          className="w-16 h-16 object-contain group-hover:scale-105 transition-transform"
         />
         <div>
-          <h3 className="font-bold text-lg capitalize text-gray-800">
+          <h3 className="font-bold text-lg capitalize text-gray-800 group-hover:text-blue-600 transition-colors">
             #{data.id} {data.name}
           </h3>
           <div className="flex gap-2 mt-2 flex-wrap">

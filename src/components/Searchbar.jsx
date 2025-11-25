@@ -26,7 +26,7 @@ export default function Searchbar({ onSelectPokemon, onSearch }) {
   const suggestionsRef = useRef(null);
 
   // FIX: niente fallback dentro il selector → nessun warning
-  const allPokemon = useSelector((state) => state.userLists.fullList);
+  const allPokemon = useSelector((state) => state.user.fullList);
   const pokemonList = allPokemon ?? []; // fallback sicuro fuori dal selector
 
   const query = input.trim().toLowerCase();

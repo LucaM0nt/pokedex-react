@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 import { pokeApi } from "./pokeApiSlice.js";
-import userListsReducer from "./userListsSlice";
+import userReducer from "./userSlice";
 
 // Funzione helper per leggere localStorage
 const load = (key, fallback) => {
@@ -16,7 +16,9 @@ const load = (key, fallback) => {
 
 // Preloaded state
 const preloadedState = {
-  userLists: {
+  user: {
+    isLogged: false,
+    username: null,
     favorites: { byId: load("pokedex_favorites", {}) },
     captures: { byId: load("pokedex_captures", {}) },
   },
@@ -25,7 +27,7 @@ const preloadedState = {
 export const store = configureStore({
   reducer: {
     [pokeApi.reducerPath]: pokeApi.reducer,
-    userLists: userListsReducer,
+    user: userReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -38,7 +40,7 @@ export const store = configureStore({
 store.subscribe(() => {
   try {
     const state = store.getState();
-    const lists = state.userLists ?? {};
+    const lists = state.user ?? {};
     localStorage.setItem(
       "pokedex_favorites",
       JSON.stringify(lists.favorites?.byId ?? {})

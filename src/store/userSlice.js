@@ -1,15 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  isLogged: false,
+  username: null,
   favorites: { byId: {} },
   captures: { byId: {} },
   fullList: [],
 };
 
-const userListsSlice = createSlice({
-  name: "userLists",
+const userSlice = createSlice({
+  name: "user",
   initialState,
   reducers: {
+    login(state, action) {
+      state.isLogged = true;
+      state.username = action.payload?.username || "User";
+    },
+    logout(state) {
+      state.isLogged = false;
+      state.username = null;
+    },
     add(state, action) {
       const { list, id } = action.payload;
       if (!state[list]) return;
@@ -33,7 +43,9 @@ const userListsSlice = createSlice({
   },
 });
 
-export const { add, remove, toggle, setFullList } = userListsSlice.actions;
+export const { login, logout, add, remove, toggle, setFullList } =
+  userSlice.actions;
+
 // Convenience action creators to keep a clear API
 export const addFavorite = (id) => add({ list: "favorites", id });
 export const removeFavorite = (id) => remove({ list: "favorites", id });
@@ -44,13 +56,17 @@ export const removeCapture = (id) => remove({ list: "captures", id });
 export const toggleCapture = (id) => toggle({ list: "captures", id });
 
 // Selectors helpers
-// Accept either the whole store (`state`) or the substate (`state.userLists`).
-const getListsState = (state) => state?.userLists ?? state;
-export const selectListById = (state, list) =>
-  getListsState(state)[list]?.byId ?? {};
-export const isFavorite = (state, id) =>
-  !!getListsState(state).favorites?.byId?.[String(id)];
-export const isCaptured = (state, id) =>
-  !!getListsState(state).captures?.byId?.[String(id)];
+// Accept either the whole store (`state`) or the substate (`state.user`).
+const getUserState = (state) => state?.user ?? state;
 
-export default userListsSlice.reducer;
+export const selectIsLogged = (state) => getUserState(state).isLogged;
+export const selectUsername = (state) => getUserState(state).username;
+
+export const selectListById = (state, list) =>
+  getUserState(state)[list]?.byId ?? {};
+export const isFavorite = (state, id) =>
+  !!getUserState(state).favorites?.byId?.[String(id)];
+export const isCaptured = (state, id) =>
+  !!getUserState(state).captures?.byId?.[String(id)];
+
+export default userSlice.reducer;

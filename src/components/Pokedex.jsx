@@ -6,7 +6,7 @@ import {
   useGetPokemonTypeQuery,
   useGetPokemonGenerationQuery,
 } from "../store/pokeApiSlice";
-import { isFavorite, isCaptured } from "../store/userListsSlice";
+import { isFavorite, isCaptured } from "../store/userSlice";
 
 import PokemonList from "./PokemonList";
 
@@ -31,7 +31,7 @@ export default function Pokedex({
   const [genPage, setGenPage] = useState(1); // pagina corrente per generazione
 
   // Redux state per favorites/captures
-  const userListsState = useSelector((state) => state.userLists);
+  const userListsState = useSelector((state) => state.user);
 
   // API
   const { data: genData, isFetching: isGenFetching } =

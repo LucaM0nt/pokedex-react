@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 import { useGetAllPokemonFullListQuery } from "../store/pokeApiSlice";
-import { setFullList } from "../store/userListsSlice";
+import { setFullList } from "../store/userSlice";
 
 import Pokedex from "../components/Pokedex";
 import PokemonPreview from "../components/PokemonPreview";
@@ -27,8 +27,8 @@ export default function Homepage() {
   }, [data, dispatch]);
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 h-full min-h-0">
-      <div className="md:w-3/5 min-h-0 h-full shrink-0 flex flex-col">
+    <div className="flex flex-col md:flex-row gap-4 h-full min-h-0 py-5">
+      <div className="md:basis-[60%] min-h-0 min-w-0 h-full flex flex-col">
         <div className="w-full">
           <Searchbar onSearch={(t) => setSubmittedSearchTerm(t)} />
           <div className="mt-4">
@@ -65,7 +65,7 @@ export default function Homepage() {
         </div>
       </div>
 
-      <aside className="md:w-2/5 min-h-0 h-full shrink-0">
+      <aside className="md:basis-[40%] min-h-0 min-w-0 h-full">
         <div className="sticky top-4">
           <PokemonPreview
             key={hoveredPokemonId || lastHoveredId}
