@@ -20,11 +20,10 @@ function Header() {
   }, []);
 
   return (
-    <header ref={headerRef}
-		className="fixed top-0 left-0 right-0 z-50 bg-gray-800">
-      <div className="container mx-auto py-3 px-3 flex items-center justify-between">
-        <button className="cursor-pointer focus:outline-none">
-          <PokedexIcon className="w-12 h-12" />
+    <header ref={headerRef} className="w-full z-50 bg-gray-800">
+      <div className="container mx-auto py-1 px-3 flex items-center justify-between">
+        <button className="cursor-pointer focus:outline-none w-12 h-12 overflow-hidden rounded">
+          <PokedexIcon className="w-full h-full object-contain" />
         </button>
         <Navbar headerHeight={headerHeight} className="ml-auto" />
       </div>

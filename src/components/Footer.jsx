@@ -5,10 +5,11 @@ export default function Footer({ mode = "desktop" }) {
 
   return (
     <footer
-      className={`
-        bg-gray-800 z-40
-        ${mode === "desktop" ? "hidden md:block text-center pt-7 pb-7" : "block md:hidden"}
-      `}
+      className={`bg-gray-800 z-40 ${
+        mode === "desktop"
+          ? "hidden md:block text-center py-2"
+          : "block md:hidden"
+      }`}
     >
       <div className=" text-slate-400">
         <p className="pb-1.5">
