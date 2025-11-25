@@ -24,6 +24,7 @@ export default function PokedexEntry() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const pokemonId = Number(id);
 
   const {
     data: pokemonData,
@@ -47,6 +48,10 @@ export default function PokedexEntry() {
     }
   }, [speciesData]);
 
+  // Call selectors unconditionally to keep hook order stable across renders
+  const fav = useSelector((state) => isFavorite(state.user, pokemonId));
+  const cap = useSelector((state) => isCaptured(state.user, pokemonId));
+
   if (isLoadingPokemon || isLoadingSpecies)
     return <div className="p-4 bg-white rounded-lg shadow">Loading...</div>;
   if (pokemonError || speciesError)
@@ -63,11 +68,8 @@ export default function PokedexEntry() {
       (entry) => entry.language.name === "en"
     )?.flavor_text || "";
 
-  const fav = useSelector((state) => isFavorite(state.user, pokemonData.id));
-  const cap = useSelector((state) => isCaptured(state.user, pokemonData.id));
-
-  const handleToggleFavorite = () => dispatch(toggleFavorite(pokemonData.id));
-  const handleToggleCapture = () => dispatch(toggleCapture(pokemonData.id));
+  const handleToggleFavorite = () => dispatch(toggleFavorite(pokemonId));
+  const handleToggleCapture = () => dispatch(toggleCapture(pokemonId));
 
   return (
     <div className="container mx-auto px-4 py-6">
@@ -103,16 +105,15 @@ export default function PokedexEntry() {
                   fav ? "Rimuovi dai preferiti" : "Aggiungi ai preferiti"
                 }
                 title={fav ? "Rimuovi dai preferiti" : "Aggiungi ai preferiti"}
-                aria-pressed={fav}
               >
                 <svg
                   className={`w-7 h-7 ${
-                    fav ? "text-yellow-500" : "text-gray-400"
+                    fav
+                      ? "text-yellow-500 fill-current"
+                      : "text-gray-400 fill-current"
                   }`}
                   viewBox="0 0 24 24"
-                  stroke="currentColor"
                   strokeWidth="2"
-                  fill={fav ? "currentColor" : "none"}
                 >
                   <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                 </svg>
@@ -125,7 +126,6 @@ export default function PokedexEntry() {
                   cap ? "Rimuovi dai catturati" : "Aggiungi ai catturati"
                 }
                 title={cap ? "Rimuovi dai catturati" : "Aggiungi ai catturati"}
-                aria-pressed={cap}
               >
                 <svg
                   className={`w-7 h-7 ${
@@ -138,12 +138,7 @@ export default function PokedexEntry() {
                 >
                   <circle cx="12" cy="12" r="10" />
                   <path d="M2 12h20" />
-                  <circle
-                    cx="12"
-                    cy="12"
-                    r="3"
-                    fill={cap ? "currentColor" : "white"}
-                  />
+                  <circle cx="12" cy="12" r="3" fill={"white"} />
                 </svg>
               </button>
             </div>
