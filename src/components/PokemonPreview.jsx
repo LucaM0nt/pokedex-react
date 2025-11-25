@@ -24,7 +24,7 @@ export default function PokemonPreview({ id = 1 }) {
   }
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow sticky top-4">
+    <div className="p-6 bg-white rounded-lg shadow">
       <div className="flex flex-col items-center text-center">
         <img
           src={
@@ -60,8 +60,6 @@ export default function PokemonPreview({ id = 1 }) {
             ))}
           </ul>
         </div>
-
-        <PokedexButton data={data} />
       </div>
     </div>
   );
