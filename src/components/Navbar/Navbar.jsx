@@ -30,9 +30,11 @@ export default function Navbar({ className, headerHeight }) {
             if (el.showInNav === "conditional") return null;
             if (!el.showInNav) return null;
 
+            const linkPath = el.path || "/"; // fallback for index route
+
             return (
-              <div key={el.path} className="relative">
-                <NavbarLink to={el.path} onClick={() => setIsOpen(false)}>
+              <div key={linkPath} className="relative">
+                <NavbarLink to={linkPath} onClick={() => setIsOpen(false)}>
                   {el.title}
                 </NavbarLink>
 
