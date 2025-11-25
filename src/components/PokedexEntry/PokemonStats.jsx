@@ -15,8 +15,8 @@ export default function PokemonStats({ stats }) {
   const maxStatValue = 255; // Max value in Pokémon games for scaling
 
   return (
-    <div className="bg-white p-4 border-4 border-gray-300 rounded-md shadow-inner mt-6">
-      <h3 className="text-xl md:text-2xl font-bold mb-4 text-gray-800 text-center">
+    <div className="bg-gray-50 p-4 border border-gray-300 rounded-lg shadow">
+      <h3 className="text-xl font-semibold mb-4 text-gray-800 text-center">
         Base Stats
       </h3>
 
@@ -35,7 +35,9 @@ export default function PokemonStats({ stats }) {
 
               <div className="flex-1 bg-gray-200 h-4 rounded-full overflow-hidden">
                 <div
-                  className={`${STAT_COLORS[name] || "bg-gray-500"} h-4 rounded-full transition-all duration-500`}
+                  className={`${
+                    STAT_COLORS[name] || "bg-gray-500"
+                  } h-4 rounded-full transition-all duration-500`}
                   style={{ width: `${widthPercent}%` }}
                 />
               </div>
