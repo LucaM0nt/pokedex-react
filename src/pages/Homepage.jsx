@@ -16,6 +16,8 @@ export default function Homepage() {
   const [hoveredPokemonId, setHoveredPokemonId] = useState(null);
   const [lastHoveredId, setLastHoveredId] = useState(1);
   const [resetSignal, setResetSignal] = useState(0);
+  const [showFavorites, setShowFavorites] = useState(false);
+  const [showCaptured, setShowCaptured] = useState(false);
 
   const dispatch = useDispatch();
   const { data } = useGetAllPokemonFullListQuery();
@@ -33,10 +35,14 @@ export default function Homepage() {
             <SearchFilters
               onSelectType={(type) => setSelectedType(type)}
               onSelectGen={(gen) => setSelectedGen(gen)}
+              onToggleFavorites={(show) => setShowFavorites(show)}
+              onToggleCaptured={(show) => setShowCaptured(show)}
               onResetFilters={() => {
                 setSelectedType(null);
                 setSelectedGen(null);
                 setSubmittedSearchTerm("");
+                setShowFavorites(false);
+                setShowCaptured(false);
                 setResetSignal((s) => s + 1);
               }}
             />
@@ -48,6 +54,8 @@ export default function Homepage() {
             submittedSearchTerm={submittedSearchTerm}
             selectedType={selectedType}
             selectedGen={selectedGen}
+            showFavorites={showFavorites}
+            showCaptured={showCaptured}
             onHoverPokemon={(id) => {
               setHoveredPokemonId(id);
               if (id) setLastHoveredId(id);

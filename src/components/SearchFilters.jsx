@@ -7,6 +7,8 @@ import { useSearchParams } from "react-router-dom";
 export default function SearchFilters({
   onSelectType,
   onSelectGen,
+  onToggleFavorites,
+  onToggleCaptured,
   onResetFilters,
 }) {
   const dropdownRef = useRef(null);
@@ -14,18 +16,32 @@ export default function SearchFilters({
   const [openGenDropdown, setOpenGenDropdown] = useState(false);
   const [selectedType, setSelectedType] = useState(null);
   const [selectedGen, setSelectedGen] = useState(null);
+  const [showFavorites, setShowFavorites] = useState(false);
+  const [showCaptured, setShowCaptured] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     const urlType = searchParams.get("type") || null;
     const urlGen = searchParams.get("gen") || null;
+    const urlFavorites = searchParams.get("favorites") === "true";
+    const urlCaptured = searchParams.get("captured") === "true";
     setSelectedType(urlType);
     // urlGen può essere stringa, converti in numero se possibile
     const genId = urlGen ? Number(urlGen) : null;
     setSelectedGen(genId);
+    setShowFavorites(urlFavorites);
+    setShowCaptured(urlCaptured);
     if (onSelectType) onSelectType(urlType);
     if (onSelectGen) onSelectGen(genId);
-  }, [searchParams, onSelectType, onSelectGen]);
+    if (onToggleFavorites) onToggleFavorites(urlFavorites);
+    if (onToggleCaptured) onToggleCaptured(urlCaptured);
+  }, [
+    searchParams,
+    onSelectType,
+    onSelectGen,
+    onToggleFavorites,
+    onToggleCaptured,
+  ]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -60,6 +76,28 @@ export default function SearchFilters({
     }
     setSearchParams(searchParams);
     setOpenGenDropdown(false);
+  };
+
+  const handleToggleFavorites = () => {
+    const newValue = !showFavorites;
+    setShowFavorites(newValue);
+    if (newValue) {
+      searchParams.set("favorites", "true");
+    } else {
+      searchParams.delete("favorites");
+    }
+    setSearchParams(searchParams);
+  };
+
+  const handleToggleCaptured = () => {
+    const newValue = !showCaptured;
+    setShowCaptured(newValue);
+    if (newValue) {
+      searchParams.set("captured", "true");
+    } else {
+      searchParams.delete("captured");
+    }
+    setSearchParams(searchParams);
   };
 
   return (
@@ -166,10 +204,17 @@ export default function SearchFilters({
       </div>
 
       {/* Icona Preferiti */}
-      <button className="cursor-pointer focus:outline-none">
+      <button
+        className="cursor-pointer focus:outline-none"
+        onClick={handleToggleFavorites}
+        title={showFavorites ? "Mostra tutti" : "Mostra solo preferiti"}
+      >
         <svg
-          className={`w-7 h-7 text-gray-400 fill-current
-          `}
+          className={`w-7 h-7 transition-colors ${
+            showFavorites
+              ? "text-yellow-500 fill-current"
+              : "text-gray-400 fill-current"
+          }`}
           viewBox="0 0 24 24"
           strokeWidth="2"
         >
@@ -178,9 +223,15 @@ export default function SearchFilters({
       </button>
 
       {/* Icona Catturati */}
-      <button className="cursor-pointer focus:outline-none">
+      <button
+        className="cursor-pointer focus:outline-none"
+        onClick={handleToggleCaptured}
+        title={showCaptured ? "Mostra tutti" : "Mostra solo catturati"}
+      >
         <svg
-          className={`w-7 h-7 text-gray-400`}
+          className={`w-7 h-7 transition-colors ${
+            showCaptured ? "text-red-500" : "text-gray-400"
+          }`}
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -199,6 +250,8 @@ export default function SearchFilters({
           setSearchParams({});
           setSelectedType(null);
           setSelectedGen(null);
+          setShowFavorites(false);
+          setShowCaptured(false);
           if (onResetFilters) onResetFilters();
         }}
         title="Reset filtri"

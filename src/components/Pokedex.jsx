@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import {
   useGetAllPokemonQuery,
   useGetAllPokemonFullListQuery,
   useGetPokemonTypeQuery,
   useGetPokemonGenerationQuery,
 } from "../store/pokeApiSlice";
+import { isFavorite, isCaptured } from "../store/userListsSlice";
 
 import PokemonList from "./PokemonList";
 
@@ -14,6 +16,8 @@ export default function Pokedex({
   submittedSearchTerm = "",
   selectedType = null,
   selectedGen = null,
+  showFavorites = false,
+  showCaptured = false,
   onHoverPokemon,
   scrollToTopSignal = 0,
 }) {
@@ -25,6 +29,9 @@ export default function Pokedex({
   const [typePage, setTypePage] = useState(1); // pagina corrente per i tipi
   const [genList, setGenList] = useState([]); // lista paginata per generazione
   const [genPage, setGenPage] = useState(1); // pagina corrente per generazione
+
+  // Redux state per favorites/captures
+  const userListsState = useSelector((state) => state.userLists);
 
   // API
   const { data: genData, isFetching: isGenFetching } =
@@ -177,6 +184,17 @@ export default function Pokedex({
       seen.add(p.id);
       return true;
     });
+    // Filtro favorites/captured
+    if (showFavorites) {
+      list = list.filter((p) =>
+        isFavorite({ userLists: userListsState }, p.id)
+      );
+    }
+    if (showCaptured) {
+      list = list.filter((p) =>
+        isCaptured({ userLists: userListsState }, p.id)
+      );
+    }
     return list;
   })();
 
