@@ -39,29 +39,27 @@ export default function PokemonList({
   }, [scrollSignal]);
 
   return (
-    <div
-      ref={containerRef}
-      className="h-full overflow-y-auto px-0 py-4 bg-white relative"
-    >
-      <ul className="space-y-3 w-full">
-        {items.map((pokemon) => {
-          const id = Number(pokemon.url.replace(/\/$/, "").split("/").pop());
-
-          return (
-            <PokemonListItem key={id} pkmnId={id} onHover={onHoverPokemon} />
-          );
-        })}
-
-        {loading && (
-          <li className="text-center py-4 text-gray-500">Loading...</li>
-        )}
-      </ul>
-
-      {/* Fade bianco alla fine della lista */}
+    <div className="h-full relative">
       <div
-        className="pointer-events-none absolute bottom-0 left-0 w-full h-20 
-                   bg-linear-to-t from-white to-transparent"
-      />
+        ref={containerRef}
+        className="h-full overflow-y-auto px-0 py-4 bg-white"
+      >
+        <ul className="space-y-3 w-full">
+          {items.map((pokemon) => {
+            const id = Number(pokemon.url.replace(/\/$/, "").split("/").pop());
+
+            return (
+              <PokemonListItem key={id} pkmnId={id} onHover={onHoverPokemon} />
+            );
+          })}
+
+          {loading && (
+            <li className="text-center py-4 text-gray-500">Loading...</li>
+          )}
+        </ul>
+      </div>
+      {/* Fade bianco fisso sopra il fondo della lista */}
+      <div className="pointer-events-none absolute bottom-0 left-0 w-full h-20 bg-linear-to-t from-white to-transparent" />
     </div>
   );
 }
