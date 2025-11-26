@@ -109,7 +109,7 @@ export default function Searchbar({ onSelectPokemon, onSearch }) {
         <input
           ref={inputRef}
           className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-500"
-          placeholder="Cerca un Pokémon..."
+          placeholder="Search Pokémon..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onFocus={() => setIsFocused(true)}

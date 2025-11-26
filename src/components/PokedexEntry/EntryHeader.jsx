@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useGetLastPokemonQuery } from "../../store/pokeApiSlice";
+import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // EntryHeader
 // Shows a centered title with the current Pokémon `#ID NAME` and
@@ -17,8 +19,16 @@ export default function EntryHeader({ pokemonId, pokemonName }) {
 
   // Compute wrap-around prev/next using `lastId` when available.
   // If `lastId` is not available we fall back to simple +/- ids.
-  const prevId = lastId ? (pokemonId - 1 < 1 ? lastId : pokemonId - 1) : pokemonId - 1;
-  const nextId = lastId ? (pokemonId + 1 > lastId ? 1 : pokemonId + 1) : pokemonId + 1;
+  const prevId = lastId
+    ? pokemonId - 1 < 1
+      ? lastId
+      : pokemonId - 1
+    : pokemonId - 1;
+  const nextId = lastId
+    ? pokemonId + 1 > lastId
+      ? 1
+      : pokemonId + 1
+    : pokemonId + 1;
 
   return (
     <div className="flex items-center justify-between gap-4 py-4">
@@ -45,40 +55,23 @@ function PrevNextButton({ id, direction, navigate }) {
   const spriteUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
 
   // Responsive sprite sizing
-  const spriteClass = "w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16";
+  const spriteClass =
+    "w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16";
 
-  // Arrow SVG (left-pointing). We'll reuse and rotate for the right arrow.
+  // Arrow SVG (left-pointing).
   const arrowSvg = (
-    <svg
-      className="w-5 h-5"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M15 19l-7-7 7-7"
-      />
-    </svg>
+    <FontAwesomeIcon
+      icon={faAngleLeft}
+      className="text-gray-500 text-2xl"
+    />
   );
 
   // Right-pointing arrow - same path rotated 180deg
   const arrowSvgRight = (
-    <svg
-      className="w-5 h-5 transform rotate-180"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M15 19l-7-7 7-7"
-      />
-    </svg>
+    <FontAwesomeIcon
+      icon={faAngleRight}
+      className="text-gray-500 text-2xl"
+    />
   );
 
   // Render the control: clickable when `enabled`, otherwise shown as
@@ -96,17 +89,29 @@ function PrevNextButton({ id, direction, navigate }) {
             <>
               {/* left arrow, then sprite+id (sprite and id hidden on small screens) */}
               {arrowSvg}
-              <img src={spriteUrl} alt={`#${id}`} className={`hidden md:block ${spriteClass}`} />
-              <span className="hidden md:inline-block text-xs cursor-pointer">#{id}</span>
+                  <img
+                    src={spriteUrl}
+                    alt={`#${id}`}
+                    className={`hidden md:block ${spriteClass} transform transition-transform duration-200 group-hover:scale-110 group-hover:-translate-y-1 group-focus:scale-110`}
+                  />
+                  <span className="hidden md:inline-block text-sm md:text-lg font-semibold cursor-pointer transform transition-transform duration-150 group-hover:scale-105 group-focus:scale-105">
+                    #{id}
+                  </span>
             </>
           )}
 
           {direction === "next" && (
             <>
               {/* id+sprite, then right arrow */}
-              <span className="hidden md:inline-block text-xs cursor-pointer">#{id}</span>
-              <img src={spriteUrl} alt={`#${id}`} className={`hidden md:block ${spriteClass}`} />
-              {arrowSvgRight}
+                  <span className="hidden md:inline-block text-sm md:text-lg font-semibold cursor-pointer transform transition-transform duration-150 group-hover:scale-105 group-focus:scale-105">
+                    #{id}
+                  </span>
+                  <img
+                    src={spriteUrl}
+                    alt={`#${id}`}
+                    className={`hidden md:block ${spriteClass} transform transition-transform duration-200 group-hover:scale-110 group-hover:-translate-y-1 group-focus:scale-110`}
+                  />
+                  {arrowSvgRight}
             </>
           )}
         </button>
@@ -116,13 +121,17 @@ function PrevNextButton({ id, direction, navigate }) {
           {direction === "prev" ? (
             <>
               {arrowSvg}
-              <div className={`hidden md:block ${spriteClass} bg-gray-200 rounded`} />
+              <div
+                className={`hidden md:block ${spriteClass} bg-gray-200 rounded`}
+              />
               <span className="hidden md:inline-block text-xs">#{id}</span>
             </>
           ) : (
             <>
               <span className="hidden md:inline-block text-xs">#{id}</span>
-              <div className={`hidden md:block ${spriteClass} bg-gray-200 rounded`} />
+              <div
+                className={`hidden md:block ${spriteClass} bg-gray-200 rounded`}
+              />
               {arrowSvgRight}
             </>
           )}

@@ -28,11 +28,11 @@ export default function EvolutionChain({ tree }) {
           <img
             src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evoId}.png`}
             alt={evo.name}
-            className="w-20 h-20 md:w-36 md:h-36 image-render-pixel"
+            className="w-30 h-30 md:w-34 md:h-34"
           />
         </a>
 
-        <p className="text-center -mt-1">
+        <p className="text-center -mt-2">
           <span className="capitalize text-gray-600 text-sm md:text-lg">
             #{evoId}
           </span>
@@ -55,10 +55,10 @@ export default function EvolutionChain({ tree }) {
         )}
 
         {childCount > 0 && (
-          <div className="flex flex-col items-center mt-4">
+          <div className="flex flex-col items-center">
             <FontAwesomeIcon
               icon={faAngleDown}
-              className="text-gray-500 text-3xl my-8"
+              className="text-gray-500 text-4xl pt-11 pb-7"
             />
 
             {/* Dynamic responsive grid: 2 cols on small screens, dynamic cols on md+ */}
@@ -77,7 +77,7 @@ export default function EvolutionChain({ tree }) {
 
   return (
     <div className="bg-gray-50 p-4 border border-gray-300 rounded-lg shadow">
-      <h3 className="text-xl lg:text-2xl font-semibold mb-4 text-gray-800 text-center pt-5">
+      <h3 className="text-xl lg:text-3xl font-semibold mb-4 text-gray-800 text-center pt-5">
         Evolution Chain
       </h3>
 

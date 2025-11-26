@@ -97,7 +97,7 @@ export const pokeApi = createApi({
         return { data: pokemonRes.data };
       },
 
-      providesTags: ["singlePokemon"],
+      providesTags: ["lastPokemon"],
     }),
   }),
 });

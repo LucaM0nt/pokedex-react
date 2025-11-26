@@ -38,8 +38,8 @@ export default function LoginModal({ isOpen, onClose }) {
           <h2 className="text-2xl font-bold text-gray-800">Login</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
-            aria-label="Chiudi"
+            className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+            aria-label="Close"
           >
             <svg
               className="w-6 h-6"
@@ -71,7 +71,7 @@ export default function LoginModal({ isOpen, onClose }) {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Inserisci username"
+              placeholder="Your username"
               required
             />
           </div>
@@ -89,7 +89,7 @@ export default function LoginModal({ isOpen, onClose }) {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Inserisci password"
+              placeholder="Your password"
               required
             />
           </div>
@@ -98,15 +98,15 @@ export default function LoginModal({ isOpen, onClose }) {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
             >
-              Annulla
+              Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+              className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors cursor-pointer"
             >
-              Conferma
+              Log In
             </button>
           </div>
         </form>

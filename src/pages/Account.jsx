@@ -107,26 +107,26 @@ function TrainerDashboard({ username }) {
         <div className="bg-white rounded-lg shadow-lg border border-gray-300 p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-semibold text-gray-800">
-              Pokémon Preferiti
+              Favorite Pokémon
             </h2>
             <p className="text-sm text-gray-500">
-              {favoriteIds.length} elementi
+              {favoriteIds.length}
             </p>
           </div>
-          <IconGrid ids={favoriteIds} emptyLabel="Nessun preferito ancora" />
+          <IconGrid ids={favoriteIds} emptyLabel="No favorites yet" />
         </div>
 
         {/* Captured Grid */}
         <div className="bg-white rounded-lg shadow-lg border border-gray-300 p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-semibold text-gray-800">
-              Pokémon Catturati
+              Caught Pokémon
             </h2>
             <p className="text-sm text-gray-500">
-              {capturedIds.length} elementi
+              {capturedIds.length}
             </p>
           </div>
-          <IconGrid ids={capturedIds} emptyLabel="Nessun catturato ancora" />
+          <IconGrid ids={capturedIds} emptyLabel="No caught Pokémon yet" />
         </div>
       </div>
     </div>

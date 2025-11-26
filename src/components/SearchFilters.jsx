@@ -115,7 +115,7 @@ export default function SearchFilters({
           {selectedType ? (
             <TypeTag type={selectedType} />
           ) : (
-            <span className="text-gray-500">Tutti i tipi</span>
+            <span className="text-gray-500">All types</span>
           )}
           <span className="flex-1" />
           <svg
@@ -135,7 +135,7 @@ export default function SearchFilters({
               className="cursor-pointer px-3 py-2 hover:bg-blue-50"
               onMouseDown={() => handleSelectType(null)}
             >
-              <span className="text-gray-700">Tutti i tipi</span>
+              <span className="text-gray-700">All types</span>
             </li>
             <hr className="my-1" />
             {TYPE_OPTIONS.map((type) => (
@@ -167,7 +167,7 @@ export default function SearchFilters({
                 selectedGen}
             </span>
           ) : (
-            <span className="text-gray-500">Tutte le generazioni</span>
+            <span className="text-gray-500">All generations</span>
           )}
           <span className="flex-1" />
           <svg
@@ -187,7 +187,7 @@ export default function SearchFilters({
               className="cursor-pointer px-3 py-2 hover:bg-blue-50"
               onMouseDown={() => handleSelectGen(null)}
             >
-              <span className="text-gray-700">Tutte le generazioni</span>
+              <span className="text-gray-700">All generations</span>
             </li>
             <hr className="my-1" />
             {GEN_OPTIONS.map((gen) => (
@@ -207,7 +207,7 @@ export default function SearchFilters({
       <button
         className="cursor-pointer focus:outline-none"
         onClick={handleToggleFavorites}
-        title={showFavorites ? "Mostra tutti" : "Mostra solo preferiti"}
+        title={showFavorites ? "Show all" : "Show favorites"}
       >
         <svg
           className={`w-7 h-7 transition-colors ${
@@ -226,7 +226,7 @@ export default function SearchFilters({
       <button
         className="cursor-pointer focus:outline-none"
         onClick={handleToggleCaptured}
-        title={showCaptured ? "Mostra tutti" : "Mostra solo catturati"}
+        title={showCaptured ? "Show all" : "Show only caught Pokémon"}
       >
         <svg
           className={`w-7 h-7 transition-colors ${
@@ -245,7 +245,7 @@ export default function SearchFilters({
 
       {/* Reset Filtri */}
       <button
-        className="ml-auto px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded text-sm text-gray-700 border border-gray-300"
+        className="ml-auto px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-xl text-sm text-gray-700 border border-gray-300"
         onClick={() => {
           setSearchParams({});
           setSelectedType(null);
@@ -254,9 +254,9 @@ export default function SearchFilters({
           setShowCaptured(false);
           if (onResetFilters) onResetFilters();
         }}
-        title="Reset filtri"
+        title="Reset"
       >
-        Reset filtri
+        Reset
       </button>
     </div>
   );
