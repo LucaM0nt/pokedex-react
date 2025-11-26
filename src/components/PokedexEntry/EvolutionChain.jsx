@@ -11,18 +11,19 @@ export default function EvolutionChain({ tree }) {
     const children = evo.evolves_to || [];
     const childCount = children.length;
 
-    // Dynamic columns based on number of children
-    const cols =
-      childCount === 1
-        ? "grid-cols-1"
-        : childCount === 2
-        ? "grid-cols-2"
-        : childCount === 3
-        ? "grid-cols-3"
-        : "grid-cols-4"; // 4+ evolutions
+    // Dynamic columns based on number of children (desktop).
+    // On devices smaller than tablet, we'll always use 2 columns for readability.
+    const colMap = {
+      1: "md:grid-cols-1",
+      2: "md:grid-cols-2",
+      3: "md:grid-cols-3",
+      4: "md:grid-cols-4",
+    };
+
+    const desktopCols = colMap[Math.min(childCount, 4)];
 
     return (
-      <div className="flex flex-col items-center gap-1 min-w-40 py-4">
+      <div className="flex flex-col items-center gap-2 min-w-40 py-4">
         <a href={`/entry/${evo.name}`}>
           <img
             src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evoId}.png`}
@@ -31,10 +32,14 @@ export default function EvolutionChain({ tree }) {
           />
         </a>
 
-        <p className="capitalize text-gray-700 text-sm md:text-lg text-center font-medium -mt-1">
-          #{evoId}
+        <p className="text-center -mt-1">
+          <span className="capitalize text-gray-600 text-sm md:text-lg">
+            #{evoId}
+          </span>
           <br />
-          {evo.name}
+          <span className="capitalize text-gray-700 text-sm font-semibold md:text-xl">
+            {evo.name}
+          </span>
         </p>
 
         {evo.types && (
@@ -56,8 +61,10 @@ export default function EvolutionChain({ tree }) {
               className="text-gray-500 text-3xl my-8"
             />
 
-            {/* Dynamic responsive grid */}
-            <div className={`grid ${cols} gap-7 place-items-start`}>
+            {/* Dynamic responsive grid: 2 cols on small screens, dynamic cols on md+ */}
+            <div
+              className={`grid grid-cols-1 ${desktopCols} gap-7 place-items-start`}
+            >
               {children.map((child, index) => (
                 <EvolutionNode key={index} evo={child} />
               ))}
