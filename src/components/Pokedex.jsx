@@ -73,6 +73,11 @@ export default function Pokedex({
     setScrollSignal((s) => s + 1);
   }, [submittedSearchTerm, scrollToTopSignal]);
 
+  // Reset scroll quando si attivano/disattivano favorites/captured
+  useEffect(() => {
+    setScrollSignal((s) => s + 1);
+  }, [showFavorites, showCaptured]);
+
   // --- Pagine tipo / generazione ---
   useEffect(() => {
     if (!selectedType || !typeData) return;
@@ -145,21 +150,27 @@ export default function Pokedex({
   };
 
   // --- Seleziona dataset da mostrare ---
+  // Se favorites o captured sono attivi, usiamo sempre la lista completa (non paginata)
+  const useFullForLists = showFavorites || showCaptured;
+
   let rawList;
   if (selectedType && selectedGen && typeData && genData) {
-    // Incrocia tutte le entry di tipo e generazione
-    const typeIds = new Set(normalizeAndSort(typeData).map((p) => p.id));
-    rawList = normalizeAndSort(genData).filter((p) => typeIds.has(p.id));
+    const fullType = normalizeAndSort(typeData);
+    const fullGen = normalizeAndSort(genData);
+    const typeIds = new Set(fullType.map((p) => p.id));
+    rawList = fullGen.filter((p) => typeIds.has(p.id));
   } else if (selectedType) {
-    rawList = typeList;
+    rawList = useFullForLists ? normalizeAndSort(typeData) : typeList;
   } else if (selectedGen && isSearching) {
     rawList = normalizeAndSort(genData ?? []);
   } else if (selectedGen) {
-    rawList = genList;
+    rawList = useFullForLists ? normalizeAndSort(genData) : genList;
   } else if (isSearching) {
     rawList = normalizeAndSort(fullListData?.results ?? []);
   } else {
-    rawList = pokemonList;
+    rawList = useFullForLists
+      ? normalizeAndSort(fullListData?.results ?? [])
+      : pokemonList;
   }
 
   // --- Filtri comuni e deduplica ---
@@ -186,14 +197,10 @@ export default function Pokedex({
     });
     // Filtro favorites/captured
     if (showFavorites) {
-      list = list.filter((p) =>
-        isFavorite({ userLists: userListsState }, p.id)
-      );
+      list = list.filter((p) => isFavorite(userListsState, p.id));
     }
     if (showCaptured) {
-      list = list.filter((p) =>
-        isCaptured({ userLists: userListsState }, p.id)
-      );
+      list = list.filter((p) => isCaptured(userListsState, p.id));
     }
     return list;
   })();
@@ -201,7 +208,10 @@ export default function Pokedex({
   const loading = isLoading || isTypeFetching || isGenFetching;
 
   let hasMore;
-  if (selectedType && !selectedGen) {
+  if (useFullForLists) {
+    // Quando favorites/captured sono attivi mostriamo già l'intero set filtrato
+    hasMore = false;
+  } else if (selectedType && !selectedGen) {
     hasMore = typeList.length < (typeData?.length ?? 0);
   } else if (selectedGen && !selectedType) {
     hasMore = genList.length < (genData?.length ?? 0);
