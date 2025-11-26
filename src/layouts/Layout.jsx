@@ -1,10 +1,21 @@
 import { Outlet, useLocation } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import LoginModal from "../components/LoginModal";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  selectLoginModalOpen,
+  closeLoginModal,
+  login,
+} from "../store/userSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function Layout() {
   const location = useLocation();
   const isHome = location.pathname === "/";
+  const isLoginOpen = useSelector(selectLoginModalOpen);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   return (
     <div
@@ -20,6 +31,17 @@ export default function Layout() {
           <Outlet />
         </section>
       </main>
+
+      {/* Global Login Modal overlay */}
+      <LoginModal
+        isOpen={isLoginOpen}
+        onClose={() => dispatch(closeLoginModal())}
+        onConfirm={(username) => {
+          dispatch(login({ username }));
+          dispatch(closeLoginModal());
+          navigate("/user");
+        }}
+      />
 
       <Footer />
     </div>

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import siteRoutes from "../../siteRoutes";
 import useAuth from "../../hooks/useAuth";
+import { useDispatch } from "react-redux";
+import { openLoginModal } from "../../store/userSlice";
 
 import HamburgerButton from "./HamburgerButton";
 import NavbarLink from "./NavbarLink";
@@ -10,6 +12,7 @@ import MobileMenu from "./MobileMenu";
 export default function Navbar({ className, headerHeight }) {
   const [isOpen, setIsOpen] = useState(false);
   const { isLogged, logout } = useAuth();
+  const dispatch = useDispatch();
 
   const handleLogout = () => {
     logout();
@@ -46,9 +49,15 @@ export default function Navbar({ className, headerHeight }) {
           {/* Conditional rendering based on login state */}
           {!isLogged ? (
             <div key="login" className="relative">
-              <NavbarLink to="/login" onClick={() => setIsOpen(false)}>
+              <button
+                onClick={() => {
+                  dispatch(openLoginModal());
+                  setIsOpen(false);
+                }}
+                className="text-white text-lg px-3 pb-7 md:pb-0 hover:text-blue-500 transition-colors duration-300 cursor-pointer"
+              >
                 Login
-              </NavbarLink>
+              </button>
             </div>
           ) : (
             <>

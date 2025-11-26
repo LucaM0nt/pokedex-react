@@ -6,6 +6,7 @@ const initialState = {
   favorites: { byId: {} },
   captures: { byId: {} },
   fullList: [],
+  loginModalOpen: false,
 };
 
 const userSlice = createSlice({
@@ -19,6 +20,12 @@ const userSlice = createSlice({
     logout(state) {
       state.isLogged = false;
       state.username = null;
+    },
+    openLoginModal(state) {
+      state.loginModalOpen = true;
+    },
+    closeLoginModal(state) {
+      state.loginModalOpen = false;
     },
     add(state, action) {
       const { list, id } = action.payload;
@@ -43,8 +50,16 @@ const userSlice = createSlice({
   },
 });
 
-export const { login, logout, add, remove, toggle, setFullList } =
-  userSlice.actions;
+export const {
+  login,
+  logout,
+  add,
+  remove,
+  toggle,
+  setFullList,
+  openLoginModal,
+  closeLoginModal,
+} = userSlice.actions;
 
 // Convenience action creators to keep a clear API
 export const addFavorite = (id) => add({ list: "favorites", id });
@@ -61,6 +76,8 @@ const getUserState = (state) => state?.user ?? state;
 
 export const selectIsLogged = (state) => getUserState(state).isLogged;
 export const selectUsername = (state) => getUserState(state).username;
+export const selectLoginModalOpen = (state) =>
+  getUserState(state).loginModalOpen;
 
 export const selectListById = (state, list) =>
   getUserState(state)[list]?.byId ?? {};
