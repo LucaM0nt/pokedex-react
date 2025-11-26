@@ -11,6 +11,7 @@ export const pokeApi = createApi({
     "pokemonByName",
     "allPokemon",
     "pokemonGeneration",
+    "lastPokemon",
   ],
   endpoints: (builder) => ({
     // Paginated list
@@ -78,18 +79,23 @@ export const pokeApi = createApi({
         }
 
         // 2) fetch only the last species entry via offset
-        const lastRes = await fetchWithBQ(`pokemon-species?limit=1&offset=${count - 1}`);
+        const lastRes = await fetchWithBQ(
+          `pokemon-species?limit=1&offset=${count - 1}`
+        );
         if (lastRes.error) return { error: lastRes.error };
 
         const lastEntry = lastRes.data?.results?.[0];
         if (!lastEntry || !lastEntry.url) {
-          return { error: { message: "Failed to retrieve last species entry" } };
+          return {
+            error: { message: "Failed to retrieve last species entry" },
+          };
         }
 
         // 3) extract numeric ID from species URL and fetch the actual pokemon
         const match = lastEntry.url.match(/pokemon-species\/(\d+)\/?$/);
         const lastId = match ? Number(match[1]) : null;
-        if (!lastId) return { error: { message: "Failed to parse last Pokémon ID" } };
+        if (!lastId)
+          return { error: { message: "Failed to parse last Pokémon ID" } };
 
         const pokemonRes = await fetchWithBQ(`pokemon/${lastId}`);
         if (pokemonRes.error) return { error: pokemonRes.error };
@@ -97,7 +103,7 @@ export const pokeApi = createApi({
         return { data: pokemonRes.data };
       },
 
-      providesTags: ["singlePokemon"],
+      providesTags: ["lastPokemon"],
     }),
   }),
 });
