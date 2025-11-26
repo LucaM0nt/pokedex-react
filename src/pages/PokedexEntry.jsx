@@ -78,7 +78,7 @@ export default function PokedexEntry() {
           <div className="flex items-center justify-between gap-4 mb-4">
             <button
               onClick={() => navigate("/")}
-              className="flex items-center gap-2 text-gray-700 hover:text-gray-900 font-medium transition-colors"
+              className="cursor-pointer flex items-center gap-2 text-gray-700 hover:text-gray-900 font-medium transition-colors"
             >
               <svg
                 className="w-5 h-5"

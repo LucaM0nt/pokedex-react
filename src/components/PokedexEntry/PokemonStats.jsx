@@ -16,7 +16,7 @@ export default function PokemonStats({ stats }) {
   // Render horizontal bars on md+ (original layout), vertical bars on smaller screens
   return (
     <div className="bg-gray-50 p-4 border border-gray-300 rounded-lg shadow">
-      <h3 className="text-xl font-semibold mb-4 text-gray-800 text-center">
+      <h3 className="text-xl font-semibold mb-4 text-gray-800 text-center lg:text-2xl">
         Base Stats
       </h3>
 

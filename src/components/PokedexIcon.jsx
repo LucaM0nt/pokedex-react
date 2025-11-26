@@ -1,5 +1,6 @@
 // PokedexIcon.jsx — replaced SVG with project asset image
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import pokeball from "../assets/ce30463b8da710923be366d5114de468-removebg-preview.webp";
 
 export default function PokedexIcon({ className = "", alt = "Pokedex" }) {
@@ -14,13 +15,15 @@ export default function PokedexIcon({ className = "", alt = "Pokedex" }) {
   };
 
   return (
-    <div
+    <Link
+      to="/"
+      aria-label="Homepage"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       onFocus={() => setHover(true)}
       onBlur={() => setHover(false)}
       style={style}
-      aria-hidden={false}
+      className="inline-block"
     >
       <img
         src={pokeball}
@@ -30,6 +33,6 @@ export default function PokedexIcon({ className = "", alt = "Pokedex" }) {
         loading="lazy"
         draggable={false}
       />
-    </div>
+    </Link>
   );
 }
