@@ -1,23 +1,20 @@
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { useGetPokemonQuery } from "../store/pokeApiSlice";
 import { store } from "../store/index.js";
-import {
-  toggleFavorite,
-  toggleCapture,
-  isFavorite,
-  isCaptured,
-} from "../store/userSlice";
+import usePokemonActions from "../hooks/usePokemonActions";
 
 import TypeTag from "./TypeTag";
 
 function PokemonListItem({ pkmnId, onHover }) {
   const { data, error, isLoading } = useGetPokemonQuery(pkmnId);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const fav = useSelector((state) => isFavorite(state.user, pkmnId));
-  const cap = useSelector((state) => isCaptured(state.user, pkmnId));
+  const {
+    isFavorite: fav,
+    isCaptured: cap,
+    toggleFavorite,
+    toggleCapture,
+  } = usePokemonActions(pkmnId);
 
   if (isLoading) {
     return (
@@ -42,15 +39,15 @@ function PokemonListItem({ pkmnId, onHover }) {
   }
   const handleToggleFavorite = (e) => {
     e.stopPropagation();
-    dispatch(toggleFavorite(pkmnId));
-    const lists = store.getState().userLists;
+    toggleFavorite();
+    const lists = store.getState().user;
     console.log("favoritesById:", lists.favorites.byId);
   };
 
   const handleToggleCapture = (e) => {
     e.stopPropagation();
-    dispatch(toggleCapture(pkmnId));
-    const lists = store.getState().userLists;
+    toggleCapture();
+    const lists = store.getState().user;
     console.log("capturesById:", lists.captures.byId);
   };
 

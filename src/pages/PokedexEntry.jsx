@@ -1,6 +1,5 @@
 ﻿import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 
 import {
   useGetPokemonQuery,
@@ -13,17 +12,10 @@ import PokemonDescription from "../components/PokedexEntry/PokemonDescription.js
 import PokemonStats from "../components/PokedexEntry/PokemonStats.jsx";
 import EvolutionChain from "../components/PokedexEntry/EvolutionChain.jsx";
 import EntryHeader from "../components/PokedexEntry/EntryHeader.jsx";
-
-import {
-  toggleFavorite,
-  toggleCapture,
-  isFavorite,
-  isCaptured,
-} from "../store/userSlice";
+import usePokemonActions from "../hooks/usePokemonActions";
 
 export default function PokedexEntry() {
   const { id } = useParams();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const pokemonId = Number(id);
 
@@ -49,15 +41,21 @@ export default function PokedexEntry() {
     }
   }, [speciesData]);
 
-  // Call selectors unconditionally to keep hook order stable across renders
-  const fav = useSelector((state) => isFavorite(state.user, pokemonId));
-  const cap = useSelector((state) => isCaptured(state.user, pokemonId));
+  // Use custom hook for Pokemon actions
+  const {
+    isFavorite: fav,
+    isCaptured: cap,
+    toggleFavorite: handleToggleFavorite,
+    toggleCapture: handleToggleCapture,
+  } = usePokemonActions(pokemonId);
 
   if (isLoadingPokemon || isLoadingSpecies)
     return <div className="p-4 bg-white rounded-lg shadow">Loading...</div>;
   if (pokemonError || speciesError)
     return (
-      <div className="p-4 bg-white rounded-lg shadow text-red-600">Loading error.</div>
+      <div className="p-4 bg-white rounded-lg shadow text-red-600">
+        Loading error.
+      </div>
     );
   if (!pokemonData || !speciesData)
     return <div className="p-4 bg-white rounded-lg shadow">No data.</div>;
@@ -66,9 +64,6 @@ export default function PokedexEntry() {
     speciesData.flavor_text_entries.find(
       (entry) => entry.language.name === "en"
     )?.flavor_text || "";
-
-  const handleToggleFavorite = () => dispatch(toggleFavorite(pokemonId));
-  const handleToggleCapture = () => dispatch(toggleCapture(pokemonId));
 
   return (
     <div className="container mx-auto px-4 py-6">
@@ -141,10 +136,7 @@ export default function PokedexEntry() {
 
           {/* Body */}
           <div className="space-y-7 my-10">
-            <EntryHeader
-                pokemonId={pokemonId}
-                pokemonName={pokemonData.name}
-            />
+            <EntryHeader pokemonId={pokemonId} pokemonName={pokemonData.name} />
             <PokemonInfo pokemonData={pokemonData} speciesData={speciesData} />
             <PokemonDescription flavorText={flavorText} />
             <PokemonStats stats={pokemonData.stats} />
@@ -155,4 +147,3 @@ export default function PokedexEntry() {
     </div>
   );
 }
-

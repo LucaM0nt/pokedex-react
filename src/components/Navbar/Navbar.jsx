@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { selectIsLogged, logout } from "../../store/userSlice";
 import siteRoutes from "../../siteRoutes";
+import useAuth from "../../hooks/useAuth";
 
 import HamburgerButton from "./HamburgerButton";
 import NavbarLink from "./NavbarLink";
@@ -10,11 +9,10 @@ import MobileMenu from "./MobileMenu";
 
 export default function Navbar({ className, headerHeight }) {
   const [isOpen, setIsOpen] = useState(false);
-  const isLogged = useSelector(selectIsLogged);
-  const dispatch = useDispatch();
+  const { isLogged, logout } = useAuth();
 
   const handleLogout = () => {
-    dispatch(logout());
+    logout();
     setIsOpen(false);
   };
 

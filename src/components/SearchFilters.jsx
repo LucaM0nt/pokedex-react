@@ -3,6 +3,7 @@ import TypeTag from "./TypeTag";
 import { TYPE_OPTIONS } from "../constants/pokemonTypes";
 import { GEN_OPTIONS } from "../constants/pokemonGenerations";
 import { useSearchParams } from "react-router-dom";
+import useClickOutside from "../hooks/useClickOutside";
 
 export default function SearchFilters({
   onSelectType,
@@ -43,16 +44,10 @@ export default function SearchFilters({
     onToggleCaptured,
   ]);
 
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setOpenTypeDropdown(false);
-        setOpenGenDropdown(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  useClickOutside(dropdownRef, () => {
+    setOpenTypeDropdown(false);
+    setOpenGenDropdown(false);
+  });
 
   const handleSelectType = (type) => {
     if (!type) {

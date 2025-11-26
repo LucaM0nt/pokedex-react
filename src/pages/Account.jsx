@@ -1,17 +1,13 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate, Link } from "react-router-dom";
-import {
-  selectIsLogged,
-  selectUsername,
-  selectListById,
-} from "../store/userSlice";
+import { selectListById } from "../store/userSlice";
 import LoginModal from "../components/LoginModal";
+import useAuth from "../hooks/useAuth";
 
 export default function Account() {
   const [showModal, setShowModal] = useState(false);
-  const isLogged = useSelector(selectIsLogged);
-  const username = useSelector(selectUsername);
+  const { isLogged, username } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -109,9 +105,7 @@ function TrainerDashboard({ username }) {
             <h2 className="text-xl font-semibold text-gray-800">
               Favorite Pokémon
             </h2>
-            <p className="text-sm text-gray-500">
-              {favoriteIds.length}
-            </p>
+            <p className="text-sm text-gray-500">{favoriteIds.length}</p>
           </div>
           <IconGrid ids={favoriteIds} emptyLabel="No favorites yet" />
         </div>
@@ -122,9 +116,7 @@ function TrainerDashboard({ username }) {
             <h2 className="text-xl font-semibold text-gray-800">
               Caught Pokémon
             </h2>
-            <p className="text-sm text-gray-500">
-              {capturedIds.length}
-            </p>
+            <p className="text-sm text-gray-500">{capturedIds.length}</p>
           </div>
           <IconGrid ids={capturedIds} emptyLabel="No caught Pokémon yet" />
         </div>
