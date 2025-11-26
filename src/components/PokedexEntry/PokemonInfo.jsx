@@ -1,19 +1,16 @@
 import TypeTag from "../TypeTag";
 
 export default function PokemonInfo({ pokemonData, speciesData }) {
-  const genderText =
-    speciesData.gender_rate === -1
-      ? "Genderless"
-      : `${(8 - speciesData.gender_rate) * 12.5}% Male / ${
-          speciesData.gender_rate * 12.5
-        }% Female`;
+  const isGenderless = speciesData.gender_rate === -1;
+  const femaleRatio = isGenderless ? 0 : speciesData.gender_rate * 12.5;
+  const maleRatio = isGenderless ? 0 : 100 - femaleRatio;
+  const genderText = isGenderless
+    ? "Genderless"
+    : `${maleRatio.toFixed(1)}% Male / ${femaleRatio.toFixed(1)}% Female`;
 
   return (
     <div className="flex flex-col md:flex-row md:items-stretch gap-6 w-full">
       <div className="flex flex-col items-center justify-center w-full md:w-1/2">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 text-center mb-1">
-          #{pokemonData.id} {pokemonData.name.toUpperCase()}
-        </h2>
         <img
           src={
             pokemonData.sprites.other["official-artwork"].front_default ||
@@ -37,27 +34,59 @@ export default function PokemonInfo({ pokemonData, speciesData }) {
         <div className="bg-gray-50 p-4 border border-gray-300 rounded-lg shadow text-center flex flex-col justify-center gap-4 h-full w-full">
           <div>
             <div className="flex items-center justify-center gap-2 font-semibold text-gray-700">
-              <span className="text-blue-600 text-xl">📏</span> Height
+              Height
             </div>
             <p className="text-gray-600">{pokemonData.height / 10} m</p>
           </div>
           <div>
             <div className="flex items-center justify-center gap-2 font-semibold text-gray-700">
-              <span className="text-red-600 text-xl">🏋️</span> Weight
+              Weight
             </div>
             <p className="text-gray-600">{pokemonData.weight / 10} kg</p>
           </div>
           <div>
             <div className="flex items-center justify-center gap-2 font-semibold text-gray-700">
-              <span className="text-purple-600 text-xl">⚥</span> Gender
+              Gender
             </div>
-            <p className="text-gray-600">{genderText}</p>
+
+            {/* Gender ratio bar */}
+            <div className="mt-2 flex flex-col items-center">
+              {isGenderless ? (
+                <>
+                  <div
+                    className="w-48 sm:w-56 h-3 rounded-2xl bg-purple-400"
+                    aria-hidden
+                  />
+                  <p className="text-gray-600 text-sm mt-1">Genderless</p>
+                </>
+              ) : (
+                <>
+                  <div
+                    className="w-48 sm:w-56 h-3 rounded-2xl overflow-hidden flex"
+                    role="img"
+                    aria-label={`Male ${maleRatio.toFixed(1)}% Female ${femaleRatio.toFixed(1)}%`}
+                  >
+                    <div
+                      className="bg-blue-500 h-full"
+                      style={{ width: `${maleRatio}%` }}
+                    />
+                    <div
+                      className="bg-pink-500 h-full"
+                      style={{ width: `${femaleRatio}%` }}
+                    />
+                  </div>
+                  <p className="text-gray-600 text-sm mt-1">
+                    {`${maleRatio.toFixed(1)}% Male / ${femaleRatio.toFixed(1)}% Female`}
+                  </p>
+                </>
+              )}
+            </div>
           </div>
           <div>
             <div className="flex items-center justify-center gap-2 font-semibold text-gray-700">
-              <span className="text-green-600 text-xl">✨</span> Abilities
+              Abilities
             </div>
-            <p className="text-gray-600">
+            <p className="text-gray-600 capitalize">
               {pokemonData.abilities
                 .map((a) => a.ability.name.replace("-", " "))
                 .join(", ")}

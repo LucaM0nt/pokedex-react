@@ -12,6 +12,7 @@ import PokemonInfo from "../components/PokedexEntry/PokemonInfo.jsx";
 import PokemonDescription from "../components/PokedexEntry/PokemonDescription.jsx";
 import PokemonStats from "../components/PokedexEntry/PokemonStats.jsx";
 import EvolutionChain from "../components/PokedexEntry/EvolutionChain.jsx";
+import EntryHeader from "../components/PokedexEntry/EntryHeader.jsx";
 
 import {
   toggleFavorite,
@@ -56,9 +57,7 @@ export default function PokedexEntry() {
     return <div className="p-4 bg-white rounded-lg shadow">Loading...</div>;
   if (pokemonError || speciesError)
     return (
-      <div className="p-4 bg-white rounded-lg shadow text-red-600">
-        Loading error.
-      </div>
+      <div className="p-4 bg-white rounded-lg shadow text-red-600">Loading error.</div>
     );
   if (!pokemonData || !speciesData)
     return <div className="p-4 bg-white rounded-lg shadow">No data.</div>;
@@ -94,17 +93,15 @@ export default function PokedexEntry() {
                   d="M15 19l-7-7 7-7"
                 />
               </svg>
-              <span>Torna al Pokédex</span>
+              <span>Back to Pokédex</span>
             </button>
 
             <div className="flex items-center gap-4">
               <button
                 onClick={handleToggleFavorite}
                 className="cursor-pointer focus:outline-none"
-                aria-label={
-                  fav ? "Rimuovi dai preferiti" : "Aggiungi ai preferiti"
-                }
-                title={fav ? "Rimuovi dai preferiti" : "Aggiungi ai preferiti"}
+                aria-label={fav ? "Remove from favorites" : "Add to favorites"}
+                title={fav ? "Remove from favorites" : "Add to favorites"}
               >
                 <svg
                   className={`w-7 h-7 ${
@@ -122,10 +119,8 @@ export default function PokedexEntry() {
               <button
                 onClick={handleToggleCapture}
                 className="cursor-pointer focus:outline-none"
-                aria-label={
-                  cap ? "Rimuovi dai catturati" : "Aggiungi ai catturati"
-                }
-                title={cap ? "Rimuovi dai catturati" : "Aggiungi ai catturati"}
+                aria-label={cap ? "Remove from caught" : "Add to caught"}
+                title={cap ? "Remove from caught" : "Add to caught"}
               >
                 <svg
                   className={`w-7 h-7 ${
@@ -145,7 +140,8 @@ export default function PokedexEntry() {
           </div>
 
           {/* Body */}
-          <div className="space-y-6 mt-2">
+          <div className="space-y-7 my-10">
+            <EntryHeader pokemonId={pokemonId} pokemonName={pokemonData.name} />
             <PokemonInfo pokemonData={pokemonData} speciesData={speciesData} />
             <PokemonDescription flavorText={flavorText} />
             <PokemonStats stats={pokemonData.stats} />
@@ -156,3 +152,4 @@ export default function PokedexEntry() {
     </div>
   );
 }
+

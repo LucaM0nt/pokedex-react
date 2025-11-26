@@ -1,6 +1,6 @@
 import React from "react";
 
-// Color mapping by stat type (optional, for flair)
+// Color mapping by stat type (for flair)
 const STAT_COLORS = {
   hp: "bg-red-500",
   attack: "bg-orange-500",
@@ -13,14 +13,15 @@ const STAT_COLORS = {
 export default function PokemonStats({ stats }) {
   // stats is expected to be the array from PokeAPI: pokemonData.stats
   const maxStatValue = 255; // Max value in Pokémon games for scaling
-
+  // Render horizontal bars on md+ (original layout), vertical bars on smaller screens
   return (
     <div className="bg-gray-50 p-4 border border-gray-300 rounded-lg shadow">
       <h3 className="text-xl font-semibold mb-4 text-gray-800 text-center">
         Base Stats
       </h3>
 
-      <div className="flex flex-col gap-3">
+      {/* Horizontal bars for md and up (original appearance) */}
+      <div className="hidden md:flex flex-col gap-3">
         {stats.map((stat) => {
           const value = stat.base_stat;
           const name = stat.stat.name; // e.g., "attack", "speed"
@@ -29,9 +30,6 @@ export default function PokemonStats({ stats }) {
 
           return (
             <div key={name} className="flex items-center gap-3">
-              <span className="capitalize w-28 text-gray-700 font-semibold text-sm md:text-base">
-                {name.replace("-", " ")}
-              </span>
 
               <div className="flex-1 bg-gray-200 h-4 rounded-full overflow-hidden">
                 <div
@@ -41,10 +39,53 @@ export default function PokemonStats({ stats }) {
                   style={{ width: `${widthPercent}%` }}
                 />
               </div>
-
-              <span className="w-10 text-right text-gray-700 font-medium text-sm md:text-base">
+              
+              <span className="w-6 pr-6 text-right text-gray-700 font-medium text-sm md:text-base">
                 {value}
               </span>
+
+              <span className="capitalize w-30 text-gray-700 font-semibold text-sm md:text-base">
+                {name.replace("-", " ")}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Vertical bars for tablets and smaller (md and below) */}
+      <div className="flex md:hidden items-start justify-between gap-1 px-1 overflow-x-auto">
+        {stats.map((stat) => {
+          const value = stat.base_stat;
+          const name = stat.stat.name; // e.g., "attack", "speed"
+
+          const heightPercent = Math.min((value / maxStatValue) * 100, 100);
+          const label = name.replace("-", " ");
+
+          return (
+            <div
+              key={name}
+              className="flex flex-col items-center flex-1 min-w-11"
+            >
+              <div
+                className="w-full h-34 bg-gray-200 rounded-md overflow-hidden flex items-end"
+                aria-hidden
+              >
+                <div
+                  className={`${
+                    STAT_COLORS[name] || "bg-gray-500"
+                  } w-full transition-all rounded-md duration-500`}
+                  style={{ height: `${heightPercent}%` }}
+                />
+              </div>
+
+              <div className="mt-1 text-center">
+                <div className="text-[10px] sm:text-sm font-semibold text-gray-700 capitalize">
+                  {label}
+                </div>
+                <div className="text-[10px] sm:text-xs text-gray-600">
+                  {value}
+                </div>
+              </div>
             </div>
           );
         })}
