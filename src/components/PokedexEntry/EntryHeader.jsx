@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useGetLastPokemonQuery } from "../../store/pokeApiSlice";
 
 // EntryHeader
 // Shows a centered title with the current Pokémon `#ID NAME` and
@@ -9,9 +10,19 @@ import { useNavigate } from "react-router-dom";
 export default function EntryHeader({ pokemonId, pokemonName }) {
   const navigate = useNavigate();
 
+  // Use the latest API helper to fetch the last valid Pokémon record.
+  // This avoids relying on `count` which may include invalid/placeholder rows.
+  const { data: lastPokemon } = useGetLastPokemonQuery();
+  const lastId = lastPokemon?.id;
+
+  // Compute wrap-around prev/next using `lastId` when available.
+  // If `lastId` is not available we fall back to simple +/- ids.
+  const prevId = lastId ? (pokemonId - 1 < 1 ? lastId : pokemonId - 1) : pokemonId - 1;
+  const nextId = lastId ? (pokemonId + 1 > lastId ? 1 : pokemonId + 1) : pokemonId + 1;
+
   return (
     <div className="flex items-center justify-between gap-4 py-4">
-      <PrevNextButton id={pokemonId - 1} direction="prev" navigate={navigate} />
+      <PrevNextButton id={prevId} direction="prev" navigate={navigate} />
 
       <div className="text-center">
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800">
@@ -19,7 +30,7 @@ export default function EntryHeader({ pokemonId, pokemonName }) {
         </h2>
       </div>
 
-      <PrevNextButton id={pokemonId + 1} direction="next" navigate={navigate} />
+      <PrevNextButton id={nextId} direction="next" navigate={navigate} />
     </div>
   );
 }

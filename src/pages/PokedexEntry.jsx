@@ -141,7 +141,10 @@ export default function PokedexEntry() {
 
           {/* Body */}
           <div className="space-y-7 my-10">
-            <EntryHeader pokemonId={pokemonId} pokemonName={pokemonData.name} />
+            <EntryHeader
+                pokemonId={pokemonId}
+                pokemonName={pokemonData.name}
+            />
             <PokemonInfo pokemonData={pokemonData} speciesData={speciesData} />
             <PokemonDescription flavorText={flavorText} />
             <PokemonStats stats={pokemonData.stats} />

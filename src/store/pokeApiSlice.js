@@ -61,6 +61,44 @@ export const pokeApi = createApi({
         })),
       providesTags: ["pokemonGeneration"],
     }),
+
+    // Get the very last Pokémon
+    // Implementation: first fetch the species metadata to get the total
+    // count, then request the single species at offset (count-1). This
+    // avoids downloading the entire species list.
+    getLastPokemon: builder.query({
+      async queryFn(_arg, _queryApi, _extraOptions, fetchWithBQ) {
+        // 1) get metadata (contains `count`)
+        const metaRes = await fetchWithBQ(`pokemon-species?limit=1`);
+        if (metaRes.error) return { error: metaRes.error };
+
+        const count = metaRes.data?.count;
+        if (!count || typeof count !== "number") {
+          return { error: { message: "Could not determine species count" } };
+        }
+
+        // 2) fetch only the last species entry via offset
+        const lastRes = await fetchWithBQ(`pokemon-species?limit=1&offset=${count - 1}`);
+        if (lastRes.error) return { error: lastRes.error };
+
+        const lastEntry = lastRes.data?.results?.[0];
+        if (!lastEntry || !lastEntry.url) {
+          return { error: { message: "Failed to retrieve last species entry" } };
+        }
+
+        // 3) extract numeric ID from species URL and fetch the actual pokemon
+        const match = lastEntry.url.match(/pokemon-species\/(\d+)\/?$/);
+        const lastId = match ? Number(match[1]) : null;
+        if (!lastId) return { error: { message: "Failed to parse last Pokémon ID" } };
+
+        const pokemonRes = await fetchWithBQ(`pokemon/${lastId}`);
+        if (pokemonRes.error) return { error: pokemonRes.error };
+
+        return { data: pokemonRes.data };
+      },
+
+      providesTags: ["singlePokemon"],
+    }),
   }),
 });
 
@@ -72,4 +110,5 @@ export const {
   useSearchPokemonByNameQuery,
   useGetAllPokemonFullListQuery,
   useGetPokemonGenerationQuery,
+  useGetLastPokemonQuery,
 } = pokeApi;
