@@ -24,7 +24,7 @@ export default function EvolutionChain({ tree }) {
 
     return (
       <div className="flex flex-col items-center gap-2 min-w-40 py-4">
-        <a href={`/entry/${evo.name}`}>
+        <a href={`/entry/${evoId}`}>
           <img
             src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evoId}.png`}
             alt={evo.name}
