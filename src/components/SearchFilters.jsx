@@ -2,8 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import TypeTag from "./TypeTag";
 import { TYPE_OPTIONS } from "../constants/pokemonTypes";
 import { GEN_OPTIONS } from "../constants/pokemonGenerations";
-import { useSearchParams } from "react-router-dom";
 import useClickOutside from "../hooks/useClickOutside";
+import usePokedexQueryParams from "../hooks/usePokedexQueryParams";
 
 export default function SearchFilters({
   onSelectType,
@@ -15,34 +15,31 @@ export default function SearchFilters({
   const dropdownRef = useRef(null);
   const [openTypeDropdown, setOpenTypeDropdown] = useState(false);
   const [openGenDropdown, setOpenGenDropdown] = useState(false);
-  const [selectedType, setSelectedType] = useState(null);
-  const [selectedGen, setSelectedGen] = useState(null);
-  const [showFavorites, setShowFavorites] = useState(false);
-  const [showCaptured, setShowCaptured] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const {
+    type: selectedType,
+    gen: selectedGen,
+    favorites: showFavorites,
+    captured: showCaptured,
+    setType,
+    setGen,
+    toggleFavorites,
+    toggleCaptured,
+    resetAll,
+  } = usePokedexQueryParams();
 
+  // Propagate current params to parent consumers
   useEffect(() => {
-    const urlType = searchParams.get("type") || null;
-    const urlGen = searchParams.get("gen") || null;
-    const urlFavorites = searchParams.get("favorites") === "true";
-    const urlCaptured = searchParams.get("captured") === "true";
-    setSelectedType(urlType);
-    // urlGen può essere stringa, converti in numero se possibile
-    const genId = urlGen ? Number(urlGen) : null;
-    setSelectedGen(genId);
-    setShowFavorites(urlFavorites);
-    setShowCaptured(urlCaptured);
-    if (onSelectType) onSelectType(urlType);
-    if (onSelectGen) onSelectGen(genId);
-    if (onToggleFavorites) onToggleFavorites(urlFavorites);
-    if (onToggleCaptured) onToggleCaptured(urlCaptured);
-  }, [
-    searchParams,
-    onSelectType,
-    onSelectGen,
-    onToggleFavorites,
-    onToggleCaptured,
-  ]);
+    if (onSelectType) onSelectType(selectedType);
+  }, [selectedType, onSelectType]);
+  useEffect(() => {
+    if (onSelectGen) onSelectGen(selectedGen);
+  }, [selectedGen, onSelectGen]);
+  useEffect(() => {
+    if (onToggleFavorites) onToggleFavorites(showFavorites);
+  }, [showFavorites, onToggleFavorites]);
+  useEffect(() => {
+    if (onToggleCaptured) onToggleCaptured(showCaptured);
+  }, [showCaptured, onToggleCaptured]);
 
   useClickOutside(dropdownRef, () => {
     setOpenTypeDropdown(false);
@@ -50,49 +47,21 @@ export default function SearchFilters({
   });
 
   const handleSelectType = (type) => {
-    if (!type) {
-      searchParams.delete("type");
-      setSelectedType(null);
-    } else {
-      searchParams.set("type", type);
-      setSelectedType(type);
-    }
-    setSearchParams(searchParams);
+    setType(type || null);
     setOpenTypeDropdown(false);
   };
 
   const handleSelectGen = (genId) => {
-    if (!genId) {
-      searchParams.delete("gen");
-      setSelectedGen(null);
-    } else {
-      searchParams.set("gen", genId);
-      setSelectedGen(genId);
-    }
-    setSearchParams(searchParams);
+    setGen(genId || null);
     setOpenGenDropdown(false);
   };
 
   const handleToggleFavorites = () => {
-    const newValue = !showFavorites;
-    setShowFavorites(newValue);
-    if (newValue) {
-      searchParams.set("favorites", "true");
-    } else {
-      searchParams.delete("favorites");
-    }
-    setSearchParams(searchParams);
+    toggleFavorites();
   };
 
   const handleToggleCaptured = () => {
-    const newValue = !showCaptured;
-    setShowCaptured(newValue);
-    if (newValue) {
-      searchParams.set("captured", "true");
-    } else {
-      searchParams.delete("captured");
-    }
-    setSearchParams(searchParams);
+    toggleCaptured();
   };
 
   return (
@@ -242,11 +211,7 @@ export default function SearchFilters({
       <button
         className="ml-auto px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-xl text-sm text-gray-700 border border-gray-300"
         onClick={() => {
-          setSearchParams({});
-          setSelectedType(null);
-          setSelectedGen(null);
-          setShowFavorites(false);
-          setShowCaptured(false);
+          resetAll();
           if (onResetFilters) onResetFilters();
         }}
         title="Reset"

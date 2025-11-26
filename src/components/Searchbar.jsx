@@ -5,8 +5,8 @@ import React, {
   useRef,
   useCallback,
 } from "react";
-import { useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import usePokedexQueryParams from "../hooks/usePokedexQueryParams";
 
 // Utility: estrai l'id dall'url (es: .../pokemon/25/)
 function getIdFromUrl(url) {
@@ -16,7 +16,8 @@ function getIdFromUrl(url) {
 }
 
 export default function Searchbar({ onSelectPokemon, onSearch }) {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { type, gen, favorites, captured, setSearch, apply } =
+    usePokedexQueryParams();
   const [input, setInput] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -60,38 +61,20 @@ export default function Searchbar({ onSelectPokemon, onSearch }) {
       setIsFocused(false);
 
       const id = getIdFromUrl(pokemon.url);
-      // Aggiorna URL params come nell'invio manuale
+      // Aggiorna URL params usando il custom hook, preservando type/gen/favorites/captured
       const searchValue = pokemon.name.trim();
-      const newParams = new URLSearchParams(searchParams);
-      const type = newParams.get("type");
-      const gen = newParams.get("gen");
-      newParams.delete("search");
-      newParams.delete("type");
-      newParams.delete("gen");
-      if (searchValue) newParams.append("search", searchValue);
-      if (type) newParams.append("type", type);
-      if (gen) newParams.append("gen", gen);
-      setSearchParams(newParams);
+      apply({ search: searchValue, type, gen, favorites, captured });
       if (onSearch) onSearch(searchValue);
       if (onSelectPokemon && Number.isFinite(id)) onSelectPokemon(id);
     },
-    [onSearch, onSelectPokemon, searchParams, setSearchParams]
+    [onSearch, onSelectPokemon, apply, type, gen, favorites, captured]
   );
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const searchValue = input.trim();
-    // Aggiorna solo il parametro 'search', mantenendo gli altri e ordinando: search, type, gen
-    const newParams = new URLSearchParams(searchParams);
-    const type = newParams.get("type");
-    const gen = newParams.get("gen");
-    newParams.delete("search");
-    newParams.delete("type");
-    newParams.delete("gen");
-    if (searchValue) newParams.append("search", searchValue);
-    if (type) newParams.append("type", type);
-    if (gen) newParams.append("gen", gen);
-    setSearchParams(newParams);
+    // Aggiorna 'search' preservando gli altri parametri via hook
+    setSearch(searchValue);
     if (onSearch) onSearch(searchValue);
   };
 
