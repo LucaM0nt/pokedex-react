@@ -41,14 +41,12 @@ function PokemonListItem({ pkmnId, onHover }) {
     e.stopPropagation();
     toggleFavorite();
     const lists = store.getState().user;
-    console.log("favoritesById:", lists.favorites.byId);
   };
 
   const handleToggleCapture = (e) => {
     e.stopPropagation();
     toggleCapture();
     const lists = store.getState().user;
-    console.log("capturesById:", lists.captures.byId);
   };
 
   const handleNavigate = () => {
