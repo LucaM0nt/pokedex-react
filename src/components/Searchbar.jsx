@@ -60,10 +60,22 @@ export default function Searchbar({ onSelectPokemon, onSearch }) {
       setIsFocused(false);
 
       const id = getIdFromUrl(pokemon.url);
-      if (onSearch) onSearch(pokemon.name);
+      // Aggiorna URL params come nell'invio manuale
+      const searchValue = pokemon.name.trim();
+      const newParams = new URLSearchParams(searchParams);
+      const type = newParams.get("type");
+      const gen = newParams.get("gen");
+      newParams.delete("search");
+      newParams.delete("type");
+      newParams.delete("gen");
+      if (searchValue) newParams.append("search", searchValue);
+      if (type) newParams.append("type", type);
+      if (gen) newParams.append("gen", gen);
+      setSearchParams(newParams);
+      if (onSearch) onSearch(searchValue);
       if (onSelectPokemon && Number.isFinite(id)) onSelectPokemon(id);
     },
-    [onSearch, onSelectPokemon]
+    [onSearch, onSelectPokemon, searchParams, setSearchParams]
   );
 
   const handleSubmit = (e) => {
