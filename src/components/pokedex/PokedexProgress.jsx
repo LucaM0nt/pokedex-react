@@ -7,7 +7,7 @@ export default function PokedexProgress() {
     selectListById(state, "captures")
   );
 
-  const totalPokemon = fullList.length;
+  const totalPokemon = fullList?.length || 0;
   const capturedCount = Object.keys(capturesById).length;
   const completionPercentage =
     totalPokemon > 0 ? Math.round((capturedCount / totalPokemon) * 100) : 0;
