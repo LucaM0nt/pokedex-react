@@ -6,6 +6,7 @@ import usePokemonActions from "../hooks/usePokemonActions";
 
 import TypeTag from "./TypeTag";
 import FallbackImage from "./FallbackImage.jsx";
+import Alert from "./Alert.jsx"
 
 function PokemonListItem({ pkmnId, onHover }) {
   const { data, error, isLoading } = useGetPokemonQuery(pkmnId);
@@ -19,22 +20,29 @@ function PokemonListItem({ pkmnId, onHover }) {
 
   if (isLoading) {
     return (
-      <li className="p-3 bg-white rounded-lg shadow hover:shadow-md transition-shadow">
-        Loading...
+      <li>
+        <Alert type="info" message="Loading..." />
       </li>
     );
   }
 
   if (error) {
+    const message = typeof error === "string"
+      ? error
+      : error?.status
+        ? `Error loading Pokémon (HTTP ${error.status}).`
+        : "Network error loading Pokémon.";
     return (
-      <li className="p-3 bg-white rounded-lg shadow text-red-600">
-        Loading error...
+      <li>
+        <Alert type="error" message={message} />
       </li>
     );
-  }
-
-  if (!data) {
-    return <li className="p-3 bg-white rounded-lg shadow">No data found</li>;
+  }  if (!data) {
+    return (
+      <li>
+        <Alert type="info" message="No data found." />
+      </li>
+    );
   }
   const handleToggleFavorite = (e) => {
     e.stopPropagation();

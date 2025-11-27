@@ -9,8 +9,9 @@ import {
 import { isFavorite, isCaptured } from "../store/userSlice";
 
 import PokemonList from "./PokemonList";
+import Alert from "./Alert";
 
-const TYPE_PAGE_SIZE = 30; // quanti Pokémon per “pagina” nei tipi
+const TYPE_PAGE_SIZE = 30; // quanti Pokémon per "pagina" nei tipi
 
 export default function Pokedex({
   submittedSearchTerm = "",
@@ -34,18 +35,28 @@ export default function Pokedex({
   const userListsState = useSelector((state) => state.user);
 
   // API
-  const { data: genData, isFetching: isGenFetching } =
-    useGetPokemonGenerationQuery(selectedGen, { skip: !selectedGen });
+  const {
+    data: genData,
+    isFetching: isGenFetching,
+    error: genError,
+  } = useGetPokemonGenerationQuery(selectedGen, { skip: !selectedGen });
 
   const safeSearch = submittedSearchTerm ?? "";
   const isSearching = safeSearch.trim().length > 0;
 
-  const { data: pageData, isLoading, isFetching } = useGetAllPokemonQuery(url);
-  const { data: fullListData } = useGetAllPokemonFullListQuery();
-  const { data: typeData, isFetching: isTypeFetching } = useGetPokemonTypeQuery(
-    selectedType,
-    { skip: !selectedType }
-  );
+  const {
+    data: pageData,
+    isLoading,
+    isFetching,
+    error: pageError,
+  } = useGetAllPokemonQuery(url);
+  const { data: fullListData, error: fullListError } =
+    useGetAllPokemonFullListQuery();
+  const {
+    data: typeData,
+    isFetching: isTypeFetching,
+    error: typeError,
+  } = useGetPokemonTypeQuery(selectedType, { skip: !selectedType });
 
   // --- Utility: normalizza e ordina per ID ---
   const normalizeAndSort = (list) =>
@@ -206,6 +217,21 @@ export default function Pokedex({
   })();
 
   const loading = isLoading || isTypeFetching || isGenFetching;
+
+  // Check for errors from any API call
+  const apiError = pageError || typeError || genError || fullListError;
+  if (apiError) {
+    const status = apiError?.status;
+    const errorMessage = status
+      ? `Failed to load Pokémon data (HTTP ${status})`
+      : "Network error. Please check your connection.";
+
+    return (
+      <div className="h-full flex items-center justify-center p-4">
+        <Alert type="error" message={errorMessage} />
+      </div>
+    );
+  }
 
   let hasMore;
   if (useFullForLists) {

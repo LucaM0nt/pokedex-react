@@ -27,13 +27,40 @@ export const buildEvolutionTree = (node) => {
 };
 
 // ---------- FETCH EVOLUTION TREE ----------
-const buildEvolutionNode = async (node) => {
+// Simple retry helper for fetch with Abort support
+async function fetchWithRetry(url, options = {}, retries = 3, delayMs = 1000) {
+  try {
+    const res = await fetch(url, options);
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`);
+    }
+    return res;
+  } catch (err) {
+    // Immediately rethrow aborts
+    if (err?.name === "AbortError") throw err;
+    if (retries <= 0) throw err;
+    await new Promise((r) => setTimeout(r, delayMs));
+    return fetchWithRetry(url, options, retries - 1, delayMs * 2);
+  }
+}
+
+const buildEvolutionNode = async (node, signal) => {
   const speciesUrl = node.species.url;
   const id = speciesUrl.split("/").filter(Boolean).pop();
 
   // Fetch Pokémon data to get types
-  const pokeRes = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
-  const pokeData = await pokeRes.json();
+  let pokeData = { types: [] };
+  try {
+    const pokeRes = await fetchWithRetry(`https://pokeapi.co/api/v2/pokemon/${id}`, { signal });
+    pokeData = await pokeRes.json();
+  } catch (err) {
+    // If a child fetch fails (network or 404), continue with empty types
+    if (err?.name !== "AbortError") {
+      console.warn(`Failed to fetch pokemon ${id} types:`, err);
+    } else {
+      throw err; // propagate aborts
+    }
+  }
 
   return {
     id,
@@ -41,13 +68,13 @@ const buildEvolutionNode = async (node) => {
     url: speciesUrl,
     types: pokeData.types, // <-- Gets the types.
     evolves_to: await Promise.all(
-      node.evolves_to.map((child) => buildEvolutionNode(child))
+      node.evolves_to.map((child) => buildEvolutionNode(child, signal))
     ),
   };
 };
 
-export const fetchEvolutionTree = async (url) => {
-  const res = await fetch(url);
+export const fetchEvolutionTree = async (url, signal) => {
+  const res = await fetchWithRetry(url, { signal });
   const data = await res.json();
-  return await buildEvolutionNode(data.chain);
+  return await buildEvolutionNode(data.chain, signal);
 };

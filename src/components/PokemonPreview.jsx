@@ -1,28 +1,27 @@
 import TypeTag from "./TypeTag";
 import PokedexButton from "./PokedexButton";
 import FallbackImage from "./FallbackImage.jsx";
+import Alert from "./Alert.jsx";
 import { useGetPokemonQuery } from "../store/pokeApiSlice";
 import { Link } from "react-router-dom";
 
 export default function PokemonPreview({ id = 1 }) {
   const { data, error, isLoading } = useGetPokemonQuery(id);
-
   if (isLoading) {
-    return (
-      <div className="p-4 bg-white rounded-lg shadow">Loading preview...</div>
-    );
+    return <Alert type="info" message="Loading preview..." />;
   }
 
   if (error) {
-    return (
-      <div className="p-4 bg-white rounded-lg shadow text-red-600">
-        Preview loading error
-      </div>
-    );
+    const message = typeof error === "string"
+      ? error
+      : error?.status
+        ? `Error loading preview (HTTP ${error.status}).`
+        : "Network error loading preview.";
+    return <Alert type="error" message={message} />;
   }
 
   if (!data) {
-    return <div className="p-4 bg-white rounded-lg shadow">No data available</div>;
+    return <Alert type="info" message="No data available." />;
   }
 
   return (

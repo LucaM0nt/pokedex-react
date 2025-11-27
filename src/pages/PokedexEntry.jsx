@@ -12,6 +12,7 @@ import PokemonDescription from "../components/PokedexEntry/PokemonDescription.js
 import PokemonStats from "../components/PokedexEntry/PokemonStats.jsx";
 import EvolutionChain from "../components/PokedexEntry/EvolutionChain.jsx";
 import EntryHeader from "../components/PokedexEntry/EntryHeader.jsx";
+import Alert from "../components/Alert.jsx";
 import usePokemonActions from "../hooks/usePokemonActions";
 
 export default function PokedexEntry() {
@@ -34,11 +35,25 @@ export default function PokedexEntry() {
   const [evolutionTree, setEvolutionTree] = useState(null);
 
   useEffect(() => {
+    const controller = new AbortController();
+    const { signal } = controller;
+    let isMounted = true;
+
     if (speciesData?.evolution_chain?.url) {
-      fetchEvolutionTree(speciesData.evolution_chain.url)
-        .then((tree) => setEvolutionTree(tree))
-        .catch(console.error);
+      fetchEvolutionTree(speciesData.evolution_chain.url, signal)
+        .then((tree) => {
+          if (isMounted) setEvolutionTree(tree);
+        })
+        .catch((err) => {
+          if (err?.name === "AbortError") return;
+          console.error(err);
+        });
     }
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
   }, [speciesData]);
 
   // Use custom hook for Pokemon actions
@@ -50,15 +65,15 @@ export default function PokedexEntry() {
   } = usePokemonActions(pokemonId);
 
   if (isLoadingPokemon || isLoadingSpecies)
-    return <div className="p-4 bg-white rounded-lg shadow">Loading...</div>;
-  if (pokemonError || speciesError)
-    return (
-      <div className="p-4 bg-white rounded-lg shadow text-red-600">
-        Loading error.
-      </div>
-    );
+    return <Alert type="info" message="Loading Pokémon details..." className="m-4" />;
+  if (pokemonError || speciesError) {
+    const message = pokemonError?.status || speciesError?.status
+      ? `Error loading Pokémon (HTTP ${pokemonError?.status || speciesError?.status}).`
+      : "Network error loading Pokémon details.";
+    return <Alert type="error" message={message} className="m-4" />;
+  }
   if (!pokemonData || !speciesData)
-    return <div className="p-4 bg-white rounded-lg shadow">No data.</div>;
+    return <Alert type="info" message="No Pokémon data available." className="m-4" />;
 
   const flavorText =
     speciesData.flavor_text_entries.find(
