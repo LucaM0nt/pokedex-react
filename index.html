@@ -2,9 +2,58 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pokédex React</title>
+
+    <!-- Primary SEO -->
+    <title>Pokédex React – Browse Pokémon, Stats, Evolutions & Types</title>
+    <meta name="description" content="Pokédex React: explore every Pokémon with stats, evolutions, types, abilities and build your trainer favorites & caught lists." />
+    <meta name="robots" content="index,follow" />
+    <meta name="theme-color" content="#1e3a8a" />
+    <link rel="canonical" href="https://pokedex-react.net/" />
+
+    <!-- Icons -->
+    <link rel="icon" type="image/webp" href="/src/assets/Pokeball_logo.webp" sizes="32x32" />
+    <link rel="icon" type="image/webp" href="/src/assets/Pokeball_logo.webp" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/src/assets/Pokeball_logo.webp" />
+
+    <!-- Preconnect / DNS Prefetch (sprites + API) -->
+    <link rel="dns-prefetch" href="https://raw.githubusercontent.com" />
+    <link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin />
+    <link rel="dns-prefetch" href="https://pokeapi.co" />
+    <link rel="preconnect" href="https://pokeapi.co" crossorigin />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Pokédex React" />
+    <meta property="og:description" content="Explore Pokémon stats, evolutions, abilities and track your favorites." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https:/pokedex-react.net/" />
+    <meta property="og:image" content="https:/pokedex-react.net/src/assets/Pokeball_logo.webp" />
+    <meta property="og:site_name" content="Pokédex React" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Pokédex React" />
+    <meta name="twitter:description" content="Search and inspect any Pokémon: stats, evolutions, types." />
+    <meta name="twitter:image" content="https://pokedex-react.net/src/assets/Pokeball_logo.webp" />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Pokédex React",
+      "url": "https://pokedex-react.net/",
+      "description": "Interactive Pokédex built with React. Browse Pokémon stats, evolutions, types and manage favorites.",
+      "applicationCategory": "Entertainment",
+      "operatingSystem": "Any",
+      "inLanguage": "en",
+      "creator": {
+        "@type": "Organization",
+        "name": "Pokédex React Team",
+        "url": "https://github.com/LucaM0nt/pokedex-react"
+      }
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>
