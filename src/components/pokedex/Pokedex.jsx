@@ -10,6 +10,7 @@ import { isFavorite, isCaptured } from "../../store/userSlice";
 
 import PokemonList from "./PokemonList";
 import Alert from "../common/Alert";
+import EmptyState from "../common/EmptyState";
 
 const TYPE_PAGE_SIZE = 30; // quanti Pokémon per "pagina" nei tipi
 
@@ -239,16 +240,11 @@ export default function Pokedex({
   if (!loading && hasActiveFilters && filteredList.length === 0) {
     return (
       <div className="p-4">
-        <div className="bg-white rounded-lg border border-gray-300 p-6 shadow-lg">
-          <div className="text-4xl mb-4">🔍</div>
-          <h3 className="text-xl font-semibold text-gray-800 mb-2">
-            No Pokémon Found
-          </h3>
-          <p className="text-gray-600 mb-4">
-            No results match your current filters. Try adjusting your search
-            criteria or reset the filters to see all Pokémon.
-          </p>
-        </div>
+        <EmptyState
+          icon="🔍"
+          title="No Pokémon Found"
+          message="No results match your current filters. Try adjusting your search criteria or reset the filters to see all Pokémon."
+        />
       </div>
     );
   }

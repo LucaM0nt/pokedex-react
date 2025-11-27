@@ -11,6 +11,9 @@ import LoginModal from "../components/auth/LoginModal";
 import useAuth from "../hooks/useAuth";
 import IconGrid from "../components/trainer/IconGrid.jsx";
 import TrainerCard from "../components/trainer/TrainerCard.jsx";
+import EmptyState from "../components/common/EmptyState";
+import Button from "../components/common/Button";
+import Card from "../components/common/Card";
 
 export default function Account() {
   const dispatch = useDispatch();
@@ -47,45 +50,29 @@ export default function Account() {
             navigate("/");
           }}
         />
-        <div className="flex flex-col items-center justify-center min-h-screen px-4">
-          <div className="text-center space-y-6 max-w-2xl">
-            <div className="space-y-2">
-              <h1 className="text-6xl font-bold tracking-wider text-gray-800">
-                🔒
-              </h1>
-              <div className="text-2xl font-semibold tracking-wide text-gray-700">
-                TRAINER ACCESS REQUIRED
-              </div>
-            </div>
-
-            <div className="bg-white text-gray-900 rounded-lg border border-gray-300 p-6 shadow-lg">
-              <div className="space-y-4">
-                <p className="text-lg font-medium">
-                  You need to log in to access your trainer profile!
-                </p>
-                <p className="text-sm text-gray-600">
-                  Login to view your favorite Pokémon, caught collection, and
-                  customize your trainer card.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-              <button
-                onClick={handleOpenLoginModal}
-                className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-6 rounded transition-colors cursor-pointer"
-              >
-                Login
-              </button>
-              <button
-                onClick={() => navigate("/")}
-                className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-6 rounded transition-colors border border-gray-300 cursor-pointer"
-              >
+        <EmptyState
+          icon="🔒"
+          title="TRAINER ACCESS REQUIRED"
+          message={
+            <>
+              <p className="text-lg font-medium">
+                You need to log in to access your trainer profile!
+              </p>
+              <p className="text-sm text-gray-600">
+                Login to view your favorite Pokémon, caught collection, and
+                customize your trainer card.
+              </p>
+            </>
+          }
+          actions={
+            <>
+              <Button onClick={handleOpenLoginModal}>Login</Button>
+              <Button variant="secondary" onClick={() => navigate("/")}>
                 Return to Pokédex
-              </button>
-            </div>
-          </div>
-        </div>
+              </Button>
+            </>
+          }
+        />
       </>
     );
   }
@@ -126,7 +113,7 @@ function TrainerDashboard({ username }) {
         <TrainerCard username={username} />
 
         {/* Favorites Grid */}
-        <div className="bg-white rounded-lg shadow-lg border border-gray-300 p-6">
+        <Card>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-semibold text-gray-800">
               Favorite Pokémon
@@ -138,10 +125,10 @@ function TrainerDashboard({ username }) {
             emptyLabel="No favorites yet"
             onRemove={handleRemoveFavorite}
           />
-        </div>
+        </Card>
 
         {/* Captured Grid */}
-        <div className="bg-white rounded-lg shadow-lg border border-gray-300 p-6">
+        <Card>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-semibold text-gray-800">
               Caught Pokémon
@@ -153,7 +140,7 @@ function TrainerDashboard({ username }) {
             emptyLabel="No caught Pokémon yet"
             onRemove={handleRemoveCapture}
           />
-        </div>
+        </Card>
       </div>
     </div>
   );

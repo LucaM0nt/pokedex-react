@@ -1,12 +1,13 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import Card from "../components/common/Card";
 
 export default function About() {
   return (
     <div className="min-h-screen py-8 px-4">
       <div className="max-w-4xl mx-auto">
         {/* About Us */}
-        <section className="mt-6 bg-white rounded-lg shadow-lg border border-gray-300 p-6 mb-6">
+        <Card as="section" className="mt-6 mb-6">
           <h1 className="text-3xl font-semibold text-gray-900 mb-4">
             About Us
           </h1>
@@ -75,8 +76,8 @@ export default function About() {
               </tr>
             </tbody>
           </table>
-        </section>
-        <section className="mt-6 bg-white rounded-lg shadow-lg border border-gray-300 p-6 mb-6">
+        </Card>
+        <Card as="section" className="mt-6 mb-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <h2 className="text-2xl font-semibold text-gray-900">
@@ -109,9 +110,9 @@ export default function About() {
               planning faster and more convenient.
             </p>
           </div>
-        </section>
+        </Card>
         {/* Features */}
-        <section className="bg-white rounded-lg shadow-lg border border-gray-300 p-6 mb-6">
+        <Card as="section" className="mb-6">
           <h2 className="text-2xl font-semibold text-gray-900 mb-4">
             Features
           </h2>
@@ -127,10 +128,10 @@ export default function About() {
               View the trainer profile with captured and favorite Pokémon.
             </li>
           </ul>
-        </section>
+        </Card>
 
         {/* PokeAPI */}
-        <section className="bg-white rounded-lg shadow-lg border border-gray-300 p-6 mb-6">
+        <Card as="section" className="mb-6">
           <h2 className="text-2xl font-semibold text-gray-900 mb-4">PokeAPI</h2>
           <p className="text-gray-700 mb-4">
             This project uses the
@@ -158,10 +159,10 @@ export default function About() {
               </a>
             </span>
           </p>
-        </section>
+        </Card>
 
         {/* General Information */}
-        <section className="bg-white rounded-lg shadow-lg border border-gray-300 p-6 mb-6">
+        <Card as="section" className="mb-6">
           <h2 className="text-2xl font-semibold text-gray-900 mb-4">
             General Information
           </h2>
@@ -176,7 +177,7 @@ export default function About() {
           <p className="text-gray-700">
             Rights to all Pokémon belong to Game Freak and Nintendo.
           </p>
-        </section>
+        </Card>
       </div>
     </div>
   );
