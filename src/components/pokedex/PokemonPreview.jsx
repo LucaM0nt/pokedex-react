@@ -2,6 +2,7 @@ import TypeTag from "../common/TypeTag";
 import PokedexButton from "./PokedexButton";
 import FallbackImage from "../common/FallbackImage.jsx";
 import Alert from "../common/Alert.jsx";
+import Card from "../common/Card.jsx";
 import { useGetPokemonQuery } from "../../store/pokeApiSlice";
 import { Link } from "react-router-dom";
 
@@ -30,7 +31,7 @@ export default function PokemonPreview({ id = 1 }) {
       to={`/entry/${data.id}`}
       className="block focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg"
     >
-      <div className="p-6 bg-white rounded-lg shadow hover:shadow-md transition-shadow cursor-pointer">
+      <Card className="hover:shadow-md transition-shadow cursor-pointer">
         <div className="flex flex-col items-center text-center">
           <FallbackImage
             type="artwork"
@@ -68,7 +69,7 @@ export default function PokemonPreview({ id = 1 }) {
             </ul>
           </div>
         </div>
-      </div>
+      </Card>
     </Link>
   );
 }
