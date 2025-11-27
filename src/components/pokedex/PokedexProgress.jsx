@@ -1,24 +1,38 @@
 import { useSelector } from "react-redux";
 import { selectListById } from "../../store/userSlice";
+import useLastPokemonId from "../../hooks/useLastPokemonId";
+import Alert from "../common/Alert";
 
 export default function PokedexProgress() {
   const fullList = useSelector((state) => state.user.fullList);
   const capturesById = useSelector((state) =>
     selectListById(state, "captures")
   );
+  const { lastId, isLoading, isError } = useLastPokemonId();
 
-  const totalPokemon = fullList?.length || 0;
+  // Prefer API-derived last valid id to avoid counting placeholder species.
+  const totalPokemon = Number.isFinite(lastId) && lastId > 0 ? lastId : fullList?.length || 0;
   const capturedCount = Object.keys(capturesById).length;
   const completionPercentage =
     totalPokemon > 0 ? Math.round((capturedCount / totalPokemon) * 100) : 0;
 
   return (
     <div className="mb-4">
+      {isLoading && (
+        <Alert type="info" title="Loading">
+          Loading progress…
+        </Alert>
+      )}
+      {isError && (
+        <Alert type="warning" title="Unavailable">
+          Could not determine the total number of Pokémon.
+        </Alert>
+      )}
       <div className="flex items-center justify-between mb-2">
-        <span className="text-sm font-medium text-gray-700">
+        <span className="text-sm font-medium text-gray-400 md:text-gray-700">
           Pokédex Progress
         </span>
-        <span className="text-sm font-bold text-gray-900">
+        <span className="text-sm font-bold text-gray-300 md:text-gray-900">
           {capturedCount} / {totalPokemon}
         </span>
       </div>
@@ -31,7 +45,7 @@ export default function PokedexProgress() {
       </div>
 
       <div className="text-right mt-1">
-        <span className="text-xs text-gray-500">
+        <span className="text-xs text-gray-400 md:text-gray-500">
           {completionPercentage}% complete
         </span>
       </div>
