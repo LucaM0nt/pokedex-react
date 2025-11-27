@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../store/userSlice";
+import Card from "../common/Card";
+import Button from "../common/Button";
 
 export default function LoginModal({ isOpen, onClose }) {
   const [username, setUsername] = useState("");
@@ -33,7 +35,7 @@ export default function LoginModal({ isOpen, onClose }) {
       className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50"
       onClick={handleOverlayClick}
     >
-      <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md mx-4">
+      <Card className="w-full max-w-md mx-4">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-bold text-gray-800">Login</h2>
           <button
@@ -99,22 +101,20 @@ export default function LoginModal({ isOpen, onClose }) {
           </div>
 
           <div className="flex gap-3">
-            <button
+            <Button
               type="button"
+              variant="secondary"
               onClick={onClose}
-              className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+              className="flex-1"
             >
               Cancel
-            </button>
-            <button
-              type="submit"
-              className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors cursor-pointer"
-            >
+            </Button>
+            <Button type="submit" variant="primary" className="flex-1">
               Log In
-            </button>
+            </Button>
           </div>
         </form>
-      </div>
+      </Card>
     </div>
   );
 }
