@@ -1,4 +1,5 @@
 import TypeTag from "../TypeTag";
+import FallbackImage from "../FallbackImage.jsx";
 
 export default function PokemonInfo({ pokemonData, speciesData }) {
   const isGenderless = speciesData.gender_rate === -1;
@@ -11,10 +12,11 @@ export default function PokemonInfo({ pokemonData, speciesData }) {
   return (
     <div className="flex flex-col md:flex-row md:items-stretch gap-6 w-full">
       <div className="flex flex-col items-center justify-center w-full md:w-1/2">
-        <img
+        <FallbackImage
+          type="artwork"
           src={
-            pokemonData.sprites.other["official-artwork"].front_default ||
-            pokemonData.sprites.front_default
+            pokemonData.sprites?.other?.["official-artwork"]?.front_default ||
+            pokemonData.sprites?.front_default
           }
           alt={pokemonData.name}
           className="w-60 h-60 object-contain"

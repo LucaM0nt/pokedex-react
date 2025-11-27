@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { useGetLastPokemonQuery } from "../../store/pokeApiSlice";
+import { useGetLastPokemonQuery, useSearchPokemonByNameQuery } from "../../store/pokeApiSlice";
+import FallbackImage from "../FallbackImage.jsx";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -19,16 +20,30 @@ export default function EntryHeader({ pokemonId, pokemonName }) {
 
   // Compute wrap-around prev/next using `lastId` when available.
   // If `lastId` is not available we fall back to simple +/- ids.
-  const prevId = lastId
-    ? pokemonId - 1 < 1
+  // Determine a reliable numeric ID for the current Pokémon. The
+  // `pokemonId` prop may be a number or a name string (e.g. when the
+  // user edits the URL to `/entry/bulbasaur`). When it's not a valid
+  // number, fetch the Pokémon by name to obtain its numeric `id`.
+  const parsedId = Number(pokemonId);
+  const isNumericId = Number.isFinite(parsedId) && parsedId > 0;
+
+  // Call the name-based query only when we don't already have a numeric id.
+  const { data: pokemonByName } = useSearchPokemonByNameQuery(pokemonName ?? "", {
+    skip: isNumericId || !pokemonName,
+  });
+
+  const currentId = isNumericId ? parsedId : pokemonByName?.id || null;
+
+  const prevId = currentId
+    ? currentId - 1 < 1
       ? lastId
-      : pokemonId - 1
-    : pokemonId - 1;
-  const nextId = lastId
-    ? pokemonId + 1 > lastId
+      : currentId - 1
+    : null;
+  const nextId = currentId
+    ? lastId && currentId + 1 > lastId
       ? 1
-      : pokemonId + 1
-    : pokemonId + 1;
+      : currentId + 1
+    : null;
 
   return (
     <div className="flex items-center justify-between gap-4 py-4">
@@ -36,7 +51,7 @@ export default function EntryHeader({ pokemonId, pokemonName }) {
 
       <div className="text-center">
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800">
-          #{pokemonId} {pokemonName.toUpperCase()}
+          #{currentId ?? "--"} {(pokemonName || "").toUpperCase()}
         </h2>
       </div>
 
@@ -51,8 +66,10 @@ export default function EntryHeader({ pokemonId, pokemonName }) {
 // hidden (only the arrow is visible). The `enabled` flag controls the
 // disabled visual state.
 function PrevNextButton({ id, direction, navigate }) {
-  const enabled = id >= 1; // enabled if id is a positive number
-  const spriteUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+  const enabled = Number.isFinite(Number(id)) && Number(id) >= 1; // enabled if id is a positive number
+  const spriteUrl = enabled
+    ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`
+    : undefined;
 
   // Responsive sprite sizing
   const spriteClass =
@@ -89,7 +106,8 @@ function PrevNextButton({ id, direction, navigate }) {
             <>
               {/* left arrow, then sprite+id (sprite and id hidden on small screens) */}
               {arrowSvg}
-                  <img
+                  <FallbackImage
+                    type="sprite"
                     src={spriteUrl}
                     alt={`#${id}`}
                     className={`hidden md:block ${spriteClass} transform transition-transform duration-200 group-hover:scale-110 group-hover:-translate-y-1 group-focus:scale-110`}
@@ -106,7 +124,8 @@ function PrevNextButton({ id, direction, navigate }) {
                   <span className="hidden md:inline-block text-sm md:text-lg font-semibold cursor-pointer transform transition-transform duration-150 group-hover:scale-105 group-focus:scale-105">
                     #{id}
                   </span>
-                  <img
+                  <FallbackImage
+                    type="sprite"
                     src={spriteUrl}
                     alt={`#${id}`}
                     className={`hidden md:block ${spriteClass} transform transition-transform duration-200 group-hover:scale-110 group-hover:-translate-y-1 group-focus:scale-110`}
