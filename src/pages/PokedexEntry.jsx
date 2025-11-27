@@ -7,14 +7,14 @@ import {
   useGetPokemonQuery,
   useGetPokemonSpeciesQuery,
 } from "../store/pokeApiSlice.js";
-import { fetchEvolutionTree } from "../components/PokedexEntry/utils.jsx";
+import { fetchEvolutionTree } from "../components/pokemon-detail/PokedexEntry/utils.jsx";
 
-import PokemonInfo from "../components/PokedexEntry/PokemonInfo.jsx";
-import PokemonDescription from "../components/PokedexEntry/PokemonDescription.jsx";
-import PokemonStats from "../components/PokedexEntry/PokemonStats.jsx";
-import EvolutionChain from "../components/PokedexEntry/EvolutionChain.jsx";
-import EntryHeader from "../components/PokedexEntry/EntryHeader.jsx";
-import Alert from "../components/Alert.jsx";
+import PokemonInfo from "../components/pokemon-detail/PokedexEntry/PokemonInfo.jsx";
+import PokemonDescription from "../components/pokemon-detail/PokedexEntry/PokemonDescription.jsx";
+import PokemonStats from "../components/pokemon-detail/PokedexEntry/PokemonStats.jsx";
+import EvolutionChain from "../components/pokemon-detail/PokedexEntry/EvolutionChain.jsx";
+import EntryHeader from "../components/pokemon-detail/PokedexEntry/EntryHeader.jsx";
+import Alert from "../components/common/Alert.jsx";
 import usePokemonActions from "../hooks/usePokemonActions";
 
 export default function PokedexEntry() {
@@ -91,7 +91,10 @@ export default function PokedexEntry() {
 
   // Arrow SVG (left-pointing).
   const arrowSvg = (
-    <FontAwesomeIcon icon={faAngleLeft} className="text-gray-600 text-xl hover:text-gray-900" />
+    <FontAwesomeIcon
+      icon={faAngleLeft}
+      className="text-gray-600 text-xl hover:text-gray-900"
+    />
   );
 
   return (
@@ -154,7 +157,11 @@ export default function PokedexEntry() {
 
           {/* Body */}
           <div className="space-y-7 my-10">
-            <EntryHeader pokemonId={pokemonId} pokemonName={pokemonData.name}  speciesData={speciesData} />
+            <EntryHeader
+              pokemonId={pokemonId}
+              pokemonName={pokemonData.name}
+              speciesData={speciesData}
+            />
             <PokemonInfo pokemonData={pokemonData} speciesData={speciesData} />
             <PokemonDescription flavorText={flavorText} />
             <PokemonStats stats={pokemonData.stats} />

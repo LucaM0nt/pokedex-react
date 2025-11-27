@@ -1,5 +1,5 @@
-import SubstituteArtwork from "../assets/Substitute_artwork.webp";
-import SubstituteSprite from "../assets/Substitute_sprite.webp";
+import SubstituteArtwork from "../../assets/Substitute_artwork.webp";
+import SubstituteSprite from "../../assets/Substitute_sprite.webp";
 
 const DEFAULT_ARTWORK = SubstituteArtwork;
 const DEFAULT_SPRITE = SubstituteSprite;
@@ -31,7 +31,7 @@ export default function FallbackImage({
 
   const handleError = (e) => {
     if (!e || !e.currentTarget) return;
-    
+
     // Prevent infinite loop if the fallback also errors
     e.currentTarget.onerror = null;
     e.currentTarget.src = fallback;

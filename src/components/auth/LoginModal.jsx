@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { login } from "../store/userSlice";
+import { login } from "../../store/userSlice";
 
 export default function LoginModal({ isOpen, onClose }) {
   const [username, setUsername] = useState("");

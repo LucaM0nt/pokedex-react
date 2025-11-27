@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import FallbackImage from "./FallbackImage.jsx";
+import FallbackImage from "../common/FallbackImage.jsx";
 
 export default function IconGrid({ ids, emptyLabel, onRemove }) {
   if (!ids || ids.length === 0) {

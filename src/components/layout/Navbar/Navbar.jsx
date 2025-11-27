@@ -1,8 +1,8 @@
 import { useState } from "react";
-import siteRoutes from "../../siteRoutes";
-import useAuth from "../../hooks/useAuth";
+import siteRoutes from "../../../siteRoutes";
+import useAuth from "../../../hooks/useAuth";
 import { useDispatch } from "react-redux";
-import { openLoginModal } from "../../store/userSlice";
+import { openLoginModal } from "../../../store/userSlice";
 
 import HamburgerButton from "./HamburgerButton";
 import NavbarLink from "./NavbarLink";

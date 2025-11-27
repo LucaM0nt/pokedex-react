@@ -5,11 +5,11 @@ import {
   useGetAllPokemonFullListQuery,
   useGetPokemonTypeQuery,
   useGetPokemonGenerationQuery,
-} from "../store/pokeApiSlice";
-import { isFavorite, isCaptured } from "../store/userSlice";
+} from "../../store/pokeApiSlice";
+import { isFavorite, isCaptured } from "../../store/userSlice";
 
 import PokemonList from "./PokemonList";
-import Alert from "./Alert";
+import Alert from "../common/Alert";
 
 const TYPE_PAGE_SIZE = 30; // quanti Pokémon per "pagina" nei tipi
 

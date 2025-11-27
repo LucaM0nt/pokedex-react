@@ -6,7 +6,7 @@ import React, {
   useCallback,
 } from "react";
 import { useSelector } from "react-redux";
-import usePokedexQueryParams from "../hooks/usePokedexQueryParams";
+import usePokedexQueryParams from "../../hooks/usePokedexQueryParams";
 
 // Utility: estrai l'id dall'url (es: .../pokemon/25/)
 function getIdFromUrl(url) {

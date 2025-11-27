@@ -1,7 +1,7 @@
-import TypeTag from "../TypeTag";
+import TypeTag from "../../common/TypeTag";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
-import FallbackImage from "../FallbackImage.jsx";
+import FallbackImage from "../../common/FallbackImage.jsx";
 
 export default function EvolutionChain({ tree }) {
   if (!tree) return null;

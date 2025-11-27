@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectTrainerProfile, updateTrainerProfile } from "../store/userSlice";
-import { REGIONS } from "../constants/pokemonRegions";
-import { TYPE_OPTIONS, TYPE_COLORS } from "../constants/pokemonTypes";
+import {
+  selectTrainerProfile,
+  updateTrainerProfile,
+} from "../../store/userSlice";
+import { REGIONS } from "../../constants/pokemonRegions";
+import { TYPE_OPTIONS, TYPE_COLORS } from "../../constants/pokemonTypes";
 import TrainerStatCard from "./TrainerStatCard";
 
 export default function TrainerCard({ username }) {

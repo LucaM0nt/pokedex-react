@@ -1,5 +1,5 @@
 import Navbar from "./Navbar/Navbar";
-import PokedexIcon from "./PokedexIcon";
+import PokedexIcon from "../pokedex/PokedexIcon";
 import { useRef, useEffect, useState } from "react";
 
 function Header() {

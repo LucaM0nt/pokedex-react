@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from "react";
-import TypeTag from "./TypeTag";
-import { TYPE_OPTIONS } from "../constants/pokemonTypes";
-import { GEN_OPTIONS } from "../constants/pokemonGenerations";
-import useClickOutside from "../hooks/useClickOutside";
-import usePokedexQueryParams from "../hooks/usePokedexQueryParams";
+import TypeTag from "../common/TypeTag";
+import { TYPE_OPTIONS } from "../../constants/pokemonTypes";
+import { GEN_OPTIONS } from "../../constants/pokemonGenerations";
+import useClickOutside from "../../hooks/useClickOutside";
+import usePokedexQueryParams from "../../hooks/usePokedexQueryParams";
 
 export default function SearchFilters({
   onSelectType,

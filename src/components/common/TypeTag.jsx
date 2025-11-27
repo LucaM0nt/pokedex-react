@@ -1,7 +1,8 @@
-import { TYPE_COLORS } from "../constants/pokemonTypes";
+import { TYPE_COLORS } from "../../constants/pokemonTypes";
 
 export default function TypeTag({ type, className = "", size = "md" }) {
-  const colorClass = TYPE_COLORS[type?.toLowerCase()] || "bg-gray-500 text-white";
+  const colorClass =
+    TYPE_COLORS[type?.toLowerCase()] || "bg-gray-500 text-white";
 
   const sizeMap = {
     sm: "w-17 text-center px-2 py-0.5 text-xs",

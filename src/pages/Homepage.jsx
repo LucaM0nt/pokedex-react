@@ -4,10 +4,10 @@ import { useDispatch } from "react-redux";
 import { useGetAllPokemonFullListQuery } from "../store/pokeApiSlice";
 import { setFullList } from "../store/userSlice";
 
-import Pokedex from "../components/Pokedex";
-import PokemonPreview from "../components/PokemonPreview";
-import Searchbar from "../components/Searchbar";
-import SearchFilters from "../components/SearchFilters";
+import Pokedex from "../components/pokedex/Pokedex";
+import PokemonPreview from "../components/pokedex/PokemonPreview";
+import Searchbar from "../components/pokedex/Searchbar";
+import SearchFilters from "../components/pokedex/SearchFilters";
 
 export default function Homepage() {
   const [selectedType, setSelectedType] = useState(null);

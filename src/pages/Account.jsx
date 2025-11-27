@@ -7,10 +7,10 @@ import {
   removeCapture,
   openLoginModal,
 } from "../store/userSlice";
-import LoginModal from "../components/LoginModal";
+import LoginModal from "../components/auth/LoginModal";
 import useAuth from "../hooks/useAuth";
-import IconGrid from "../components/IconGrid.jsx";
-import TrainerCard from "../components/TrainerCard.jsx";
+import IconGrid from "../components/trainer/IconGrid.jsx";
+import TrainerCard from "../components/trainer/TrainerCard.jsx";
 
 export default function Account() {
   const dispatch = useDispatch();

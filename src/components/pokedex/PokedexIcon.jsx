@@ -1,7 +1,7 @@
 // PokedexIcon.jsx — replaced SVG with project asset image
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import pokeball from "../assets/Pokeball_logo.webp";
+import pokeball from "../../assets/Pokeball_logo.webp";
 
 export default function PokedexIcon({ className = "", alt = "Pokedex" }) {
   const [hover, setHover] = useState(false);

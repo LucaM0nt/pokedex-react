@@ -1,12 +1,12 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-import { useGetPokemonQuery } from "../store/pokeApiSlice";
-import { store } from "../store/index.js";
-import usePokemonActions from "../hooks/usePokemonActions";
+import { useGetPokemonQuery } from "../../store/pokeApiSlice";
+import { store } from "../../store/index.js";
+import usePokemonActions from "../../hooks/usePokemonActions";
 
-import TypeTag from "./TypeTag";
-import FallbackImage from "./FallbackImage.jsx";
-import Alert from "./Alert.jsx"
+import TypeTag from "../common/TypeTag";
+import FallbackImage from "../common/FallbackImage.jsx";
+import Alert from "../common/Alert.jsx";
 
 function PokemonListItem({ pkmnId, onHover }) {
   const { data, error, isLoading } = useGetPokemonQuery(pkmnId);
@@ -27,9 +27,10 @@ function PokemonListItem({ pkmnId, onHover }) {
   }
 
   if (error) {
-    const message = typeof error === "string"
-      ? error
-      : error?.status
+    const message =
+      typeof error === "string"
+        ? error
+        : error?.status
         ? `Error loading Pokémon (HTTP ${error.status}).`
         : "Network error loading Pokémon.";
     return (
@@ -37,7 +38,8 @@ function PokemonListItem({ pkmnId, onHover }) {
         <Alert type="error" message={message} />
       </li>
     );
-  }  if (!data) {
+  }
+  if (!data) {
     return (
       <li>
         <Alert type="info" message="No data found." />

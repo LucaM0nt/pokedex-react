@@ -1,8 +1,8 @@
-import TypeTag from "./TypeTag";
+import TypeTag from "../common/TypeTag";
 import PokedexButton from "./PokedexButton";
-import FallbackImage from "./FallbackImage.jsx";
-import Alert from "./Alert.jsx";
-import { useGetPokemonQuery } from "../store/pokeApiSlice";
+import FallbackImage from "../common/FallbackImage.jsx";
+import Alert from "../common/Alert.jsx";
+import { useGetPokemonQuery } from "../../store/pokeApiSlice";
 import { Link } from "react-router-dom";
 
 export default function PokemonPreview({ id = 1 }) {
@@ -12,9 +12,10 @@ export default function PokemonPreview({ id = 1 }) {
   }
 
   if (error) {
-    const message = typeof error === "string"
-      ? error
-      : error?.status
+    const message =
+      typeof error === "string"
+        ? error
+        : error?.status
         ? `Error loading preview (HTTP ${error.status}).`
         : "Network error loading preview.";
     return <Alert type="error" message={message} />;

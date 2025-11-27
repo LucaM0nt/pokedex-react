@@ -1,5 +1,5 @@
-import TypeTag from "../TypeTag";
-import FallbackImage from "../FallbackImage.jsx";
+import TypeTag from "../../common/TypeTag";
+import FallbackImage from "../../common/FallbackImage.jsx";
 
 export default function PokemonInfo({ pokemonData, speciesData }) {
   const isGenderless = speciesData.gender_rate === -1;
@@ -23,7 +23,12 @@ export default function PokemonInfo({ pokemonData, speciesData }) {
         />
         <div className="mt-7 flex justify-center flex-wrap gap-3">
           {pokemonData.types.map((t) => (
-            <TypeTag key={t.type.name} type={t.type.name} size="lg" className="shadow-sm" />
+            <TypeTag
+              key={t.type.name}
+              type={t.type.name}
+              size="lg"
+              className="shadow-sm"
+            />
           ))}
         </div>
       </div>
@@ -62,7 +67,9 @@ export default function PokemonInfo({ pokemonData, speciesData }) {
                   <div
                     className="w-48 sm:w-56 h-3 rounded-2xl overflow-hidden flex"
                     role="img"
-                    aria-label={`Male ${maleRatio.toFixed(1)}% Female ${femaleRatio.toFixed(1)}%`}
+                    aria-label={`Male ${maleRatio.toFixed(
+                      1
+                    )}% Female ${femaleRatio.toFixed(1)}%`}
                   >
                     <div
                       className="bg-blue-500 h-full"
@@ -74,7 +81,9 @@ export default function PokemonInfo({ pokemonData, speciesData }) {
                     />
                   </div>
                   <p className="text-gray-600 text-sm mt-1">
-                    {`${maleRatio.toFixed(1)}% Male / ${femaleRatio.toFixed(1)}% Female`}
+                    {`${maleRatio.toFixed(1)}% Male / ${femaleRatio.toFixed(
+                      1
+                    )}% Female`}
                   </p>
                 </>
               )}
