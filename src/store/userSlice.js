@@ -7,6 +7,13 @@ const initialState = {
   captures: { byId: {} },
   fullList: [],
   loginModalOpen: false,
+  trainerProfile: {
+    level: 45,
+    badges: 8,
+    region: "Kanto",
+    since: 2025,
+    favoriteType: "electric",
+  },
 };
 
 const userSlice = createSlice({
@@ -47,6 +54,12 @@ const userSlice = createSlice({
     setFullList(state, action) {
       state.fullList = action.payload;
     },
+    updateTrainerProfile(state, action) {
+      state.trainerProfile = {
+        ...state.trainerProfile,
+        ...action.payload,
+      };
+    },
   },
 });
 
@@ -59,6 +72,7 @@ export const {
   setFullList,
   openLoginModal,
   closeLoginModal,
+  updateTrainerProfile,
 } = userSlice.actions;
 
 // Convenience action creators to keep a clear API
@@ -85,5 +99,8 @@ export const isFavorite = (state, id) =>
   !!getUserState(state).favorites?.byId?.[String(id)];
 export const isCaptured = (state, id) =>
   !!getUserState(state).captures?.byId?.[String(id)];
+
+export const selectTrainerProfile = (state) =>
+  getUserState(state).trainerProfile;
 
 export default userSlice.reducer;

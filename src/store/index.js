@@ -21,6 +21,14 @@ const preloadedState = {
     username: null,
     favorites: { byId: load("pokedex_favorites", {}) },
     captures: { byId: load("pokedex_captures", {}) },
+    loginModalOpen: false,
+    trainerProfile: {
+      level: 45,
+      badges: 8,
+      region: "Kanto",
+      since: 2025,
+      favoriteType: "electric",
+    },
   },
 };
 
