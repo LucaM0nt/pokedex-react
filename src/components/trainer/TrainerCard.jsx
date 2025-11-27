@@ -7,6 +7,7 @@ import {
 import { REGIONS } from "../../constants/pokemonRegions";
 import { TYPE_OPTIONS, TYPE_COLORS } from "../../constants/pokemonTypes";
 import TrainerStatCard from "./TrainerStatCard";
+import Card from "../common/Card";
 
 export default function TrainerCard({ username }) {
   const dispatch = useDispatch();
@@ -38,7 +39,7 @@ export default function TrainerCard({ username }) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg border border-gray-300 p-6">
+    <Card>
       <div className="pb-2 flex items-center gap-4">
         <div
           className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold shadow ${avatarColor}`}
@@ -160,6 +161,6 @@ export default function TrainerCard({ username }) {
           />
         </div>
       )}
-    </div>
+    </Card>
   );
 }
