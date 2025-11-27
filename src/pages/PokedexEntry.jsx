@@ -7,13 +7,13 @@ import {
   useGetPokemonQuery,
   useGetPokemonSpeciesQuery,
 } from "../store/pokeApiSlice.js";
-import { fetchEvolutionTree } from "../components/pokemon-detail/PokedexEntry/utils.jsx";
+import { fetchEvolutionTree } from "../components/pokedex-entry/utils.jsx";
 
-import PokemonInfo from "../components/pokemon-detail/PokedexEntry/PokemonInfo.jsx";
-import PokemonDescription from "../components/pokemon-detail/PokedexEntry/PokemonDescription.jsx";
-import PokemonStats from "../components/pokemon-detail/PokedexEntry/PokemonStats.jsx";
-import EvolutionChain from "../components/pokemon-detail/PokedexEntry/EvolutionChain.jsx";
-import EntryHeader from "../components/pokemon-detail/PokedexEntry/EntryHeader.jsx";
+import PokemonInfo from "../components/pokedex-entry/PokemonInfo.jsx";
+import PokemonDescription from "../components/pokedex-entry/PokemonDescription.jsx";
+import PokemonStats from "../components/pokedex-entry/PokemonStats.jsx";
+import EvolutionChain from "../components/pokedex-entry/EvolutionChain.jsx";
+import EntryHeader from "../components/pokedex-entry/EntryHeader.jsx";
 import Alert from "../components/common/Alert.jsx";
 import Card from "../components/common/Card.jsx";
 import usePokemonActions from "../hooks/usePokemonActions";
