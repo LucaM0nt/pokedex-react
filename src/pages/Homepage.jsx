@@ -8,6 +8,7 @@ import Pokedex from "../components/pokedex/Pokedex";
 import PokemonPreview from "../components/pokedex/PokemonPreview";
 import Searchbar from "../components/pokedex/Searchbar";
 import SearchFilters from "../components/pokedex/SearchFilters";
+import PokedexProgress from "../components/pokedex/PokedexProgress";
 
 export default function Homepage() {
   const [selectedType, setSelectedType] = useState(null);
@@ -67,6 +68,9 @@ export default function Homepage() {
 
       <aside className="hidden md:block md:basis-[40%] min-h-0 min-w-0 h-full">
         <div className="sticky top-4">
+          <div className="hidden lg:block">
+            <PokedexProgress />
+          </div>
           <PokemonPreview
             key={hoveredPokemonId || lastHoveredId}
             id={hoveredPokemonId || lastHoveredId}
