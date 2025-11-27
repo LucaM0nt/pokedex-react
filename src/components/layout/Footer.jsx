@@ -5,9 +5,9 @@ export default function Footer({ mode = "desktop" }) {
 
   return (
     <footer
-      className={`bg-gray-800 z-40 ${
+      className={`z-40 ${
         mode === "desktop"
-          ? "hidden md:block text-center py-2"
+          ? "bg-gray-800 hidden md:block text-center py-2"
           : "block md:hidden"
       }`}
     >

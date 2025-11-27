@@ -1,5 +1,6 @@
 import Footer from "../Footer";
 import siteRoutes from "../../../siteRoutes";
+import PokedexProgress from "../../pokedex/PokedexProgress";
 
 export default function MobileMenu({ isOpen, headerHeight, children }) {
   return (
@@ -23,9 +24,14 @@ export default function MobileMenu({ isOpen, headerHeight, children }) {
             {children}
           </div>
 
-          {/* Footer (only appears inside mobile menu) */}
-          <div className="mt-auto pt-8 border-t border-gray-700 md:hidden">
-            <Footer mode="mobile" />
+          {/* Bottom section: Progress + Footer (only appears inside mobile menu) */}
+          <div className="mt-auto md:hidden">
+            <div className="mb-6">
+              <PokedexProgress />
+            </div>
+            <div className="pt-6 border-t border-gray-700">
+              <Footer mode="mobile" />
+            </div>
           </div>
         </div>
       </div>
