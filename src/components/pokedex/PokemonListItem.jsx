@@ -71,7 +71,7 @@ function PokemonListItem({ pkmnId, onHover }) {
 
   return (
     <li
-      className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl shadow-sm hover:shadow-lg hover:border-blue-300 transition-all duration-200 flex items-center gap-4 justify-between cursor-pointer"
+      className="w-full p-3 sm:p-4 bg-gray-50 border border-gray-200 rounded-xl shadow-sm hover:shadow-lg hover:border-blue-300 transition-all duration-200 flex items-center gap-2 sm:gap-4 justify-between cursor-pointer"
       onMouseEnter={() => onHover(pkmnId)}
       onClick={handleNavigate}
       role="button"
@@ -79,18 +79,18 @@ function PokemonListItem({ pkmnId, onHover }) {
       onKeyDown={handleKeyDown}
       aria-label={`Open details for ${data.name}`}
     >
-      <div className="flex items-center gap-4 group">
+      <div className="flex items-center gap-2 sm:gap-4 group min-w-0">
         <FallbackImage
           type="sprite"
           src={data.sprites.other.home.front_default}
           alt={data.name}
-          className="w-16 h-16 object-contain group-hover:scale-105 transition-transform"
+          className="w-12 h-12 sm:w-16 sm:h-16 object-contain group-hover:scale-105 transition-transform shrink-0"
         />
-        <div>
-          <h3 className="font-bold text-lg capitalize text-gray-800 group-hover:text-blue-600 transition-colors">
+        <div className="min-w-0">
+          <h3 className="font-bold text-sm sm:text-lg capitalize text-gray-800 group-hover:text-blue-600 transition-colors truncate">
             #{data.id} {data.name}
           </h3>
-          <div className="flex gap-2 mt-2 flex-wrap">
+          <div className="flex gap-1 sm:gap-2 mt-1 sm:mt-2 flex-wrap">
             {data.types?.map((typeObj) => (
               <TypeTag key={typeObj.type.name} type={typeObj.type.name} />
             ))}
@@ -98,14 +98,14 @@ function PokemonListItem({ pkmnId, onHover }) {
         </div>
       </div>
 
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-2 sm:gap-6 shrink-0">
         <button
           onClick={handleToggleFavorite}
           className="cursor-pointer focus:outline-none"
           aria-label={fav ? "Remove from favorites" : "Add to favorites"}
         >
           <svg
-            className={`w-7 h-7 ${
+            className={`w-6 h-6 sm:w-7 sm:h-7 ${
               fav
                 ? "text-yellow-500 fill-current"
                 : "text-gray-400 fill-current"
@@ -123,7 +123,9 @@ function PokemonListItem({ pkmnId, onHover }) {
           aria-label={cap ? "Remove from captured" : "Add to captured"}
         >
           <svg
-            className={`w-7 h-7 ${cap ? "text-red-500" : "text-gray-400"}`}
+            className={`w-6 h-6 sm:w-7 sm:h-7 ${
+              cap ? "text-red-500" : "text-gray-400"
+            }`}
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"

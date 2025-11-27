@@ -1,11 +1,12 @@
 export default function HamburgerButton({ isOpen, onClick }) {
   return (
     <button
-      className="md:hidden flex items-center px-2.5 py-2.5 border rounded text-slate-300 border-slate-400"
+      className="md:hidden flex items-center p-2 text-white hover:text-blue-400 transition-colors duration-300 relative z-50"
       onClick={onClick}
+      aria-label={isOpen ? "Close menu" : "Open menu"}
     >
       <svg
-        className="w-6 h-6"
+        className="w-7 h-7 transition-transform duration-300"
         fill="none"
         stroke="currentColor"
         strokeWidth="2"

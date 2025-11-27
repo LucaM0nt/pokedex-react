@@ -65,7 +65,7 @@ export default function Homepage() {
         </div>
       </div>
 
-      <aside className="md:basis-[40%] min-h-0 min-w-0 h-full">
+      <aside className="hidden md:block md:basis-[40%] min-h-0 min-w-0 h-full">
         <div className="sticky top-4">
           <PokemonPreview
             key={hoveredPokemonId || lastHoveredId}

@@ -17,65 +17,67 @@ export default function About() {
             to explore modern web technologies such as React, APIs, and state
             management.
           </p>
-          <table className="min-w-full table-auto border-collapse">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-4 py-3 text-left font-semibold text-gray-700 border-b border-gray-200">
-                  Name
-                </th>
-                <th className="px-4 py-3 text-left font-semibold text-gray-700 border-b border-gray-200">
-                  GitHub
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white">
-              <tr className="border-b border-gray-100">
-                <td className="px-4 py-3 font-medium text-gray-900">
-                  Project Repo
-                </td>
-                <td className="px-4 py-3">
-                  <a
-                    href="https://github.com/LucaM0nt/pokedex-react"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-500 hover:text-blue-600 hover:underline"
-                  >
-                    github.com/LucaM0nt/pokedex-react
-                  </a>
-                </td>
-              </tr>
-              <tr className="border-b border-gray-100">
-                <td className="px-4 py-3 font-medium text-gray-900">
-                  Luca Montanaro
-                </td>
-                <td className="px-4 py-3">
-                  <a
-                    href="https://github.com/LucaM0nt"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-500 hover:text-blue-600 hover:underline"
-                  >
-                    github.com/LucaM0nt
-                  </a>
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 font-medium text-gray-900">
-                  Gloria Paita
-                </td>
-                <td className="px-4 py-3">
-                  <a
-                    href="https://github.com/Gloria-Pi"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-500 hover:text-blue-600 hover:underline"
-                  >
-                    github.com/Gloria-Pi
-                  </a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div className="overflow-x-auto -mx-6 px-6">
+            <table className="min-w-full table-auto border-collapse">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-2 sm:px-4 py-3 text-left font-semibold text-gray-700 border-b border-gray-200 text-sm sm:text-base">
+                    Name
+                  </th>
+                  <th className="px-2 sm:px-4 py-3 text-left font-semibold text-gray-700 border-b border-gray-200 text-sm sm:text-base">
+                    GitHub
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white">
+                <tr className="border-b border-gray-100">
+                  <td className="px-2 sm:px-4 py-3 font-medium text-gray-900 text-sm sm:text-base">
+                    Project Repo
+                  </td>
+                  <td className="px-2 sm:px-4 py-3">
+                    <a
+                      href="https://github.com/LucaM0nt/pokedex-react"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 hover:text-blue-600 hover:underline text-xs sm:text-base break-all"
+                    >
+                      github.com/LucaM0nt/pokedex-react
+                    </a>
+                  </td>
+                </tr>
+                <tr className="border-b border-gray-100">
+                  <td className="px-2 sm:px-4 py-3 font-medium text-gray-900 text-sm sm:text-base">
+                    Luca Montanaro
+                  </td>
+                  <td className="px-2 sm:px-4 py-3">
+                    <a
+                      href="https://github.com/LucaM0nt"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 hover:text-blue-600 hover:underline text-xs sm:text-base break-all"
+                    >
+                      github.com/LucaM0nt
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-2 sm:px-4 py-3 font-medium text-gray-900 text-sm sm:text-base">
+                    Gloria Paita
+                  </td>
+                  <td className="px-2 sm:px-4 py-3">
+                    <a
+                      href="https://github.com/Gloria-Pi"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 hover:text-blue-600 hover:underline text-xs sm:text-base break-all"
+                    >
+                      github.com/Gloria-Pi
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </Card>
         <Card as="section" className="mt-6 mb-6">
           <div className="flex items-center justify-between">

@@ -2,33 +2,33 @@ import Footer from "../Footer";
 import siteRoutes from "../../../siteRoutes";
 
 export default function MobileMenu({ isOpen, headerHeight, children }) {
-  const style = isOpen
-    ? { height: `calc(101vh - ${headerHeight}px)` }
-    : undefined;
-
   return (
-    <div
-      style={style}
-      className={`flex flex-col md:flex md:flex-row md:items-center gap-1 md:gap-4 font-semibold
-        absolute md:static bg-gray-800 md:bg-transparent w-70 -left-55 md:left-0 px-10 md:w-auto transition-all duration-300
-        ${
-          isOpen
-            ? "max-h-auto md:max-h-1 py-8 mt-3"
-            : "max-h-0 overflow-hidden md:max-h-full md:py-0"
+    <>
+      {/* Backdrop */}
+      <div
+        className={`fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 md:hidden z-40 ${
+          isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
-    >
-      {/* Use flex-col + justify-between to push footer to bottom */}
-      <div className="flex flex-col justify-between h-full md:h-auto w-full md:w-auto">
-        {/* Links */}
-        <div className="flex flex-col md:flex-row md:items-center md:gap-4">
-          {children}
-        </div>
+      />
 
-        {/* Footer (only appears inside mobile menu) */}
-        <div className="md:hidden">
-          <Footer mode="mobile" />
+      {/* Menu Panel */}
+      <div
+        className={`fixed top-0 right-0 h-full w-80 bg-gray-900/95 backdrop-blur-md shadow-2xl transition-transform duration-300 ease-in-out md:static md:transform-none md:w-auto md:h-auto md:bg-transparent md:shadow-none z-40 ${
+          isOpen ? "translate-x-0" : "translate-x-full"
+        } md:translate-x-0`}
+      >
+        <div className="flex flex-col justify-between h-full pt-20 pb-6 px-6 md:pt-0 md:pb-0 md:px-0 md:flex-row md:items-center md:gap-4">
+          {/* Links */}
+          <div className="flex flex-col gap-6 md:flex-row md:items-center md:gap-4">
+            {children}
+          </div>
+
+          {/* Footer (only appears inside mobile menu) */}
+          <div className="mt-auto pt-8 border-t border-gray-700 md:hidden">
+            <Footer mode="mobile" />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
