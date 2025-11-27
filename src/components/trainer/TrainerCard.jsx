@@ -54,6 +54,9 @@ export default function TrainerCard({ username }) {
             Ace Trainer •{" "}
             {isEditing ? (
               <select
+                id="trainer-region"
+                name="region"
+                autoComplete="off"
                 value={formData.region}
                 onChange={(e) => handleChange("region", e.target.value)}
                 className="bg-white border border-gray-300 rounded px-2 py-1 text-sm"

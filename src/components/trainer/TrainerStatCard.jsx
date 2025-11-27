@@ -7,12 +7,16 @@ export default function TrainerStatCard({
   onChange,
   inputProps = {},
 }) {
+  const fieldId = `trainer-${label.toLowerCase().replace(/[^a-z0-9]/g, "-")}`;
+
   return (
     <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
       <p className="text-gray-500 mb-1">{label}</p>
       {isEditing ? (
         inputType === "select" ? (
           <select
+            id={fieldId}
+            name={fieldId}
             value={value}
             onChange={(e) => onChange(e.target.value)}
             className="w-full border border-gray-300 rounded px-2 py-1 font-semibold capitalize"
@@ -26,6 +30,8 @@ export default function TrainerStatCard({
           </select>
         ) : (
           <input
+            id={fieldId}
+            name={fieldId}
             type={inputType}
             value={value}
             onChange={(e) =>
