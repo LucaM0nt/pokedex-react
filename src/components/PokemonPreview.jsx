@@ -1,5 +1,6 @@
 import TypeTag from "./TypeTag";
 import PokedexButton from "./PokedexButton";
+import FallbackImage from "./FallbackImage.jsx";
 import { useGetPokemonQuery } from "../store/pokeApiSlice";
 import { Link } from "react-router-dom";
 
@@ -15,13 +16,13 @@ export default function PokemonPreview({ id = 1 }) {
   if (error) {
     return (
       <div className="p-4 bg-white rounded-lg shadow text-red-600">
-        Errore nel caricamento preview
+        Preview loading error
       </div>
     );
   }
 
   if (!data) {
-    return <div className="p-4 bg-white rounded-lg shadow">Nessun dato</div>;
+    return <div className="p-4 bg-white rounded-lg shadow">No data available</div>;
   }
 
   return (
@@ -31,7 +32,8 @@ export default function PokemonPreview({ id = 1 }) {
     >
       <div className="p-6 bg-white rounded-lg shadow hover:shadow-md transition-shadow cursor-pointer">
         <div className="flex flex-col items-center text-center">
-          <img
+          <FallbackImage
+            type="artwork"
             src={
               data.sprites.other["official-artwork"].front_default ||
               data.sprites.front_default

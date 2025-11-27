@@ -11,6 +11,7 @@ import {
 } from "../store/userSlice";
 
 import TypeTag from "./TypeTag";
+import FallbackImage from "./FallbackImage.jsx";
 
 function PokemonListItem({ pkmnId, onHover }) {
   const { data, error, isLoading } = useGetPokemonQuery(pkmnId);
@@ -30,14 +31,14 @@ function PokemonListItem({ pkmnId, onHover }) {
   if (error) {
     return (
       <li className="p-3 bg-white rounded-lg shadow text-red-600">
-        Errore nel caricamento
+        Loading error...
       </li>
     );
   }
 
   if (!data) {
     return (
-      <li className="p-3 bg-white rounded-lg shadow">Nessun dato trovato</li>
+      <li className="p-3 bg-white rounded-lg shadow">No data available</li>
     );
   }
   const handleToggleFavorite = (e) => {
@@ -76,7 +77,8 @@ function PokemonListItem({ pkmnId, onHover }) {
       aria-label={`Apri dettaglio di ${data.name}`}
     >
       <div className="flex items-center gap-4 group">
-        <img
+        <FallbackImage
+          type="sprite"
           src={data.sprites.other.home.front_default}
           alt={data.name}
           className="w-16 h-16 object-contain group-hover:scale-105 transition-transform"

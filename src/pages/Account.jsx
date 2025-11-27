@@ -7,6 +7,7 @@ import {
   selectListById,
 } from "../store/userSlice";
 import LoginModal from "../components/LoginModal";
+import FallbackImage from "../components/FallbackImage.jsx";
 
 export default function Account() {
   const [showModal, setShowModal] = useState(false);
@@ -143,7 +144,8 @@ function IconGrid({ ids, emptyLabel }) {
       {ids.map((id) => (
         <Link key={id} to={`/entry/${id}`} className="group block">
           <div className="bg-white border border-gray-300 rounded-lg shadow-sm p-2 w-20 h-20 mx-auto flex items-center justify-center hover:shadow transition-shadow">
-            <img
+            <FallbackImage
+              type="sprite"
               src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`}
               alt={`#${id}`}
               className="w-14 h-14 image-render-pixel"

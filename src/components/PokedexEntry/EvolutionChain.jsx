@@ -1,6 +1,7 @@
 import TypeTag from "../TypeTag";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
+import FallbackImage from "../FallbackImage.jsx";
 
 export default function EvolutionChain({ tree }) {
   if (!tree) return null;
@@ -22,11 +23,16 @@ export default function EvolutionChain({ tree }) {
 
     const desktopCols = colMap[Math.min(childCount, 4)];
 
+    const spriteSrc = evoId
+      ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evoId}.png`
+      : undefined;
+
     return (
       <div className="flex flex-col items-center gap-2 min-w-40 py-4">
         <a href={`/entry/${evoId}`}>
-          <img
-            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evoId}.png`}
+          <FallbackImage
+            type="sprite"
+            src={spriteSrc}
             alt={evo.name}
             className="w-30 h-30 md:w-34 md:h-34"
           />
