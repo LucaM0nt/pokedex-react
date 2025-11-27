@@ -102,6 +102,8 @@ export default function Searchbar({ onSelectPokemon, onSearch }) {
     <form ref={formRef} onSubmit={handleSubmit} className="relative w-full">
       <div className="relative">
         <input
+          id="search"
+          name="search"
           ref={inputRef}
           className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-500"
           placeholder="Search Pokémon..."
@@ -113,6 +115,7 @@ export default function Searchbar({ onSelectPokemon, onSearch }) {
           aria-autocomplete="list"
           aria-expanded={isFocused && suggestions.length > 0}
           aria-haspopup="listbox"
+          autoComplete="off"
         />
 
         <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
