@@ -9,7 +9,7 @@ const load = (key, fallback) => {
     const raw = localStorage.getItem(key);
     return raw ? JSON.parse(raw) : fallback;
   } catch (e) {
-    console.warn("Errore caricamento localStorage", key, e);
+    console.warn("localStorage loading error", key, e);
     return fallback;
   }
 };
@@ -50,6 +50,6 @@ store.subscribe(() => {
       JSON.stringify(lists.captures?.byId ?? {})
     );
   } catch (e) {
-    console.warn("Impossibile salvare in localStorage", e);
+    console.warn("Unable to save to localStorage", e);
   }
 });

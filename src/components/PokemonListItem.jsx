@@ -34,9 +34,7 @@ function PokemonListItem({ pkmnId, onHover }) {
   }
 
   if (!data) {
-    return (
-      <li className="p-3 bg-white rounded-lg shadow">No data available</li>
-    );
+    return <li className="p-3 bg-white rounded-lg shadow">No data found</li>;
   }
   const handleToggleFavorite = (e) => {
     e.stopPropagation();
@@ -69,7 +67,7 @@ function PokemonListItem({ pkmnId, onHover }) {
       role="button"
       tabIndex={0}
       onKeyDown={handleKeyDown}
-      aria-label={`Apri dettaglio di ${data.name}`}
+      aria-label={`Open details for ${data.name}`}
     >
       <div className="flex items-center gap-4 group">
         <FallbackImage
@@ -94,7 +92,7 @@ function PokemonListItem({ pkmnId, onHover }) {
         <button
           onClick={handleToggleFavorite}
           className="cursor-pointer focus:outline-none"
-          aria-label={fav ? "Rimuovi dai preferiti" : "Aggiungi ai preferiti"}
+          aria-label={fav ? "Remove from favorites" : "Add to favorites"}
         >
           <svg
             className={`w-7 h-7 ${
@@ -112,7 +110,7 @@ function PokemonListItem({ pkmnId, onHover }) {
         <button
           onClick={handleToggleCapture}
           className="cursor-pointer focus:outline-none"
-          aria-label={cap ? "Rimuovi dai catturati" : "Aggiungi ai catturati"}
+          aria-label={cap ? "Remove from captured" : "Add to captured"}
         >
           <svg
             className={`w-7 h-7 ${cap ? "text-red-500" : "text-gray-400"}`}
