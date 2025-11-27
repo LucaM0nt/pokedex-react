@@ -65,7 +65,7 @@ function TrainerDashboard({ username }) {
       <div className="max-w-5xl mx-auto space-y-8">
         {/* Trainer Card */}
         <div className="bg-white rounded-lg shadow-lg border border-gray-300 p-6">
-          <div className="flex items-center gap-4">
+          <div className="pb-2 flex items-center gap-4">
             <div className="w-16 h-16 rounded-full bg-blue-600 text-white flex items-center justify-center text-2xl font-bold shadow">
               {initials}
             </div>
@@ -80,20 +80,20 @@ function TrainerDashboard({ username }) {
               <p className="font-semibold text-gray-800">#123456</p>
             </div>
           </div>
-          <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm text-gray-700">
+          <div className="cursor-pointer mt-4 grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm text-gray-700">
             <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
               <p className="text-gray-500">Lv.</p>
               <p className="font-semibold">45</p>
             </div>
-            <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
+            <div className="cursor-pointer bg-gray-50 border border-gray-200 rounded-lg p-3">
               <p className="text-gray-500">Badges</p>
               <p className="font-semibold">8</p>
             </div>
-            <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
+            <div className="cursor-pointer bg-gray-50 border border-gray-200 rounded-lg p-3">
               <p className="text-gray-500">Since</p>
               <p className="font-semibold">2025</p>
             </div>
-            <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
+            <div className="cursor-pointer bg-gray-50 border border-gray-200 rounded-lg p-3">
               <p className="text-gray-500">Favorite Type</p>
               <p className="font-semibold">Electric</p>
             </div>
@@ -132,19 +132,19 @@ function IconGrid({ ids, emptyLabel }) {
   }
 
   return (
-    <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3">
+    <div className="mt-6 mx-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
       {ids.map((id) => (
         <Link key={id} to={`/entry/${id}`} className="group block">
-          <div className="bg-white border border-gray-300 rounded-lg shadow-sm p-2 w-20 h-20 mx-auto flex items-center justify-center hover:shadow transition-shadow">
+          <div className="bg-white border-2 border-gray-300 rounded-lg shadow-sm p-2 w-24 h-24 md:w-30 md:h-30 mx-auto flex items-center justify-center group-hover:border-blue-400 hover:shadow transition duration-200">
             <FallbackImage
               type="sprite"
               src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`}
               alt={`#${id}`}
-              className="w-14 h-14 image-render-pixel"
+              className="w-18 h-18 sm:w-20 sm:h-20 md:w-24 md:h-24 image-render-pixel"
               loading="lazy"
             />
           </div>
-          <p className="mt-1 text-center text-xs text-gray-600 group-hover:text-gray-800">
+          <p className="mt-1 text-center text-sm md:text-base text-gray-600 group-hover:text-gray-800">
             #{id}
           </p>
         </Link>
