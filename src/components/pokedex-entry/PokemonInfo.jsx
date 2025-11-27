@@ -1,5 +1,5 @@
-import TypeTag from "../../common/TypeTag";
-import FallbackImage from "../../common/FallbackImage.jsx";
+import TypeTag from "../common/TypeTag";
+import FallbackImage from "../common/FallbackImage.jsx";
 
 export default function PokemonInfo({ pokemonData, speciesData }) {
   const isGenderless = speciesData.gender_rate === -1;
