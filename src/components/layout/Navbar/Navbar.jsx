@@ -54,7 +54,7 @@ export default function Navbar({ className, headerHeight }) {
                   dispatch(openLoginModal());
                   setIsOpen(false);
                 }}
-                className="text-white text-lg px-3 pb-7 md:pb-0 hover:text-blue-500 transition-colors duration-300 cursor-pointer"
+                className="text-white text-lg md:text-base px-3 py-2 md:py-0 rounded-lg md:rounded-none hover:text-blue-400 hover:bg-gray-800/30 md:hover:bg-transparent transition-all duration-300 cursor-pointer w-full text-left md:w-auto md:text-center block md:inline-block"
               >
                 Login
               </button>
@@ -69,7 +69,7 @@ export default function Navbar({ className, headerHeight }) {
               <div key="logout" className="relative">
                 <button
                   onClick={handleLogout}
-                  className="text-red-400 text-lg px-3 pb-7 md:pb-0 hover:text-red-300 transition-colors duration-300"
+                  className="text-red-400 text-lg md:text-base px-3 py-2 md:py-0 rounded-lg md:rounded-none hover:text-red-300 hover:bg-gray-800/30 md:hover:bg-transparent transition-all duration-300 cursor-pointer w-full text-left md:w-auto md:text-center block md:inline-block"
                 >
                   Logout
                 </button>
