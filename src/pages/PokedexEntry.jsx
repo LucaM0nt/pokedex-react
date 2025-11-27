@@ -1,5 +1,7 @@
 ﻿import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 
 import {
   useGetPokemonQuery,
@@ -65,20 +67,32 @@ export default function PokedexEntry() {
   } = usePokemonActions(pokemonId);
 
   if (isLoadingPokemon || isLoadingSpecies)
-    return <Alert type="info" message="Loading Pokémon details..." className="m-4" />;
+    return (
+      <Alert type="info" message="Loading Pokémon details..." className="m-4" />
+    );
   if (pokemonError || speciesError) {
-    const message = pokemonError?.status || speciesError?.status
-      ? `Error loading Pokémon (HTTP ${pokemonError?.status || speciesError?.status}).`
-      : "Network error loading Pokémon details.";
+    const message =
+      pokemonError?.status || speciesError?.status
+        ? `Error loading Pokémon (HTTP ${
+            pokemonError?.status || speciesError?.status
+          }).`
+        : "Network error loading Pokémon details.";
     return <Alert type="error" message={message} className="m-4" />;
   }
   if (!pokemonData || !speciesData)
-    return <Alert type="info" message="No Pokémon data available." className="m-4" />;
+    return (
+      <Alert type="info" message="No Pokémon data available." className="m-4" />
+    );
 
   const flavorText =
     speciesData.flavor_text_entries.find(
       (entry) => entry.language.name === "en"
     )?.flavor_text || "";
+
+  // Arrow SVG (left-pointing).
+  const arrowSvg = (
+    <FontAwesomeIcon icon={faAngleLeft} className="text-gray-600 text-xl hover:text-gray-900" />
+  );
 
   return (
     <div className="container mx-auto px-4 py-6">
@@ -90,26 +104,15 @@ export default function PokedexEntry() {
               onClick={() => navigate("/")}
               className="cursor-pointer flex items-center gap-2 text-gray-700 hover:text-gray-900 font-medium transition-colors"
             >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-              <span>Back to Pokédex</span>
+              {arrowSvg}
+              <span className="hidden sm:inline">Back to Pokédex</span>
+              <span className="sm:hidden">Back</span>
             </button>
 
             <div className="flex items-center gap-4">
               <button
                 onClick={handleToggleFavorite}
-                className="cursor-pointer focus:outline-none"
+                className="cursor-pointer focus:outline-none duration-250 hover:opacity-70"
                 aria-label={fav ? "Remove from favorites" : "Add to favorites"}
                 title={fav ? "Remove from favorites" : "Add to favorites"}
               >
@@ -128,7 +131,7 @@ export default function PokedexEntry() {
 
               <button
                 onClick={handleToggleCapture}
-                className="cursor-pointer focus:outline-none"
+                className="cursor-pointer focus:outline-none duration-250 hover:opacity-70"
                 aria-label={cap ? "Remove from caught" : "Add to caught"}
                 title={cap ? "Remove from caught" : "Add to caught"}
               >
@@ -151,7 +154,7 @@ export default function PokedexEntry() {
 
           {/* Body */}
           <div className="space-y-7 my-10">
-            <EntryHeader pokemonId={pokemonId} pokemonName={pokemonData.name} />
+            <EntryHeader pokemonId={pokemonId} pokemonName={pokemonData.name}  speciesData={speciesData} />
             <PokemonInfo pokemonData={pokemonData} speciesData={speciesData} />
             <PokemonDescription flavorText={flavorText} />
             <PokemonStats stats={pokemonData.stats} />

@@ -21,15 +21,11 @@ export default function PokemonInfo({ pokemonData, speciesData }) {
           alt={pokemonData.name}
           className="w-60 h-60 object-contain"
         />
-        <div className="mt-1 flex justify-center flex-wrap gap-2">
+        <div className="mt-7 flex justify-center flex-wrap gap-3">
           {pokemonData.types.map((t) => (
-            <TypeTag key={t.type.name} type={t.type.name} />
+            <TypeTag key={t.type.name} type={t.type.name} size="lg" className="shadow-sm" />
           ))}
         </div>
-        <p className="text-gray-600 text-base font-medium text-center italic mt-2">
-          {speciesData.genera.find((g) => g.language.name === "en")?.genus ||
-            "Unknown"}
-        </p>
       </div>
 
       <div className="w-full md:w-1/2 flex">

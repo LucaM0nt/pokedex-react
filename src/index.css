@@ -1,0 +1,23 @@
+/* Small "jump" animation for sprites on hover.
+	 The animation runs once when the parent button (with class `group`) is hovered.
+*/
+
+@keyframes jump {
+	0% {
+		transform: translateY(0);
+	}
+	30% {
+		transform: translateY(-6px);
+	}
+	100% {
+		transform: translateY(0);
+	}
+}
+
+.jump-on-hover {
+	transition: transform 180ms ease;
+}
+
+.group:hover .jump-on-hover {
+	animation: jump 360ms ease 1;
+}

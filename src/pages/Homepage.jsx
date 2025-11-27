@@ -27,7 +27,7 @@ export default function Homepage() {
   }, [data, dispatch]);
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 h-full min-h-0 py-5">
+    <div className="flex flex-col md:flex-row gap-4 h-full min-h-0 py-5 px-1">
       <div className="md:basis-[60%] min-h-0 min-w-0 h-full flex flex-col">
         <div className="w-full">
           <Searchbar onSearch={(t) => setSubmittedSearchTerm(t)} />

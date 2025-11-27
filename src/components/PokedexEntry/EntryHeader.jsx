@@ -1,5 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { useGetLastPokemonQuery, useSearchPokemonByNameQuery } from "../../store/pokeApiSlice";
+import {
+  useGetLastPokemonQuery,
+  useSearchPokemonByNameQuery,
+} from "../../store/pokeApiSlice";
 import FallbackImage from "../FallbackImage.jsx";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,7 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // Props:
 // - `pokemonId` (number): current Pokémon id
 // - `pokemonName` (string): current Pokémon name
-export default function EntryHeader({ pokemonId, pokemonName }) {
+export default function EntryHeader({ pokemonId, pokemonName, speciesData }) {
   const navigate = useNavigate();
 
   // Use the latest API helper to fetch the last valid Pokémon record.
@@ -28,9 +31,12 @@ export default function EntryHeader({ pokemonId, pokemonName }) {
   const isNumericId = Number.isFinite(parsedId) && parsedId > 0;
 
   // Call the name-based query only when we don't already have a numeric id.
-  const { data: pokemonByName } = useSearchPokemonByNameQuery(pokemonName ?? "", {
-    skip: isNumericId || !pokemonName,
-  });
+  const { data: pokemonByName } = useSearchPokemonByNameQuery(
+    pokemonName ?? "",
+    {
+      skip: isNumericId || !pokemonName,
+    }
+  );
 
   const currentId = isNumericId ? parsedId : pokemonByName?.id || null;
 
@@ -53,6 +59,10 @@ export default function EntryHeader({ pokemonId, pokemonName }) {
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800">
           #{currentId ?? "--"} {(pokemonName || "").toUpperCase()}
         </h2>
+        <p className="text-gray-500 text-base md:text-lg lg:text-xl font-medium text-center italic mt-2 mb-1">
+          {speciesData.genera.find((g) => g.language.name === "en")?.genus ||
+            "Unknown"}
+        </p>
       </div>
 
       <PrevNextButton id={nextId} direction="next" navigate={navigate} />
@@ -79,7 +89,7 @@ function PrevNextButton({ id, direction, navigate }) {
   const arrowSvg = (
     <FontAwesomeIcon
       icon={faAngleLeft}
-      className="text-gray-500 text-2xl"
+      className="text-gray-500 text-2xl hover:text-gray-900"
     />
   );
 
@@ -87,7 +97,7 @@ function PrevNextButton({ id, direction, navigate }) {
   const arrowSvgRight = (
     <FontAwesomeIcon
       icon={faAngleRight}
-      className="text-gray-500 text-2xl"
+      className="text-gray-500 text-2xl hover:text-gray-900"
     />
   );
 
@@ -98,7 +108,7 @@ function PrevNextButton({ id, direction, navigate }) {
       {enabled ? (
         <button
           onClick={() => navigate(`/entry/${id}`)}
-          className="flex items-center gap-2 text-sm text-gray-700 hover:text-gray-900 cursor-pointer"
+          className="group flex items-center gap-2 text-sm text-gray-700 hover:text-gray-900 cursor-pointer"
           aria-label={direction === "prev" ? `Previous #${id}` : `Next #${id}`}
           title={direction === "prev" ? `Previous #${id}` : `Next #${id}`}
         >
@@ -106,31 +116,31 @@ function PrevNextButton({ id, direction, navigate }) {
             <>
               {/* left arrow, then sprite+id (sprite and id hidden on small screens) */}
               {arrowSvg}
-                  <FallbackImage
-                    type="sprite"
-                    src={spriteUrl}
-                    alt={`#${id}`}
-                    className={`hidden md:block ${spriteClass} transform transition-transform duration-200 group-hover:scale-110 group-hover:-translate-y-1 group-focus:scale-110`}
-                  />
-                  <span className="hidden md:inline-block text-sm md:text-lg font-semibold cursor-pointer transform transition-transform duration-150 group-hover:scale-105 group-focus:scale-105">
-                    #{id}
-                  </span>
+              <FallbackImage
+                type="sprite"
+                src={spriteUrl}
+                alt={`#${id}`}
+                className={`hidden md:block ${spriteClass} transform transition-transform duration-200 group-hover:scale-110 group-focus:scale-110 jump-on-hover`}
+              />
+              <span className="hidden md:inline-block text-sm md:text-lg font-semibold cursor-pointer transform transition-transform duration-150 group-focus:scale-105">
+                #{id}
+              </span>
             </>
           )}
 
           {direction === "next" && (
             <>
               {/* id+sprite, then right arrow */}
-                  <span className="hidden md:inline-block text-sm md:text-lg font-semibold cursor-pointer transform transition-transform duration-150 group-hover:scale-105 group-focus:scale-105">
-                    #{id}
-                  </span>
-                  <FallbackImage
-                    type="sprite"
-                    src={spriteUrl}
-                    alt={`#${id}`}
-                    className={`hidden md:block ${spriteClass} transform transition-transform duration-200 group-hover:scale-110 group-hover:-translate-y-1 group-focus:scale-110`}
-                  />
-                  {arrowSvgRight}
+              <span className="hidden md:inline-block text-sm md:text-lg font-semibold cursor-pointer transform transition-transform duration-150 group-focus:scale-105">
+                #{id}
+              </span>
+              <FallbackImage
+                type="sprite"
+                src={spriteUrl}
+                alt={`#${id}`}
+                className={`hidden md:block ${spriteClass} transform transition-transform duration-200 group-hover:scale-110 group-focus:scale-110 jump-on-hover`}
+              />
+              {arrowSvgRight}
             </>
           )}
         </button>

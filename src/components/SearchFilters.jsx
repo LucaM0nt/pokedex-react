@@ -74,7 +74,7 @@ export default function SearchFilters({
             setOpenTypeDropdown((prev) => !prev);
             setOpenGenDropdown(false);
           }}
-          className="w-full flex items-center gap-2 px-2 py-2 pr-7 bg-white text-gray-900 text-sm min-h-0 h-10"
+          className="cursor-pointer w-full flex items-center gap-2 px-3 py-2 pr-7 bg-white text-gray-900 text-sm min-h-0 h-10 border border-gray-300 rounded-3xl transition-colors duration-300 hover:bg-blue-50 hover:border-blue-300"
         >
           {selectedType ? (
             <TypeTag type={selectedType} />
@@ -94,9 +94,9 @@ export default function SearchFilters({
           </svg>
         </button>
         {openTypeDropdown && (
-          <ul className="absolute z-20 w-full bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto mt-1 text-sm">
+          <ul className="absolute z-20 w-full bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto mt-1 text-sm min-w-max">
             <li
-              className="cursor-pointer px-3 py-2 hover:bg-blue-50"
+              className="cursor-pointer px-3 py-2 transition-colors duration-150 hover:bg-blue-50 hover:text-blue-700"
               onMouseDown={() => handleSelectType(null)}
             >
               <span className="text-gray-700">All types</span>
@@ -105,7 +105,7 @@ export default function SearchFilters({
             {TYPE_OPTIONS.map((type) => (
               <li
                 key={type}
-                className="cursor-pointer px-3 py-2 hover:bg-blue-50 flex items-center"
+                className="cursor-pointer px-3 py-2 transition-colors duration-150 hover:bg-blue-50 hover:text-blue-700 flex items-center"
                 onMouseDown={() => handleSelectType(type)}
               >
                 <TypeTag type={type} />
@@ -116,14 +116,14 @@ export default function SearchFilters({
       </div>
 
       {/* Dropdown Generazione */}
-      <div className="relative min-w-[170px] w-48">
+      <div className="relative">
         <button
           type="button"
           onClick={() => {
             setOpenGenDropdown((prev) => !prev);
             setOpenTypeDropdown(false);
           }}
-          className="w-full flex items-center gap-2 px-2 py-2 pr-7 bg-white text-gray-900 text-sm min-h-0 h-10"
+          className="cursor-pointer w-full flex items-center gap-2 px-3 py-2 pr-7 bg-white text-gray-900 text-sm min-h-0 h-10 border border-gray-300 rounded-3xl transition-colors duration-300 hover:bg-blue-50 hover:border-blue-300"
         >
           {selectedGen ? (
             <span>
@@ -146,9 +146,9 @@ export default function SearchFilters({
           </svg>
         </button>
         {openGenDropdown && (
-          <ul className="absolute z-20 w-full bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto mt-1 text-sm">
+          <ul className="absolute z-20 left-0 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto mt-1 text-sm min-w-max">
             <li
-              className="cursor-pointer px-3 py-2 hover:bg-blue-50"
+              className="cursor-pointer px-3 py-2 transition-colors duration-150 hover:bg-blue-50 hover:text-blue-700"
               onMouseDown={() => handleSelectGen(null)}
             >
               <span className="text-gray-700">All generations</span>
@@ -157,7 +157,7 @@ export default function SearchFilters({
             {GEN_OPTIONS.map((gen) => (
               <li
                 key={gen.id}
-                className="cursor-pointer px-3 py-2 hover:bg-blue-50"
+                className="cursor-pointer px-3 py-2 transition-colors duration-150 hover:bg-blue-50 hover:text-blue-700"
                 onMouseDown={() => handleSelectGen(gen.id)}
               >
                 {gen.label}
@@ -169,7 +169,7 @@ export default function SearchFilters({
 
       {/* Icona Preferiti */}
       <button
-        className="cursor-pointer focus:outline-none"
+        className="cursor-pointer focus:outline-none duration-250 hover:opacity-70"
         onClick={handleToggleFavorites}
         title={showFavorites ? "Show all" : "Show favorites"}
       >
@@ -188,7 +188,7 @@ export default function SearchFilters({
 
       {/* Icona Catturati */}
       <button
-        className="cursor-pointer focus:outline-none"
+        className="cursor-pointer focus:outline-none transition duration-250 hover:opacity-70"
         onClick={handleToggleCaptured}
         title={showCaptured ? "Show all" : "Show only caught Pokémon"}
       >
@@ -207,9 +207,9 @@ export default function SearchFilters({
         </svg>
       </button>
 
-      {/* Reset Filtri */}
+      {/* Reset */}
       <button
-        className="ml-auto px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-xl text-sm text-gray-700 border border-gray-300"
+        className="cursor-pointer ml-auto px-4 py-2 rounded-xl text-sm text-gray-500 border border-gray-300 duration-300 hover:bg-red-200 hover:border-red-300 hover:text-red-950"
         onClick={() => {
           resetAll();
           if (onResetFilters) onResetFilters();

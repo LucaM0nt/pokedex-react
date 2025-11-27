@@ -29,13 +29,15 @@ export default function EvolutionChain({ tree }) {
 
     return (
       <div className="flex flex-col items-center gap-2 min-w-40 py-4">
-        <a href={`/entry/${evoId}`}>
-          <FallbackImage
-            type="sprite"
-            src={spriteSrc}
-            alt={evo.name}
-            className="w-30 h-30 md:w-34 md:h-34"
-          />
+        <a href={`/entry/${evoId}`} className="group focus:outline-none">
+          <div className="bg-white rounded-full p-2 shadow-sm border border-gray-200 flex items-center justify-center mb-3">
+            <FallbackImage
+              type="sprite"
+              src={spriteSrc}
+              alt={evo.name}
+              className="w-26 h-26 md:w-30 md:h-30 object-contain transform transition-transform duration-200 group-hover:scale-105 group-focus:scale-105"
+            />
+          </div>
         </a>
 
         <p className="text-center -mt-2">
@@ -64,12 +66,12 @@ export default function EvolutionChain({ tree }) {
           <div className="flex flex-col items-center">
             <FontAwesomeIcon
               icon={faAngleDown}
-              className="text-gray-500 text-4xl pt-11 pb-7"
+              className="text-gray-500 text-4xl py-7"
             />
 
             {/* Dynamic responsive grid: 2 cols on small screens, dynamic cols on md+ */}
             <div
-              className={`grid grid-cols-1 ${desktopCols} gap-7 place-items-start`}
+              className={`grid grid-cols-1 ${desktopCols} gap-2 lg:gap-8 place-items-start`}
             >
               {children.map((child, index) => (
                 <EvolutionNode key={index} evo={child} />
