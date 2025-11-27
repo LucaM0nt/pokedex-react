@@ -3,11 +3,16 @@ import PokedexButton from "./PokedexButton";
 import FallbackImage from "../common/FallbackImage.jsx";
 import Alert from "../common/Alert.jsx";
 import Card from "../common/Card.jsx";
-import { useGetPokemonQuery } from "../../store/pokeApiSlice";
+import {
+  useGetPokemonQuery,
+  useGetPokemonSpeciesQuery,
+} from "../../store/pokeApiSlice";
 import { Link } from "react-router-dom";
 
 export default function PokemonPreview({ id = 1 }) {
   const { data, error, isLoading } = useGetPokemonQuery(id);
+  const { data: speciesData } = useGetPokemonSpeciesQuery(id);
+
   if (isLoading) {
     return <Alert type="info" message="Loading preview..." />;
   }
@@ -26,6 +31,9 @@ export default function PokemonPreview({ id = 1 }) {
     return <Alert type="info" message="No data available." />;
   }
 
+  const genus =
+    speciesData?.genera?.find((g) => g.language.name === "en")?.genus || "";
+
   return (
     <Link
       to={`/entry/${data.id}`}
@@ -33,6 +41,17 @@ export default function PokemonPreview({ id = 1 }) {
     >
       <Card className="hover:shadow-md transition-shadow cursor-pointer">
         <div className="flex flex-col items-center text-center">
+          <div className="text-center mb-4">
+            <h2 className="text-l sm:text-3xl md:text-l font-bold text-gray-800">
+              #{data.id} {data.name.toUpperCase()}
+            </h2>
+            {genus && (
+              <p className="text-gray-500 text-base md:text-lg lg:text-xl font-medium italic mt-2 mb-1">
+                {genus}
+              </p>
+            )}
+          </div>
+
           <FallbackImage
             type="artwork"
             src={
@@ -42,10 +61,6 @@ export default function PokemonPreview({ id = 1 }) {
             alt={data.name}
             className="w-40 h-40 object-contain mb-4"
           />
-
-          <h2 className="text-2xl font-bold capitalize">
-            #{data.id} {data.name}
-          </h2>
 
           <div className="flex gap-2 mt-3">
             {data.types?.map((t) => (
