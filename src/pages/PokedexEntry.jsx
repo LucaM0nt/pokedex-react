@@ -15,6 +15,7 @@ import PokemonStats from "../components/pokemon-detail/PokedexEntry/PokemonStats
 import EvolutionChain from "../components/pokemon-detail/PokedexEntry/EvolutionChain.jsx";
 import EntryHeader from "../components/pokemon-detail/PokedexEntry/EntryHeader.jsx";
 import Alert from "../components/common/Alert.jsx";
+import Card from "../components/common/Card.jsx";
 import usePokemonActions from "../hooks/usePokemonActions";
 
 export default function PokedexEntry() {
@@ -100,7 +101,7 @@ export default function PokedexEntry() {
   return (
     <div className="container mx-auto px-4 py-6">
       <div className="max-w-5xl mx-auto">
-        <div className="bg-white rounded-lg shadow-lg border border-gray-300 p-6">
+        <Card>
           {/* Back link and toggles */}
           <div className="flex items-center justify-between gap-4 mb-4">
             <button
@@ -167,7 +168,7 @@ export default function PokedexEntry() {
             <PokemonStats stats={pokemonData.stats} />
             <EvolutionChain tree={evolutionTree} />
           </div>
-        </div>
+        </Card>
       </div>
     </div>
   );
