@@ -4,17 +4,28 @@ import { faVolumeHigh } from "@fortawesome/free-solid-svg-icons";
 
 /**
  * PokemonCryButton
- * Icon-only button that plays the Pokémon cry for a given numeric id.
  *
- * Props:
- * - pokemonId: number (required)
- * - className: optional className for sizing/spacing
- * - title: optional tooltip (defaults to "Play cry")
+ * Small, reusable, icon-only button that plays the Pokémon "cry" audio
+ * for a given Pokémon ID using the official public cries repository.
+ *
+ * The component manages a single HTMLAudioElement for predictable playback,
+ * avoids overlapping plays, and cleans up listeners on unmount.
+ *
+ * Accessibility: provides an aria-label and keyboard-focus styles.
  */
-export default function PokemonCryButton({ pokemonId, className = "", title = "Play cry" }) {
+export default function PokemonCryButton({
+  pokemonId,
+  className = "",
+  title = "Play cry",
+}) {
+  /**
+   * A persistent Audio element used across clicks.
+   * Avoids creating a new element each time and makes cleanup explicit.
+   */
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
+  // --- Setup & teardown of the Audio element ---------------------------------
   useEffect(() => {
     const audio = new Audio();
     audio.preload = "none";
@@ -36,6 +47,11 @@ export default function PokemonCryButton({ pokemonId, className = "", title = "P
     };
   }, []);
 
+  /**
+   * onPlay
+   * Loads the cry for the provided pokemonId and plays from the start.
+   * Uses a stable URL pattern maintained by the community repository.
+   */
   const onPlay = () => {
     if (!pokemonId) return;
     const audio = audioRef.current;
@@ -63,11 +79,19 @@ export default function PokemonCryButton({ pokemonId, className = "", title = "P
       type="button"
       aria-label="Play cry"
       title={title}
+      /*
+       * UI/Accessibility: icon-only button with visible focus ring and
+       * subtle hover. Rounded shape helps when placed inline near text.
+       */
       className={`inline-flex items-center justify-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 rounded ${className}`}
       onClick={onPlay}
       disabled={!pokemonId || isPlaying}
     >
-      <FontAwesomeIcon icon={faVolumeHigh} className={`text-lg ${isPlaying ? "opacity-60" : ""}`} />
+      <FontAwesomeIcon
+        icon={faVolumeHigh}
+        /* When playing, reduce opacity to indicate a transient disabled state */
+        className={`text-lg ${isPlaying ? "opacity-60" : ""}`}
+      />
     </button>
   );
 }
