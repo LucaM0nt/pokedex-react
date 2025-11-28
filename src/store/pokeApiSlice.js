@@ -24,12 +24,14 @@ export const pokeApi = createApi({
     // Single Pokémon by ID
     getPokemon: builder.query({
       query: (id) => `pokemon/${id}`,
+      keepUnusedDataFor: Infinity,
       providesTags: ["singlePokemon"],
     }),
 
     // Pokémon species
     getPokemonSpecies: builder.query({
       query: (id) => `pokemon-species/${id}`,
+      keepUnusedDataFor: Infinity,
       providesTags: ["pokemonSpecies"],
     }),
 
@@ -38,6 +40,7 @@ export const pokeApi = createApi({
       query: (typeName) => `type/${typeName}`,
       transformResponse: (response) =>
         response.pokemon.map((item) => item.pokemon),
+      keepUnusedDataFor: Infinity,
       providesTags: ["pokemonTypes"],
     }),
 
@@ -50,6 +53,7 @@ export const pokeApi = createApi({
     // Full list (for heavy client-side filtering)
     getAllPokemonFullList: builder.query({
       query: () => `pokemon?limit=20000&offset=0`,
+      keepUnusedDataFor: Infinity,
       providesTags: ["allPokemon"],
     }),
 
@@ -60,6 +64,7 @@ export const pokeApi = createApi({
           name: p.name,
           url: p.url.replace("pokemon-species", "pokemon"), // convert species → pokemon
         })),
+      keepUnusedDataFor: Infinity,
       providesTags: ["pokemonGeneration"],
     }),
 
@@ -102,7 +107,7 @@ export const pokeApi = createApi({
 
         return { data: pokemonRes.data };
       },
-
+      keepUnusedDataFor: Infinity,
       providesTags: ["lastPokemon"],
     }),
   }),
