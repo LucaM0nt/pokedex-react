@@ -2,13 +2,18 @@ import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { useSelector } from "react-redux";
 import usePokedexQueryParams from "../../hooks/usePokedexQueryParams";
 
-// Utility: estrai l'id dall'url (es: .../pokemon/25/)
+// Utility: extract id from url (e.g., .../pokemon/25/)
 function getIdFromUrl(url) {
   if (!url) return null;
   const parts = url.replace(/\/$/, "").split("/");
   return Number(parts[parts.length - 1]);
 }
 
+/**
+ * Searchbar
+ * Auto-complete search input with keyboard navigation (arrows, Enter, Escape).
+ * Preserves all query params (type, gen, favorites, captured) when selecting.
+ */
 export default function Searchbar({ onSelectPokemon, onSearch }) {
   const { type, gen, favorites, captured, setSearch, apply } =
     usePokedexQueryParams();
@@ -19,9 +24,9 @@ export default function Searchbar({ onSelectPokemon, onSearch }) {
   const formRef = useRef(null);
   const inputRef = useRef(null);
 
-  // FIX: niente fallback dentro il selector → nessun warning
+  // FIX: no fallback inside the selector → avoids Redux warnings
   const allPokemon = useSelector((state) => state.user.fullList);
-  const pokemonList = allPokemon ?? []; // fallback sicuro fuori dal selector
+  const pokemonList = allPokemon ?? []; // safe fallback outside selector
 
   const query = input.trim().toLowerCase();
 
@@ -54,7 +59,7 @@ export default function Searchbar({ onSelectPokemon, onSearch }) {
       setIsFocused(false);
 
       const id = getIdFromUrl(pokemon.url);
-      // Aggiorna URL params usando il custom hook, preservando type/gen/favorites/captured
+      // Update URL params via custom hook, preserving type/gen/favorites/captured
       const searchValue = pokemon.name.trim();
       apply({ search: searchValue, type, gen, favorites, captured });
       if (onSearch) onSearch(searchValue);
@@ -66,7 +71,7 @@ export default function Searchbar({ onSelectPokemon, onSearch }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     const searchValue = input.trim();
-    // Aggiorna 'search' preservando gli altri parametri via hook
+    // Update 'search' while preserving other params via hook
     setSearch(searchValue);
     if (onSearch) onSearch(searchValue);
   };

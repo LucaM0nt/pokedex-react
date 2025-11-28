@@ -7,8 +7,9 @@ import {
 } from "../store/userSlice";
 
 /**
- * Custom hook per gestire le azioni di favorite e capture su un Pokémon
- * @param {number} pokemonId - ID del Pokémon
+ * usePokemonActions
+ * Manages favorite and capture actions for a specific Pokémon.
+ * @param {number} pokemonId - Pokémon ID
  * @returns {Object} - { isFavorite, isCaptured, toggleFavorite, toggleCapture }
  */
 export default function usePokemonActions(pokemonId) {

@@ -47,11 +47,13 @@ function PokemonListItem({ pkmnId, onHover }) {
     );
   }
   const handleToggleFavorite = (e) => {
+    // Prevent parent navigation when clicking action buttons
     e.stopPropagation();
     toggleFavorite();
   };
 
   const handleToggleCapture = (e) => {
+    // Prevent parent navigation when clicking action buttons
     e.stopPropagation();
     toggleCapture();
   };

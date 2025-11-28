@@ -1,7 +1,11 @@
 import { useGetLastPokemonQuery } from "../store/pokeApiSlice";
 
-// Returns the last valid Pokémon numeric id from the API.
-// Reuses the same logic employed by EntryHeader to avoid counting placeholders.
+/**
+ * useLastPokemonId
+ * Returns the last valid Pokémon numeric ID from the API.
+ * Used for wrap-around navigation and progress calculations.
+ * @returns {Object} - { lastId, isLoading, isError }
+ */
 export default function useLastPokemonId() {
   const { data: lastPokemon, isLoading, isError } = useGetLastPokemonQuery();
   const lastId = lastPokemon?.id ?? null;

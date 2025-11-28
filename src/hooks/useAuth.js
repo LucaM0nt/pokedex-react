@@ -2,7 +2,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectIsLogged, selectUsername, logout } from "../store/userSlice";
 
 /**
- * Custom hook per gestire lo stato di autenticazione dell'utente
+ * useAuth
+ * Provides user authentication state and logout handler.
  * @returns {Object} - { isLogged, username, logout }
  */
 export default function useAuth() {

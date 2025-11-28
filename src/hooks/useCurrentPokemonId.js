@@ -1,7 +1,11 @@
 import { useSearchPokemonByNameQuery } from "../store/pokeApiSlice";
 
-// Resolve the current numeric Pokémon id from either a numeric id or a name.
-// Returns { currentId, isResolving }.
+/**
+ * useCurrentPokemonId
+ * Resolves a numeric Pokémon ID from either a numeric id or a name.
+ * Skips name lookup if a valid numeric ID is provided.
+ * @returns {Object} - { currentId, isResolving }
+ */
 export default function useCurrentPokemonId(pokemonId, pokemonName) {
   const parsedId = Number(pokemonId);
   const isNumericId = Number.isFinite(parsedId) && parsedId > 0;

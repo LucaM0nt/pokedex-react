@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+/**
+ * userSlice
+ * Manages user auth, favorites/captures (stored as `byId` maps), and trainer profile.
+ * Lists use string IDs as keys for consistent localStorage serialization.
+ */
 const initialState = {
   isLogged: false,
   username: null,
@@ -75,7 +80,7 @@ export const {
   updateTrainerProfile,
 } = userSlice.actions;
 
-// Convenience action creators to keep a clear API
+// Convenience action creators for favorites and captures
 export const addFavorite = (id) => add({ list: "favorites", id });
 export const removeFavorite = (id) => remove({ list: "favorites", id });
 export const toggleFavorite = (id) => toggle({ list: "favorites", id });
@@ -84,8 +89,10 @@ export const addCapture = (id) => add({ list: "captures", id });
 export const removeCapture = (id) => remove({ list: "captures", id });
 export const toggleCapture = (id) => toggle({ list: "captures", id });
 
-// Selectors helpers
-// Accept either the whole store (`state`) or the substate (`state.user`).
+/**
+ * Selector helpers
+ * Accept either full store (`state`) or substate (`state.user`) for flexibility.
+ */
 const getUserState = (state) => state?.user ?? state;
 
 export const selectIsLogged = (state) => getUserState(state).isLogged;

@@ -6,6 +6,11 @@ import { GEN_OPTIONS } from "../../constants/pokemonGenerations";
 import useClickOutside from "../../hooks/useClickOutside";
 import usePokedexQueryParams from "../../hooks/usePokedexQueryParams";
 
+/**
+ * SearchFilters
+ * Type/generation dropdowns + favorites/captured toggles + reset.
+ * Uses `useClickOutside` to close dropdowns when clicking elsewhere.
+ */
 export default function SearchFilters({ onResetFilters }) {
   const dropdownRef = useRef(null);
   const [openTypeDropdown, setOpenTypeDropdown] = useState(false);
@@ -45,7 +50,7 @@ export default function SearchFilters({ onResetFilters }) {
 
   return (
     <div className="flex flex-wrap items-center gap-2 w-full" ref={dropdownRef}>
-      {/* Dropdown Tipo */}
+      {/* Type dropdown */}
       <div className="relative flex-1 min-w-[120px] sm:flex-none sm:w-36">
         <button
           type="button"
@@ -94,7 +99,7 @@ export default function SearchFilters({ onResetFilters }) {
         )}
       </div>
 
-      {/* Dropdown Generazione */}
+      {/* Generation dropdown */}
       <div className="relative flex-1 min-w-[120px] sm:flex-none">
         <button
           type="button"

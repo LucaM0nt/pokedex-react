@@ -3,6 +3,10 @@ import { selectListById } from "../../store/userSlice";
 import useLastPokemonId from "../../hooks/useLastPokemonId";
 import Alert from "../common/Alert";
 
+/**
+ * PokedexProgress
+ * Shows capture progress; prefers API last valid id and falls back to `fullList.length`.
+ */
 export default function PokedexProgress() {
   const fullList = useSelector((state) => state.user.fullList);
   const capturesById = useSelector((state) =>
