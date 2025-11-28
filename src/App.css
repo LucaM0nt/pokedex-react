@@ -1,3 +1,2 @@
-/* In order to use the plugin for tailwind intellisense */
-/* Should be removed before the final commit */
+/* Tailwind CSS entry point for Vite */
 @import "tailwindcss"
