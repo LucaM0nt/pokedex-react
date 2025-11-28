@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useMemo,
-  useRef,
-  useCallback,
-} from "react";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { useSelector } from "react-redux";
 import usePokedexQueryParams from "../../hooks/usePokedexQueryParams";
 
@@ -24,7 +18,6 @@ export default function Searchbar({ onSelectPokemon, onSearch }) {
 
   const formRef = useRef(null);
   const inputRef = useRef(null);
-  const suggestionsRef = useRef(null);
 
   // FIX: niente fallback dentro il selector → nessun warning
   const allPokemon = useSelector((state) => state.user.fullList);
@@ -138,7 +131,6 @@ export default function Searchbar({ onSelectPokemon, onSearch }) {
 
       {isFocused && suggestions.length > 0 && (
         <ul
-          ref={suggestionsRef}
           role="listbox"
           className="absolute z-10 w-full bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto mt-1"
         >
