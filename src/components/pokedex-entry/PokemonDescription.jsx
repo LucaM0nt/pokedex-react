@@ -1,4 +1,4 @@
-import { parseText } from "./utils.jsx";
+import { parseText } from "../../utils/pokemonEntryUtils.jsx";
 
 export default function PokedexDescription({ flavorText }) {
   return (
