@@ -11,23 +11,20 @@ export default function PokedexProgress() {
   const { lastId, isLoading, isError } = useLastPokemonId();
 
   // Prefer API-derived last valid id to avoid counting placeholder species.
-  const totalPokemon = Number.isFinite(lastId) && lastId > 0 ? lastId : fullList?.length || 0;
+  const hasFallback = Array.isArray(fullList) && fullList.length > 0;
+  const totalPokemon = Number.isFinite(lastId) && lastId > 0 ? lastId : hasFallback ? fullList.length : 0;
   const capturedCount = Object.keys(capturesById).length;
   const completionPercentage =
     totalPokemon > 0 ? Math.round((capturedCount / totalPokemon) * 100) : 0;
 
   return (
     <div className="mb-4">
-      {isLoading && (
-        <Alert type="info" title="Loading">
-          Loading progress…
-        </Alert>
-      )}
-      {isError && (
-        <Alert type="warning" title="Unavailable">
-          Could not determine the total number of Pokémon.
-        </Alert>
-      )}
+      {isLoading ? (
+        <Alert type="info" message="Loading progress…" />
+      ) : isError && !hasFallback ? (
+        <Alert type="warning" message="Could not determine the total number of Pokémon." />
+      ) : (
+      <>
       <div className="flex items-center justify-between mb-2">
         <span className="text-sm font-medium text-gray-400 md:text-gray-700">
           Pokédex Progress
@@ -49,6 +46,8 @@ export default function PokedexProgress() {
           {completionPercentage}% complete
         </span>
       </div>
+      </>
+      )}
     </div>
   );
 }
