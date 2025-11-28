@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import TypeTag from "../common/TypeTag";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
@@ -36,7 +37,11 @@ export default function EvolutionNode({ evo }) {
 
   return (
     <div className="flex flex-col items-center gap-2 min-w-40 py-4">
-      <a href={`/entry/${evoId}`} className="group focus:outline-none">
+      <Link 
+        to={`/entry/${evoId}`} 
+        className="group focus:outline-none"
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      >
         <div className="bg-white rounded-full p-2 shadow-sm border border-gray-200 flex items-center justify-center mb-3">
           <FallbackImage
             type="sprite"
@@ -45,7 +50,7 @@ export default function EvolutionNode({ evo }) {
             className="w-26 h-26 md:w-30 md:h-30 object-contain transform transition-transform duration-200 group-hover:scale-105 group-focus:scale-105"
           />
         </div>
-      </a>
+      </Link>
 
       <p className="text-center -mt-2">
         <span className="capitalize text-gray-600 text-sm md:text-lg">#{evoId}</span>
