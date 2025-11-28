@@ -15,21 +15,35 @@ import EmptyState from "../components/common/EmptyState";
 import Button from "../components/common/Button";
 import Card from "../components/common/Card";
 
+/**
+ * Account
+ * Trainer profile page accessible at /user (when logged in) or /login (prompts login modal)
+ * 
+ * Behavior:
+ * - /login: Opens login modal; redirects to /user after login
+ * - /user: Shows trainer dashboard with favorites/captures if logged in
+ * - Auto-redirects logged-in users from /login → /user
+ * - Shows login prompt for non-authenticated users
+ * 
+ * Components:
+ * - TrainerCard: Displays trainer info, badges, level, region, favorite type
+ * - IconGrid: Shows Pokémon sprites with remove buttons on hover
+ */
 export default function Account() {
   const dispatch = useDispatch();
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false); // Local modal state (separate from Redux)
   const { isLogged, username } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Se l'utente è su /login ma è già loggato, reindirizza a /user
+  // If user is logged in but on /login, redirect to /user
   useEffect(() => {
     if (isLogged && location.pathname === "/login") {
       navigate("/user", { replace: true });
     }
   }, [isLogged, location.pathname, navigate]);
 
-  // Apri la modale automaticamente se l'utente non è loggato e su /login
+  // Auto-open modal if user is not logged in and on /login
   useEffect(() => {
     if (!isLogged && location.pathname === "/login") {
       setShowModal(true);
@@ -40,6 +54,7 @@ export default function Account() {
     dispatch(openLoginModal());
   };
 
+  // Not logged in: show modal + empty state with login prompt
   if (!isLogged) {
     return (
       <>
@@ -78,9 +93,19 @@ export default function Account() {
     );
   }
 
+  // Logged in: render trainer dashboard
   return <TrainerDashboard username={username} />;
 }
 
+/**
+ * TrainerDashboard
+ * Displays trainer card and two grids (favorites + captures) with remove functionality.
+ * 
+ * Data flow:
+ * - Reads favorites/captures from Redux (stored as { byId: { "1": true, "25": true } })
+ * - Converts string keys to sorted numeric IDs for rendering
+ * - Dispatches remove actions to update Redux store (auto-persists to localStorage)
+ */
 function TrainerDashboard({ username }) {
   const dispatch = useDispatch();
   const favoritesById = useSelector((state) =>
@@ -90,6 +115,7 @@ function TrainerDashboard({ username }) {
     selectListById(state, "captures")
   );
 
+  // Convert byId object keys to sorted numeric arrays for IconGrid
   const favoriteIds = Object.keys(favoritesById || {})
     .map((x) => Number(x))
     .filter(Number.isFinite)
