@@ -7,7 +7,7 @@ import {
   useGetPokemonQuery,
   useGetPokemonSpeciesQuery,
 } from "../store/pokeApiSlice.js";
-import { fetchEvolutionTree } from "../components/pokedex-entry/utils.jsx";
+import { fetchEvolutionTree } from "../utils/pokemonEntryUtils.jsx";
 
 import PokemonInfo from "../components/pokedex-entry/PokemonInfo.jsx";
 import PokemonDescription from "../components/pokedex-entry/PokemonDescription.jsx";
