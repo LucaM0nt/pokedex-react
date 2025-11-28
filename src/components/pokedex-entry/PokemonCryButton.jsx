@@ -83,14 +83,16 @@ export default function PokemonCryButton({
        * UI/Accessibility: icon-only button with visible focus ring and
        * subtle hover. Rounded shape helps when placed inline near text.
        */
-      className={`inline-flex items-center justify-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 rounded ${className}`}
+      className={`inline-flex items-center justify-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 rounded cursor-pointer disabled:cursor-not-allowed ${className}`}
       onClick={onPlay}
       disabled={!pokemonId || isPlaying}
     >
       <FontAwesomeIcon
         icon={faVolumeHigh}
         /* When playing, reduce opacity to indicate a transient disabled state */
-        className={`text-lg ${isPlaying ? "opacity-60" : ""}`}
+        className={`text-lg pointer-events-none ${
+          isPlaying ? "opacity-60" : ""
+        }`}
       />
     </button>
   );
