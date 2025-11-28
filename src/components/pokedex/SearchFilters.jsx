@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import PokemonActions from "../pokedex-entry/PokemonActions.jsx";
 import TypeTag from "../common/TypeTag";
 import { TYPE_OPTIONS } from "../../constants/pokemonTypes";
 import { GEN_OPTIONS } from "../../constants/pokemonGenerations";
@@ -146,48 +147,18 @@ export default function SearchFilters({ onResetFilters }) {
       </div>
 
       {/* Actions group: Favorites, Captured, Reset */}
-      <div className="flex items-center gap-2 ml-auto">
-        {/* Icona Preferiti */}
-        <button
-          className="cursor-pointer focus:outline-none duration-250 hover:opacity-70"
-          onClick={toggleFavorites}
-          title={showFavorites ? "Show all" : "Show favorites"}
-        >
-          <svg
-            className={`w-6 h-6 sm:w-7 sm:h-7 transition-colors ${
-              showFavorites
-                ? "text-yellow-500 fill-current"
-                : "text-gray-400 fill-current"
-            }`}
-            viewBox="0 0 24 24"
-            strokeWidth="2"
-          >
-            <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-          </svg>
-        </button>
-
-        {/* Icona Catturati */}
-        <button
-          className="cursor-pointer focus:outline-none transition duration-250 hover:opacity-70"
-          onClick={toggleCaptured}
-          title={showCaptured ? "Show all" : "Show only caught Pokémon"}
-        >
-          <svg
-            className={`w-6 h-6 sm:w-7 sm:h-7 transition-colors ${
-              showCaptured ? "text-red-500" : "text-gray-400"
-            }`}
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <path d="M2 12h20" />
-            <circle cx="12" cy="12" r="3" fill="white" />
-          </svg>
-        </button>
-
-        {/* Reset */}
+      <div className="flex items-center gap-4 ml-auto">
+        <PokemonActions
+          fav={showFavorites}
+          cap={showCaptured}
+          onToggleFavorite={toggleFavorites}
+          onToggleCapture={toggleCaptured}
+          favoriteOnLabel="Show all"
+          favoriteOffLabel="Show favorites"
+          captureOnLabel="Show all"
+          captureOffLabel="Show caught"
+          className="gap-2"
+        />
         <button
           className="cursor-pointer px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm text-gray-500 border border-gray-300 duration-300 hover:bg-red-200 hover:border-red-300 hover:text-red-950"
           onClick={handleReset}

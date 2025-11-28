@@ -1,5 +1,3 @@
-import React from "react";
-
 // Color mapping by stat type (for flair)
 const STAT_COLORS = {
   hp: "bg-red-500",
