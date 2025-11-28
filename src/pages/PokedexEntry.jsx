@@ -1,5 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+﻿import { useParams, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 
@@ -7,7 +6,7 @@ import {
   useGetPokemonQuery,
   useGetPokemonSpeciesQuery,
 } from "../store/pokeApiSlice.js";
-import { fetchEvolutionTree } from "../utils/pokemonEntryUtils.jsx";
+import useEvolutionChain from "../hooks/useEvolutionChain";
 
 import PokemonInfo from "../components/pokedex-entry/PokemonInfo.jsx";
 import PokemonDescription from "../components/pokedex-entry/PokemonDescription.jsx";
@@ -36,29 +35,9 @@ export default function PokedexEntry() {
     isLoading: isLoadingSpecies,
   } = useGetPokemonSpeciesQuery(id);
 
-  const [evolutionTree, setEvolutionTree] = useState(null);
-
-  useEffect(() => {
-    const controller = new AbortController();
-    const { signal } = controller;
-    let isMounted = true;
-
-    if (speciesData?.evolution_chain?.url) {
-      fetchEvolutionTree(speciesData.evolution_chain.url, signal)
-        .then((tree) => {
-          if (isMounted) setEvolutionTree(tree);
-        })
-        .catch((err) => {
-          if (err?.name === "AbortError") return;
-          console.error(err);
-        });
-    }
-
-    return () => {
-      isMounted = false;
-      controller.abort();
-    };
-  }, [speciesData]);
+  const { evolutionTree } = useEvolutionChain(
+    speciesData?.evolution_chain?.url
+  );
 
   // Use custom hook for Pokemon actions
   const {
@@ -68,10 +47,12 @@ export default function PokedexEntry() {
     toggleCapture: handleToggleCapture,
   } = usePokemonActions(pokemonId);
 
-  if (isLoadingPokemon || isLoadingSpecies)
+  if (isLoadingPokemon || isLoadingSpecies) {
     return (
       <Alert type="info" message="Loading Pokémon details..." className="m-4" />
     );
+  }
+
   if (pokemonError || speciesError) {
     const message =
       pokemonError?.status || speciesError?.status
@@ -81,23 +62,17 @@ export default function PokedexEntry() {
         : "Network error loading Pokémon details.";
     return <Alert type="error" message={message} className="m-4" />;
   }
-  if (!pokemonData || !speciesData)
+
+  if (!pokemonData || !speciesData) {
     return (
       <Alert type="info" message="No Pokémon data available." className="m-4" />
     );
+  }
 
   const flavorText =
     speciesData.flavor_text_entries.find(
       (entry) => entry.language.name === "en"
     )?.flavor_text || "";
-
-  // Arrow SVG (left-pointing).
-  const arrowSvg = (
-    <FontAwesomeIcon
-      icon={faAngleLeft}
-      className="text-gray-600 text-xl hover:text-gray-900"
-    />
-  );
 
   return (
     <div className="container mx-auto px-4 py-6">
@@ -109,7 +84,10 @@ export default function PokedexEntry() {
               onClick={() => navigate("/")}
               className="cursor-pointer flex items-center gap-2 text-gray-700 hover:text-gray-900 font-medium transition-colors"
             >
-              {arrowSvg}
+              <FontAwesomeIcon
+                icon={faAngleLeft}
+                className="text-gray-600 text-xl hover:text-gray-900"
+              />
               <span className="hidden sm:inline">Back to Pokédex</span>
               <span className="sm:hidden">Back</span>
             </button>

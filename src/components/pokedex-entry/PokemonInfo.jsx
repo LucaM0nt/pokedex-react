@@ -5,9 +5,6 @@ export default function PokemonInfo({ pokemonData, speciesData }) {
   const isGenderless = speciesData.gender_rate === -1;
   const femaleRatio = isGenderless ? 0 : speciesData.gender_rate * 12.5;
   const maleRatio = isGenderless ? 0 : 100 - femaleRatio;
-  const genderText = isGenderless
-    ? "Genderless"
-    : `${maleRatio.toFixed(1)}% Male / ${femaleRatio.toFixed(1)}% Female`;
 
   return (
     <div className="flex flex-col md:flex-row md:items-stretch gap-6 w-full">
