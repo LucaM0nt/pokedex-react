@@ -21,14 +21,14 @@ import PokemonActions from "../components/common/PokemonActions.jsx";
 /**
  * PokedexEntry
  * Full detail page for a single Pokémon, accessible at /entry/:id
- * 
+ *
  * Displays:
  * - Header with prev/next navigation and favorite/capture toggles
  * - Artwork, types, physical stats, gender ratio, abilities
  * - Pokédex flavor text
  * - Base stats visualization
  * - Evolution chain with types
- * 
+ *
  * Data sources:
  * - pokemon endpoint: stats, types, sprites, abilities
  * - species endpoint: flavor text, genus, evolution chain URL, gender ratio
