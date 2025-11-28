@@ -27,7 +27,7 @@ export default function Navbar({ className, headerHeight }) {
       <MobileMenu isOpen={isOpen} headerHeight={headerHeight}>
         <div className="flex flex-col md:flex-row gap-3">
           {siteRoutes[0].children.map((el) => {
-            // Skip conditional items (login/user)
+            // Filter out conditional/hidden routes (login/user handled separately below)
             if (el.showInNav === "conditional") return null;
             if (!el.showInNav) return null;
 
@@ -40,7 +40,10 @@ export default function Navbar({ className, headerHeight }) {
                 </NavbarLink>
 
                 {el.children?.length > 0 && (
-                  <NavbarSubmenu children={el.children} />
+                  <NavbarSubmenu 
+                    children={el.children} 
+                    onLinkClick={() => setIsOpen(false)}
+                  />
                 )}
               </div>
             );

@@ -3,6 +3,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import FallbackImage from "../common/FallbackImage.jsx";
 
+/**
+ * EvolutionNode
+ * Recursively renders an evolution node with sprite, labels, types, and children.
+ *
+ * Props:
+ * - evo: node object with `name`, `url`, optional `types`, and `evolves_to` array
+ *
+ * Behavior:
+ * - Derives `evoId` from the species/pokemon URL path segment
+ * - Uses a responsive grid for children, mapping count → `md:grid-cols-N`
+ * - Each child renders another `EvolutionNode` (simple recursion)
+ */
 export default function EvolutionNode({ evo }) {
   const evoId = evo.url.split("/").filter(Boolean).pop();
 

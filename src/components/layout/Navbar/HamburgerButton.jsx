@@ -5,6 +5,7 @@ export default function HamburgerButton({ isOpen, onClick }) {
       onClick={onClick}
       aria-label={isOpen ? "Close menu" : "Open menu"}
     >
+      {/* Animated SVG: transforms between hamburger menu (three lines) and X (close) icon */}
       <svg
         className="w-7 h-7 transition-transform duration-300"
         fill="none"

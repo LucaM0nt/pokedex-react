@@ -3,7 +3,20 @@ import { useGetLastPokemonQuery } from "../../store/pokeApiSlice";
 import PrevNextButton from "./PrevNextButton";
 import useCurrentPokemonId from "../../hooks/useCurrentPokemonId";
 
-// Header for the Pokémon entry page with title and prev/next navigation
+/**
+ * EntryHeader
+ * Renders the Pokémon name/number with accessible genus subtitle and prev/next navigation.
+ *
+ * Props:
+ * - pokemonId: numeric ID or string that can resolve to an ID
+ * - pokemonName: fallback identifier used by `useCurrentPokemonId`
+ * - speciesData: includes `genera` for localized genus; English is selected
+ *
+ * Behavior:
+ * - Resolves a numeric `currentId` via `useCurrentPokemonId(pokemonId, pokemonName)`
+ * - Computes `prevId`/`nextId` with wrap-around using the API-reported `lastId`
+ * - Uses `PrevNextButton` for navigation and consistent sprite/label rendering
+ */
 export default function EntryHeader({ pokemonId, pokemonName, speciesData }) {
   const navigate = useNavigate();
 

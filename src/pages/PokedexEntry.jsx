@@ -16,7 +16,7 @@ import EntryHeader from "../components/pokedex-entry/EntryHeader.jsx";
 import Alert from "../components/common/Alert.jsx";
 import Card from "../components/common/Card.jsx";
 import usePokemonActions from "../hooks/usePokemonActions";
-import PokemonActions from "../components/pokedex-entry/PokemonActions.jsx";
+import PokemonActions from "../components/common/PokemonActions.jsx";
 
 export default function PokedexEntry() {
   const { id } = useParams();

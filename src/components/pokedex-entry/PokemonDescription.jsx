@@ -1,5 +1,12 @@
 import { parseText } from "../../utils/pokemonEntryUtils.jsx";
 
+/**
+ * PokedexDescription
+ * Displays the species flavor text, normalized (whitespace/newlines) via `parseText`.
+ *
+ * Props:
+ * - flavorText: raw text from species API (may include control chars)
+ */
 export default function PokedexDescription({ flavorText }) {
   return (
     <div className="bg-gray-50 p-4 border border-gray-300 rounded-lg shadow">

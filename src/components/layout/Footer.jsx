@@ -1,9 +1,16 @@
 import { Link } from "react-router-dom";
 
+/**
+ * Footer
+ * Renders two responsive variants controlled by `mode`:
+ * - desktop: visible on md+ with fixed styling
+ * - mobile: rendered inside the mobile drawer (via Navbar's MobileMenu)
+ */
 export default function Footer({ mode = "desktop" }) {
   // mode: "desktop" | "mobile"
 
   return (
+    // Toggle visibility/styles by mode and breakpoint
     <footer
       className={`z-40 ${
         mode === "desktop"

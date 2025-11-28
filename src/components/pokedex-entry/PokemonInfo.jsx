@@ -1,6 +1,18 @@
 import TypeTag from "../common/TypeTag";
 import FallbackImage from "../common/FallbackImage.jsx";
 
+/**
+ * PokemonInfo
+ * Shows artwork, types, physical info, gender ratio, and abilities.
+ *
+ * Props:
+ * - pokemonData: full Pokémon payload with `sprites`, `types`, `height`, `weight`, `abilities`
+ * - speciesData: includes `gender_rate` (-1 → genderless)
+ *
+ * Notes:
+ * - Gender ratio uses the standard 12.5% units per `gender_rate` from PokeAPI
+ * - The ratio bar sets `aria-label` for screen readers; the visual bar is decorative
+ */
 export default function PokemonInfo({ pokemonData, speciesData }) {
   const isGenderless = speciesData.gender_rate === -1;
   const femaleRatio = isGenderless ? 0 : speciesData.gender_rate * 12.5;

@@ -24,6 +24,7 @@ export default function EmptyState({
         {message && (
           <Card className="text-gray-900">
             <div className="space-y-4">
+              {/* Message can be string or React nodes for flexible content */}
               {typeof message === "string" ? (
                 <p className="text-lg font-medium">{message}</p>
               ) : (

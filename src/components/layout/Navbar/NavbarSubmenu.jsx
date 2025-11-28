@@ -1,12 +1,22 @@
 import { NavLink } from "react-router-dom";
 
-export default function NavbarSubmenu({ children }) {
+/**
+ * NavbarSubmenu
+ * Renders a responsive dropdown containing the child routes of a navbar item.
+ * - Mobile: shown inline
+ * - Desktop: shown as an absolute dropdown under the parent link
+ * Clicking a submenu link triggers onLinkClick (usually closes mobile nav).
+ * 
+ * NOTE: Currently unused - no routes have nested children.
+ * Kept for future app expansion when nested navigation is needed.
+ */
+export default function NavbarSubmenu({ children, onLinkClick }) {
   return (
     <div
       key={children.path}
       className="flex flex-col md:flex-row md:items-center relative"
     >
-      {/* Sottomenu */}
+      {/* Dropdown submenu - positioned absolutely on desktop */}
       {children && children.length > 0 && (
         <div
           className={`
@@ -20,7 +30,7 @@ export default function NavbarSubmenu({ children }) {
               key={sub.path}
               to={sub.path}
               className="text-slate-200 px-3 py-2 hover:text-white hover:bg-gray-600 rounded-md"
-              onClick={() => setIsOpen(false)}
+              onClick={onLinkClick}
             >
               {sub.title}
             </NavLink>

@@ -1,5 +1,16 @@
 import EvolutionNode from "./EvolutionNode.jsx";
 
+/**
+ * EvolutionChain
+ * Top-level container for rendering an evolution tree.
+ *
+ * Props:
+ * - tree: root evolution node from species/chain API; null-safe.
+ *
+ * Notes:
+ * - Guards against missing `tree`.
+ * - Centers the recursive grid via a flex wrapper.
+ */
 export default function EvolutionChain({ tree }) {
   if (!tree) return null;
 

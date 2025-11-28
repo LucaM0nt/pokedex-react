@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import PokemonActions from "../pokedex-entry/PokemonActions.jsx";
+import PokemonActions from "../common/PokemonActions.jsx";
 import TypeTag from "../common/TypeTag";
 import { TYPE_OPTIONS } from "../../constants/pokemonTypes";
 import { GEN_OPTIONS } from "../../constants/pokemonGenerations";

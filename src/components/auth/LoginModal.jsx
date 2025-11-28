@@ -24,6 +24,7 @@ export default function LoginModal({ isOpen, onClose }) {
     }
   };
 
+  // Close modal when clicking outside (on overlay, not children)
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) {
       onClose();
@@ -31,6 +32,8 @@ export default function LoginModal({ isOpen, onClose }) {
   };
 
   return (
+    
+    // Modal overlay with backdrop blur and click-outside-to-close
     <div
       className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50"
       onClick={handleOverlayClick}
