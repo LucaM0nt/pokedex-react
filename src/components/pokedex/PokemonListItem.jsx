@@ -1,7 +1,6 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { useGetPokemonQuery } from "../../store/pokeApiSlice";
-import { store } from "../../store/index.js";
 import usePokemonActions from "../../hooks/usePokemonActions";
 
 import TypeTag from "../common/TypeTag";
@@ -50,13 +49,11 @@ function PokemonListItem({ pkmnId, onHover }) {
   const handleToggleFavorite = (e) => {
     e.stopPropagation();
     toggleFavorite();
-    const lists = store.getState().user;
   };
 
   const handleToggleCapture = (e) => {
     e.stopPropagation();
     toggleCapture();
-    const lists = store.getState().user;
   };
 
   const handleNavigate = () => {
