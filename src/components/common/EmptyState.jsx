@@ -1,21 +1,15 @@
 import Card from "./Card";
-import Button from "./Button";
 
 export default function EmptyState({
   icon,
   title,
   message,
   actions,
-  fullScreen = true,
-  centered = true,
+  marginTop = true,
 }) {
-  const containerClass = fullScreen
-    ? "flex flex-col items-center justify-center min-h-screen px-4"
-    : "p-4";
-
   return (
-    <div className={containerClass}>
-      <div className={`space-y-6 max-w-2xl ${centered ? "text-center" : ""}`}>
+    <div className={`p-4 ${marginTop ? "mt-24" : ""}`}>
+      <div className="space-y-6 max-w-2xl text-center mx-auto">
         {icon && (
           <div className="space-y-2">
             <div className="text-4xl sm:text-6xl mb-4">{icon}</div>

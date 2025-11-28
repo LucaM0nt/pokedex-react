@@ -51,6 +51,7 @@ export default function Account() {
           }}
         />
         <EmptyState
+          marginTop={true}
           icon="🔒"
           title="TRAINER ACCESS REQUIRED"
           message={

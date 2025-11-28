@@ -5,6 +5,7 @@ import Button from "../components/common/Button";
 export default function ErrorPage() {
   return (
     <EmptyState
+      marginTop={true}
       icon="404"
       title="WILD MISSINGNO. APPEARED!"
       message={

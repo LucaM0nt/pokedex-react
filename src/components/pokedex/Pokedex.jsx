@@ -44,8 +44,9 @@ export default function Pokedex({
 
   if (!loading && hasActiveFilters && items.length === 0) {
     return (
-      <div className="p-4">
+      <div className="h-full flex items-start justify-center p-4 pt-12">
         <EmptyState
+          marginTop={false}
           icon="🔍"
           title="No Pokémon Found"
           message="No results match your current filters. Try adjusting your search criteria or reset the filters to see all Pokémon."
