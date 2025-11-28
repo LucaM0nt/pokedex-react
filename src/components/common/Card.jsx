@@ -1,4 +1,5 @@
 export default function Card({ children, className = "", as = "div" }) {
+  // Polymorphic component - can render as different HTML elements
   const Component = as;
 
   return (

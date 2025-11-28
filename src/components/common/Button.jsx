@@ -7,6 +7,7 @@ export default function Button({
   disabled = false,
   ...props
 }) {
+  // Variant-based styling for consistent button appearances
   const variants = {
     primary: "bg-blue-500 hover:bg-blue-600 text-white disabled:bg-blue-300",
     secondary:

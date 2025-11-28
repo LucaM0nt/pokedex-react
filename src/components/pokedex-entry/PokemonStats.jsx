@@ -8,9 +8,20 @@ const STAT_COLORS = {
   speed: "bg-blue-500",
 };
 
+/**
+ * PokemonStats
+ * Visualizes the `pokemonData.stats` array with responsive bars.
+ *
+ * Props:
+ * - stats: PokeAPI `pokemon.stats` array; each item includes `base_stat` and `stat.name`
+ *
+ * Behavior:
+ * - Horizontal bars for `md+`, vertical bars for small screens
+ * - Scales to the canonical max stat value (255)
+ */
 export default function PokemonStats({ stats }) {
   // stats is expected to be the array from PokeAPI: pokemonData.stats
-  const maxStatValue = 255; // Max value in Pokémon games for scaling
+  const maxStatValue = 255; // Canonical upper bound used for scaling
   // Render horizontal bars on md+ (original layout), vertical bars on smaller screens
   return (
     <div className="bg-gray-50 p-4 border border-gray-300 rounded-lg shadow">

@@ -5,6 +5,7 @@ export default function NavbarLink({ to, children, onClick }) {
     <NavLink
       to={to}
       className={({ isActive }) =>
+        // Active link: yellow with bg on mobile, transparent bg on desktop
         `text-lg md:text-base px-3 py-2 md:py-0 rounded-lg md:rounded-none transition-all duration-300 block md:inline-block ${
           isActive
             ? "text-yellow-400 bg-gray-800/50 md:bg-transparent"

@@ -26,13 +26,13 @@ export default function FallbackImage({
 }) {
   const fallback = type === "artwork" ? DEFAULT_ARTWORK : DEFAULT_SPRITE;
 
-  // If src is missing/null, start with fallback immediately
+  // Start with fallback immediately if src is missing
   const initialSrc = src || fallback;
 
   const handleError = (e) => {
     if (!e || !e.currentTarget) return;
 
-    // Prevent infinite loop if the fallback also errors
+    // Prevent infinite loop if fallback image also fails
     e.currentTarget.onerror = null;
     e.currentTarget.src = fallback;
 

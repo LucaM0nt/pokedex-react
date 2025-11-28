@@ -2,8 +2,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import FallbackImage from "../common/FallbackImage.jsx";
 
-// Navigation button for previous/next Pokémon in the entry page.
-// Shows arrow + sprite + ID on larger screens, just arrow on mobile.
+/**
+ * PrevNextButton
+ * Compact control to navigate to the previous/next entry.
+ *
+ * Props:
+ * - id: target Pokémon ID; non-finite values disable the button
+ * - direction: "prev" | "next" controls arrow and label order
+ * - navigate: router navigation function (from `useNavigate`)
+ *
+ * Notes:
+ * - Sprite and numeric label are hidden on mobile for compactness
+ * - Applies `aria-label` and `title` for accessible context
+ */
 export default function PrevNextButton({ id, direction, navigate }) {
   const enabled = Number.isFinite(Number(id)) && Number(id) >= 1;
   const spriteUrl = enabled

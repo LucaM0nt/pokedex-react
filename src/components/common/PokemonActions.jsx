@@ -4,6 +4,8 @@ export default function PokemonActions({
   onToggleFavorite,
   onToggleCapture,
   className = "",
+  
+  // Customizable labels allow different contexts (pokédex entry page vs. homepage filters)
   favoriteOnLabel = "Remove from favorites",
   favoriteOffLabel = "Add to favorites",
   captureOnLabel = "Remove from caught",

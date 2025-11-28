@@ -7,7 +7,7 @@ import usePokemonActions from "../../hooks/usePokemonActions";
 import TypeTag from "../common/TypeTag";
 import FallbackImage from "../common/FallbackImage.jsx";
 import Alert from "../common/Alert.jsx";
-import PokemonActions from "../pokedex-entry/PokemonActions.jsx";
+import PokemonActions from "../common/PokemonActions.jsx";
 
 function PokemonListItem({ pkmnId, onHover }) {
   const { data, error, isLoading } = useGetPokemonQuery(pkmnId);
