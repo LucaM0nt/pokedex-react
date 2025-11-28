@@ -48,12 +48,14 @@ function PokemonListItem({ pkmnId, onHover }) {
     );
   }
   const handleToggleFavorite = (e) => {
+    // Prevent parent navigation when clicking action buttons
     e.stopPropagation();
     toggleFavorite();
     const lists = store.getState().user;
   };
 
   const handleToggleCapture = (e) => {
+    // Prevent parent navigation when clicking action buttons
     e.stopPropagation();
     toggleCapture();
     const lists = store.getState().user;

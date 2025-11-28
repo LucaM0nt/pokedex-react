@@ -19,6 +19,8 @@ export default function PokedexButton({ data }) {
         active:shadow-[0_2px_0px_rgba(0,0,0,1)]
         select-none
     "
+        title="Read more"
+        aria-label={`Read more about #${data.id}`}
       >
         READ MORE
       </Link>

@@ -1,4 +1,7 @@
-// PokedexIcon.jsx — replaced SVG with project asset image
+/**
+ * PokedexIcon
+ * Replaces inline SVG with the pokeball asset and adds subtle hover/focus transform.
+ */
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import pokeball from "../../assets/Pokeball_logo.webp";
