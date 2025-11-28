@@ -18,28 +18,47 @@ import Card from "../components/common/Card.jsx";
 import usePokemonActions from "../hooks/usePokemonActions";
 import PokemonActions from "../components/common/PokemonActions.jsx";
 
+/**
+ * PokedexEntry
+ * Full detail page for a single Pokémon, accessible at /entry/:id
+ * 
+ * Displays:
+ * - Header with prev/next navigation and favorite/capture toggles
+ * - Artwork, types, physical stats, gender ratio, abilities
+ * - Pokédex flavor text
+ * - Base stats visualization
+ * - Evolution chain with types
+ * 
+ * Data sources:
+ * - pokemon endpoint: stats, types, sprites, abilities
+ * - species endpoint: flavor text, genus, evolution chain URL, gender ratio
+ * - evolution chain: fetched separately via useEvolutionChain hook
+ */
 export default function PokedexEntry() {
   const { id } = useParams();
   const navigate = useNavigate();
   const pokemonId = Number(id);
 
+  // Fetch core Pokémon data (stats, types, sprites, abilities)
   const {
     data: pokemonData,
     error: pokemonError,
     isLoading: isLoadingPokemon,
   } = useGetPokemonQuery(id);
 
+  // Fetch species data (flavor text, genus, evolution chain URL, gender ratio)
   const {
     data: speciesData,
     error: speciesError,
     isLoading: isLoadingSpecies,
   } = useGetPokemonSpeciesQuery(id);
 
+  // Fetch and build evolution tree with types (separate async operation)
   const { evolutionTree } = useEvolutionChain(
     speciesData?.evolution_chain?.url
   );
 
-  // Use custom hook for Pokemon actions
+  // Manage favorite/capture state with Redux
   const {
     isFavorite: fav,
     isCaptured: cap,
@@ -47,12 +66,14 @@ export default function PokedexEntry() {
     toggleCapture: handleToggleCapture,
   } = usePokemonActions(pokemonId);
 
+  // Loading state: wait for both pokemon and species data
   if (isLoadingPokemon || isLoadingSpecies) {
     return (
       <Alert type="info" message="Loading Pokémon details..." className="m-4" />
     );
   }
 
+  // Error state: show HTTP status or generic network error
   if (pokemonError || speciesError) {
     const message =
       pokemonError?.status || speciesError?.status
@@ -63,12 +84,14 @@ export default function PokedexEntry() {
     return <Alert type="error" message={message} className="m-4" />;
   }
 
+  // Null check: ensure both datasets are present before rendering
   if (!pokemonData || !speciesData) {
     return (
       <Alert type="info" message="No Pokémon data available." className="m-4" />
     );
   }
 
+  // Extract English flavor text for description section
   const flavorText =
     speciesData.flavor_text_entries.find(
       (entry) => entry.language.name === "en"
@@ -78,7 +101,7 @@ export default function PokedexEntry() {
     <div className="container mx-auto px-4 py-6">
       <div className="max-w-5xl mx-auto">
         <Card>
-          {/* Back link and toggles */}
+          {/* Navigation bar: back button + favorite/capture actions */}
           <div className="flex items-center justify-between gap-4 mb-4">
             <button
               onClick={() => navigate("/")}
@@ -100,7 +123,7 @@ export default function PokedexEntry() {
             />
           </div>
 
-          {/* Body */}
+          {/* Main content sections */}
           <div className="space-y-7 my-10">
             <EntryHeader
               pokemonId={pokemonId}

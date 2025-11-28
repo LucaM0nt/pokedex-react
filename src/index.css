@@ -1,6 +1,9 @@
-/* Small "jump" animation for sprites on hover.
-	 The animation runs once when the parent button (with class `group`) is hovered.
-*/
+/**
+ * Custom animations
+ * 
+ * jump-on-hover: Sprite bounce animation triggered by parent .group hover
+ * Usage: Apply to sprite images within a .group container
+ */
 
 @keyframes jump {
 	0% {
