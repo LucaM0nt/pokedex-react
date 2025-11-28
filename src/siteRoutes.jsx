@@ -2,8 +2,6 @@ import Layout from "./layouts/Layout";
 import Homepage from "./pages/Homepage";
 import Account from "./pages/Account";
 import PokedexEntry from "./pages/PokedexEntry";
-// Subpages for Account: FavouritesPage and CaughtPage
-
 import About from "./pages/About";
 import ErrorPage from "./pages/ErrorPage";
 
@@ -22,7 +20,6 @@ const siteRoutes = [
         path: "entry/:id",
         Component: PokedexEntry,
         showInNav: false, // Hides this page from the navbar, it's only accessed through the Pokédex preview
-        // showInNav: true,
         title: "Scheda Pokémon",
       },
       {
