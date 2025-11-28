@@ -10,6 +10,11 @@ import {
 } from "../store/userSlice";
 import { useNavigate } from "react-router-dom";
 
+/**
+ * Layout
+ * Root layout with Header, Footer, and global LoginModal.
+ * Homepage uses full viewport height; other pages use natural min-height.
+ */
 export default function Layout() {
   const location = useLocation();
   const isHome = location.pathname === "/";

@@ -1,3 +1,6 @@
+/**
+ * Pokémon regions ordered by generation (Kanto → Paldea).
+ */
 export const REGIONS = [
   "Kanto",
   "Johto",
