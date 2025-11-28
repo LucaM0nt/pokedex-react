@@ -6,10 +6,9 @@ import { openLoginModal } from "../../../store/userSlice";
 
 import HamburgerButton from "./HamburgerButton";
 import NavbarLink from "./NavbarLink";
-import NavbarSubmenu from "./NavbarSubmenu";
 import MobileMenu from "./MobileMenu";
 
-export default function Navbar({ className, headerHeight }) {
+export default function Navbar({ className }) {
   const [isOpen, setIsOpen] = useState(false);
   const { isLogged, logout } = useAuth();
   const dispatch = useDispatch();
@@ -24,7 +23,7 @@ export default function Navbar({ className, headerHeight }) {
       <HamburgerButton isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
 
       {/* Mobile menu */}
-      <MobileMenu isOpen={isOpen} headerHeight={headerHeight}>
+      <MobileMenu isOpen={isOpen}>
         <div className="flex flex-col md:flex-row gap-3">
           {siteRoutes[0].children.map((el) => {
             // Filter out conditional/hidden routes (login/user handled separately below)
@@ -39,12 +38,7 @@ export default function Navbar({ className, headerHeight }) {
                   {el.title}
                 </NavbarLink>
 
-                {el.children?.length > 0 && (
-                  <NavbarSubmenu 
-                    children={el.children} 
-                    onLinkClick={() => setIsOpen(false)}
-                  />
-                )}
+                {/* Submenu disabled for now; enable when nested routes are added */}
               </div>
             );
           })}

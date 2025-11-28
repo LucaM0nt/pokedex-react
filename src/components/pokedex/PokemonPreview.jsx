@@ -1,5 +1,4 @@
 import TypeTag from "../common/TypeTag";
-import PokedexButton from "./PokedexButton";
 import FallbackImage from "../common/FallbackImage.jsx";
 import Alert from "../common/Alert.jsx";
 import Card from "../common/Card.jsx";
