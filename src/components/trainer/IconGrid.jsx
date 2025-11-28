@@ -24,6 +24,8 @@ export default function IconGrid({ ids, emptyLabel, onRemove }) {
               #{id}
             </p>
           </Link>
+          
+          {/* Remove button - hidden until hover, positioned at top-right */}
           {onRemove && (
             <button
               onClick={(e) => {

@@ -16,6 +16,8 @@ export default function TrainerCard({ username }) {
   const [formData, setFormData] = useState(profile);
 
   const initials = (username || "U").slice(0, 1).toUpperCase();
+
+  // Avatar color matches the user's favorite Pokémon type
   const avatarColor =
     TYPE_COLORS[profile.favoriteType] || "bg-blue-600 text-white";
 
@@ -72,6 +74,8 @@ export default function TrainerCard({ username }) {
             )}
           </p>
         </div>
+        
+        {/* Edit button and Trainer ID display */}
         <div className="text-right">
           {!isEditing && (
             <button
@@ -89,6 +93,7 @@ export default function TrainerCard({ username }) {
         </div>
       </div>
 
+      {/* Edit mode: editable fields with Save/Cancel - View mode: static display */}
       {isEditing ? (
         <div className="mt-4 space-y-3">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">

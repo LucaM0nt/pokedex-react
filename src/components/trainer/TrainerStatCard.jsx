@@ -7,11 +7,15 @@ export default function TrainerStatCard({
   onChange,
   inputProps = {},
 }) {
+  
+  // Generate unique ID from label for accessibility (e.g., "Lv." -> "trainer-lv")
   const fieldId = `trainer-${label.toLowerCase().replace(/[^a-z0-9]/g, "-")}`;
 
   return (
     <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
       <p className="text-gray-500 mb-1">{label}</p>
+
+      {/* Render select dropdown, text/number input, or static text based on editing state */}
       {isEditing ? (
         inputType === "select" ? (
           <select
