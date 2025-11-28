@@ -146,10 +146,8 @@ export default function About() {
               PokeAPI
             </a>
             , a public API that provides detailed information about Pokémon,
-            abilities, moves, and more.
-          </p>
-          <p className="text-gray-700 mb-4">
-            You can find the official documentation here:
+            abilities, moves, and more. You can find the official documentation
+            here:
             <span>
               <a
                 href="https://pokeapi.co"
@@ -160,6 +158,20 @@ export default function About() {
                 PokeAPI
               </a>
             </span>
+          </p>
+          <p className="text-gray-700 mb-4">
+            In addition to PokeAPI data, the Pokémon "cry" audio files used in
+            this app are sourced from the community-maintained
+            <a
+              href="https://github.com/PokeAPI/cries"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:text-blue-600 hover:underline ml-1"
+            >
+              PokeAPI/cries
+            </a>
+            . These audio assets are used for a small, optional playback feature
+            that plays each Pokémon's cry on the detail page.
           </p>
         </Card>
 

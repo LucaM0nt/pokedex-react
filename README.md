@@ -2,7 +2,7 @@
 
 A modern, educational Pokédex web app built with React 18, Vite, Redux Toolkit, and RTK Query, consuming the public [PokéAPI](https://pokeapi.co/). The app features fast search with suggestions, type and generation filters, infinite scrolling, a global login modal, and a user dashboard for favorites and captured Pokémon.
 
----
+<br>
 
 ## Table of Contents
 
@@ -16,13 +16,13 @@ A modern, educational Pokédex web app built with React 18, Vite, Redux Toolkit,
 - [Known Issues & Limitations](#known-issues--limitations)
 - [Authors](#authors)
 
----
+<br>
 
 ## Project Overview
 
 **Pokédex React** is a feature-rich Pokédex web application designed for educational purposes. It allows users to browse, search, and filter Pokémon, view detailed stats and evolution chains, and manage personal lists of favorites and captured Pokémon. The app demonstrates best practices in modern React development, state management, and API integration.
 
----
+<br>
 
 ## Tech Stack & Dependencies
 
@@ -37,7 +37,7 @@ A modern, educational Pokédex web app built with React 18, Vite, Redux Toolkit,
 
 > See `package.json` for exact versions.
 
----
+<br>
 
 ## Installation & Getting Started
 
@@ -79,7 +79,7 @@ npm run preview
 
 Visit [http://localhost:5173](http://localhost:5173) (or the port shown in your terminal).
 
----
+<br>
 
 ## API Reference
 
@@ -94,38 +94,97 @@ This app uses the public [PokéAPI](https://pokeapi.co/), a RESTful API providin
   - `/pokemon-species` (species, evolution chains)
   - Others as needed for stats, abilities, etc.
 
+In addition to the JSON data from PokéAPI, the project uses a community
+repository of Pokémon cry audio files for the small playback feature on the
+detail page:
+
+- **Cries audio:** https://github.com/PokeAPI/cries (used to play per-Pokémon
+  audio; assets are attributed to the repository owners)
+
 All API requests are handled via RTK Query, with aggressive caching for static data.
 
----
+<br>
 
 ## Project Structure
 
 ```
 src/
-	components/
-		Navbar/...
-		Pokedex.jsx, PokemonList.jsx, PokemonListItem.jsx, PokemonPreview.jsx
-		Searchbar.jsx, SearchFilters.jsx
-		pokedex-entry/ (info, description, stats, evolution chain)
-		LoginModal.jsx
-	hooks/
-		useAuth.js                # isLogged, username, logout
-		usePokemonActions.js      # favorite/capture toggles + flags
-		useClickOutside.js        # close dropdowns on outside click
-		usePokedexQueryParams.js  # one source of truth for URL params
-	layouts/
-		Layout.jsx                # global header/footer + global login modal mount
-	pages/
-		Homepage.jsx, Account.jsx (User), PokedexEntry.jsx
-	store/
-		userSlice.js, pokeApiSlice.js, index.js
-	utils/
-		pokemonEntryUtils.jsx, pokemonListUtils.jsx
-	constants/
-		pokemonTypes.js, pokemonRegions.js, pokemonGenerations.js
+├─ assets/
+│  └─ ...
+├─ components/
+│  ├─ auth/
+│  │  └─ LoginModal.jsx
+│  ├─ common/
+│  │  ├─ Alert.jsx
+│  │  ├─ Button.jsx
+│  │  ├─ Card.jsx
+│  │  ├─ EmptyState.jsx
+│  │  ├─ FallbackImage.jsx
+│  │  ├─ PokemonActions.jsx
+│  │  └─ TypeTag.jsx
+│  ├─ layout/
+│  │  ├─ Footer.jsx
+│  │  ├─ Header.jsx
+│  │  └─ Navbar/
+│  │     ├─ HamburgerButton.jsx
+│  │     ├─ MobileMenu.jsx
+│  │     ├─ Navbar.jsx
+│  │     ├─ NavbarLink.jsx
+│  │     └─ NavbarSubmenu.jsx
+│  ├─ pokedex/
+│  │  ├─ Pokedex.jsx
+│  │  ├─ PokedexIcon.jsx
+│  │  ├─ PokedexProgress.jsx
+│  │  ├─ PokemonList.jsx
+│  │  ├─ PokemonListItem.jsx
+│  │  ├─ PokemonPreview.jsx
+│  │  ├─ Searchbar.jsx
+│  │  └─ SearchFilters.jsx
+│  ├─ pokedex-entry/
+│  │  ├─ EntryHeader.jsx
+│  │  ├─ EvolutionChain.jsx
+│  │  ├─ EvolutionNode.jsx
+│  │  ├─ PokemonCryButton.jsx
+│  │  ├─ PokemonDescription.jsx
+│  │  ├─ PokemonInfo.jsx
+│  │  ├─ PokemonStats.jsx
+│  │  └─ PrevNextButton.jsx
+│  └─ trainer/
+│     ├─ IconGrid.jsx
+│     ├─ TrainerCard.jsx
+│     └─ TrainerStatCard.jsx
+├─ constants/
+│  ├─ pokemonGenerations.js
+│  ├─ pokemonRegions.js
+│  └─ pokemonTypes.js
+├─ hooks/
+│  ├─ useAuth.js                 # isLogged, username, logout
+│  ├─ useClickOutside.js         # close dropdowns on outside click
+│  ├─ useCurrentPokemonId.js     # current Pokémon ID from route
+│  ├─ useEvolutionChain.js       # fetch and build evolution tree
+│  ├─ useLastPokemonId.js        # last Pokémon ID in dex
+│  ├─ usePokedexQueryParams.js   # URL params state management
+│  ├─ usePokemonActions.js       # favorite/capture toggles + flags
+│  └─ usePokemonList.js          # filtered/sorted Pokémon list
+├─ layouts/
+│  └─ Layout.jsx                 # global header/footer + modal mount
+├─ pages/
+│  ├─ About.jsx
+│  ├─ Account.jsx                # user dashboard
+│  ├─ ErrorPage.jsx
+│  ├─ Homepage.jsx
+│  └─ PokedexEntry.jsx
+├─ store/
+│  ├─ index.js
+│  ├─ pokeApiSlice.js
+│  └─ userSlice.js
+└─ utils/
+   ├─ pokemonEntryUtils.jsx
+   └─ pokemonListUtils.jsx
+
 ```
 
----
+<br>
 
 ## Design & Architectural Choices
 
@@ -149,7 +208,7 @@ src/
 
 - **Utility-first CSS** (Tailwind-style classes) is used for rapid, consistent styling without the overhead of a full CSS framework.
 
----
+<br>
 
 ## External Libraries: Rationale & Integration
 
@@ -171,7 +230,7 @@ src/
 - **Necessity:** Ensures consistent iconography without custom SVGs.
 - **Integration:** Used in components like About, navigation, and action buttons.
 
----
+<br>
 
 ## Known Issues & Limitations
 
@@ -179,9 +238,8 @@ src/
 - **No User Authentication Backend:** Login is simulated client-side; no real user accounts or persistence beyond localStorage.
 - **No Offline Support:** The app does not cache APIs' data on local storage for offline use.
 - **No Dedicated Error Pages:** Some API/network errors may show generic messages.
-- **No Accessibility Audit:** While semantic HTML and ARIA roles are used, a full accessibility audit has not been performed.
 
----
+<br>
 
 ## Authors
 
@@ -189,8 +247,7 @@ src/
 - **Luca Montanaro** — [https://github.com/LucaM0nt](https://github.com/LucaM0nt)
 - **Gloria Paita** — [https://github.com/Gloria-Pi](https://github.com/Gloria-Pi)
 
----
+<br>
 
----
 
 _All Pokémon and their information are the property of The Pokémon Company._
