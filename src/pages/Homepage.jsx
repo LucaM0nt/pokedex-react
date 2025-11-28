@@ -62,10 +62,12 @@ export default function Homepage() {
           <div className="hidden lg:block">
             <PokedexProgress />
           </div>
-          <PokemonPreview
-            key={hoveredPokemonId || lastHoveredId}
-            id={hoveredPokemonId || lastHoveredId}
-          />
+          <div className="mt-10">
+            <PokemonPreview
+              key={hoveredPokemonId || lastHoveredId}
+              id={hoveredPokemonId || lastHoveredId}
+            />
+          </div>
         </div>
       </aside>
     </div>
