@@ -3,7 +3,10 @@ import { configureStore } from "@reduxjs/toolkit";
 import { pokeApi } from "./pokeApiSlice.js";
 import userReducer from "./userSlice";
 
-// Funzione helper per leggere localStorage
+/**
+ * load
+ * Helper to safely read and parse from localStorage.
+ */
 const load = (key, fallback) => {
   try {
     const raw = localStorage.getItem(key);
@@ -14,7 +17,7 @@ const load = (key, fallback) => {
   }
 };
 
-// Preloaded state
+// Preloaded state from localStorage
 const preloadedState = {
   user: {
     isLogged: false,
@@ -44,7 +47,10 @@ export const store = configureStore({
   preloadedState,
 });
 
-// Persist: salva solo le mappe byId su localStorage
+/**
+ * Persist favorites and captures to localStorage on every state change.
+ * Only saves the `byId` maps to avoid storing large lists.
+ */
 store.subscribe(() => {
   try {
     const state = store.getState();

@@ -1,6 +1,13 @@
 import { useMemo, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 
+/**
+ * usePokedexQueryParams
+ * Manages URL query params for Pokedex filters (search, type, gen, favorites, captured).
+ * Provides getters, setters, toggles, and a generic `apply` for batch updates.
+ * @returns {Object} - { search, type, gen, favorites, captured, setSearch, setType, setGen, toggleFavorites, toggleCaptured, resetAll, apply }
+ */
+
 // Normalize reading boolean params
 const readBool = (sp, key) => sp.get(key) === "true";
 

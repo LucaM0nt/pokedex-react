@@ -1,5 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+/**
+ * pokeApi
+ * RTK Query API for PokeAPI endpoints.
+ * Uses aggressive caching (keepUnusedDataFor: Infinity) for static data.
+ */
 export const pokeApi = createApi({
   reducerPath: "pokeApi",
   baseQuery: fetchBaseQuery({ baseUrl: "https://pokeapi.co/api/v2/" }),
@@ -68,10 +73,12 @@ export const pokeApi = createApi({
       providesTags: ["pokemonGeneration"],
     }),
 
-    // Get the very last Pokémon
-    // Implementation: first fetch the species metadata to get the total
-    // count, then request the single species at offset (count-1). This
-    // avoids downloading the entire species list.
+    /**
+     * getLastPokemon
+     * Two-step query to fetch the last valid Pokémon without downloading the full list:
+     * 1. Fetch species metadata to get total count
+     * 2. Fetch last species entry via offset, extract ID, and fetch pokemon data
+     */
     getLastPokemon: builder.query({
       async queryFn(_arg, _queryApi, _extraOptions, fetchWithBQ) {
         // 1) get metadata (contains `count`)
