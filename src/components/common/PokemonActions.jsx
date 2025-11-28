@@ -1,3 +1,9 @@
+/**
+ * PokemonActions
+ * Small, reusable action group with Favorite and Captured toggles.
+ * Designed to be context-agnostic: labels can be customized per view
+ * (e.g., list item vs. search filters) while icons reflect current state.
+ */
 export default function PokemonActions({
   fav,
   cap,
@@ -19,6 +25,7 @@ export default function PokemonActions({
         aria-label={fav ? favoriteOnLabel : favoriteOffLabel}
         title={fav ? favoriteOnLabel : favoriteOffLabel}
       >
+        {/* Star icon: filled and yellow when favored; gray otherwise */}
         <svg
           className={`w-7 h-7 ${
             fav ? "text-yellow-500 fill-current" : "text-gray-400 fill-current"
@@ -36,6 +43,7 @@ export default function PokemonActions({
         aria-label={cap ? captureOnLabel : captureOffLabel}
         title={cap ? captureOnLabel : captureOffLabel}
       >
+        {/* Poké Ball icon: red when captured; gray when not */}
         <svg
           className={`w-7 h-7 ${cap ? "text-red-500" : "text-gray-400"}`}
           viewBox="0 0 24 24"

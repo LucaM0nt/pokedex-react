@@ -1,3 +1,18 @@
+/**
+ * IconGrid
+ * Responsive grid of small Pokémon sprite tiles linking to their entry pages.
+ * Shows an empty label when no IDs are provided. Optionally renders a remove
+ * button on hover to allow deleting items from a list (favorites/captured).
+ *
+ * Props:
+ * - ids: number[] — Pokémon IDs to render
+ * - emptyLabel: string — message when no ids are present
+ * - onRemove?: (id: number) => void — render and handle remove button if set
+ *
+ * Implementation notes:
+ * - Images use `loading="lazy"` and `FallbackImage` to guard against failures.
+ * - Remove button uses `preventDefault` to avoid following the `<Link>`.
+ */
 import { Link } from "react-router-dom";
 import FallbackImage from "../common/FallbackImage.jsx";
 

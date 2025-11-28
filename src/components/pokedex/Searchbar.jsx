@@ -1,3 +1,14 @@
+/**
+ * Searchbar
+ * Auto-complete search input with keyboard navigation (arrows, Enter, Escape).
+ * Preserves all query params (type, gen, favorites, captured) when selecting.
+ *
+ * Implementation notes:
+ * - Suggestions are memoized from the full list in Redux; we avoid fallback
+ *   inside the selector to prevent warnings and do it outside.
+ * - `handleSelect` applies query params via the custom hook to keep filters.
+ * - Keyboard UX: ArrowUp/Down to move, Enter to pick, Escape to close.
+ */
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { useSelector } from "react-redux";
 import usePokedexQueryParams from "../../hooks/usePokedexQueryParams";
@@ -8,12 +19,6 @@ function getIdFromUrl(url) {
   const parts = url.replace(/\/$/, "").split("/");
   return Number(parts[parts.length - 1]);
 }
-
-/**
- * Searchbar
- * Auto-complete search input with keyboard navigation (arrows, Enter, Escape).
- * Preserves all query params (type, gen, favorites, captured) when selecting.
- */
 export default function Searchbar({ onSelectPokemon, onSearch }) {
   const { type, gen, favorites, captured, setSearch, apply } =
     usePokedexQueryParams();

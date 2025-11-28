@@ -1,3 +1,13 @@
+/**
+ * TrainerStatCard
+ * Compact stat display that switches between static text and an editable
+ * control depending on `isEditing`. Supports text/number inputs and a
+ * select dropdown via `inputType`.
+ *
+ * Implementation notes:
+ * - Accessibility: derive a stable `id` from label to associate controls.
+ * - Number inputs coerce values with `Number(...)` before calling onChange.
+ */
 export default function TrainerStatCard({
   label,
   value,

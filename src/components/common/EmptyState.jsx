@@ -1,5 +1,16 @@
 import Card from "./Card";
 
+/**
+ * EmptyState
+ * Generic empty/placeholder view with optional icon, title, message, and actions.
+ *
+ * Props:
+ * - icon: emoji or React node displayed prominently at the top
+ * - title: short heading below the icon
+ * - message: string or React nodes for flexible content (paragraphs, links)
+ * - actions: React nodes (buttons/links) rendered in a centered flex row
+ * - marginTop: adds top margin for vertical spacing within full-page layouts
+ */
 export default function EmptyState({
   icon,
   title,
@@ -24,7 +35,7 @@ export default function EmptyState({
         {message && (
           <Card className="text-gray-900">
             <div className="space-y-4">
-              {/* Message can be string or React nodes for flexible content */}
+              {/* Message supports either a plain string or rich React nodes */}
               {typeof message === "string" ? (
                 <p className="text-lg font-medium">{message}</p>
               ) : (
@@ -34,6 +45,7 @@ export default function EmptyState({
           </Card>
         )}
 
+        {/* Actions area: rendered only when provided */}
         {actions && (
           <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
             {actions}
