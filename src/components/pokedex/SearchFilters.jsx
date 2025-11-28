@@ -1,20 +1,15 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import TypeTag from "../common/TypeTag";
 import { TYPE_OPTIONS } from "../../constants/pokemonTypes";
 import { GEN_OPTIONS } from "../../constants/pokemonGenerations";
 import useClickOutside from "../../hooks/useClickOutside";
 import usePokedexQueryParams from "../../hooks/usePokedexQueryParams";
 
-export default function SearchFilters({
-  onSelectType,
-  onSelectGen,
-  onToggleFavorites,
-  onToggleCaptured,
-  onResetFilters,
-}) {
+export default function SearchFilters({ onResetFilters }) {
   const dropdownRef = useRef(null);
   const [openTypeDropdown, setOpenTypeDropdown] = useState(false);
   const [openGenDropdown, setOpenGenDropdown] = useState(false);
+
   const {
     type: selectedType,
     gen: selectedGen,
@@ -26,20 +21,6 @@ export default function SearchFilters({
     toggleCaptured,
     resetAll,
   } = usePokedexQueryParams();
-
-  // Propagate current params to parent consumers
-  useEffect(() => {
-    if (onSelectType) onSelectType(selectedType);
-  }, [selectedType, onSelectType]);
-  useEffect(() => {
-    if (onSelectGen) onSelectGen(selectedGen);
-  }, [selectedGen, onSelectGen]);
-  useEffect(() => {
-    if (onToggleFavorites) onToggleFavorites(showFavorites);
-  }, [showFavorites, onToggleFavorites]);
-  useEffect(() => {
-    if (onToggleCaptured) onToggleCaptured(showCaptured);
-  }, [showCaptured, onToggleCaptured]);
 
   useClickOutside(dropdownRef, () => {
     setOpenTypeDropdown(false);
@@ -56,12 +37,9 @@ export default function SearchFilters({
     setOpenGenDropdown(false);
   };
 
-  const handleToggleFavorites = () => {
-    toggleFavorites();
-  };
-
-  const handleToggleCaptured = () => {
-    toggleCaptured();
+  const handleReset = () => {
+    resetAll();
+    if (onResetFilters) onResetFilters();
   };
 
   return (
@@ -172,7 +150,7 @@ export default function SearchFilters({
         {/* Icona Preferiti */}
         <button
           className="cursor-pointer focus:outline-none duration-250 hover:opacity-70"
-          onClick={handleToggleFavorites}
+          onClick={toggleFavorites}
           title={showFavorites ? "Show all" : "Show favorites"}
         >
           <svg
@@ -191,7 +169,7 @@ export default function SearchFilters({
         {/* Icona Catturati */}
         <button
           className="cursor-pointer focus:outline-none transition duration-250 hover:opacity-70"
-          onClick={handleToggleCaptured}
+          onClick={toggleCaptured}
           title={showCaptured ? "Show all" : "Show only caught Pokémon"}
         >
           <svg
@@ -212,10 +190,7 @@ export default function SearchFilters({
         {/* Reset */}
         <button
           className="cursor-pointer px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm text-gray-500 border border-gray-300 duration-300 hover:bg-red-200 hover:border-red-300 hover:text-red-950"
-          onClick={() => {
-            resetAll();
-            if (onResetFilters) onResetFilters();
-          }}
+          onClick={handleReset}
           title="Reset"
         >
           Reset

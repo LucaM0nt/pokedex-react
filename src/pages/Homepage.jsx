@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 
 import { useGetAllPokemonFullListQuery } from "../store/pokeApiSlice";
 import { setFullList } from "../store/userSlice";
+import usePokedexQueryParams from "../hooks/usePokedexQueryParams";
 
 import Pokedex from "../components/pokedex/Pokedex";
 import PokemonPreview from "../components/pokedex/PokemonPreview";
@@ -11,17 +12,21 @@ import SearchFilters from "../components/pokedex/SearchFilters";
 import PokedexProgress from "../components/pokedex/PokedexProgress";
 
 export default function Homepage() {
-  const [selectedType, setSelectedType] = useState(null);
-  const [selectedGen, setSelectedGen] = useState(null);
-  const [submittedSearchTerm, setSubmittedSearchTerm] = useState("");
   const [hoveredPokemonId, setHoveredPokemonId] = useState(null);
   const [lastHoveredId, setLastHoveredId] = useState(1);
-  const [resetSignal, setResetSignal] = useState(0);
-  const [showFavorites, setShowFavorites] = useState(false);
-  const [showCaptured, setShowCaptured] = useState(false);
 
   const dispatch = useDispatch();
   const { data } = useGetAllPokemonFullListQuery();
+
+  const {
+    search: searchTerm,
+    type: selectedType,
+    gen: selectedGen,
+    favorites: showFavorites,
+    captured: showCaptured,
+    setSearch,
+    resetAll,
+  } = usePokedexQueryParams();
 
   useEffect(() => {
     if (data) dispatch(setFullList(data.results));
@@ -31,28 +36,15 @@ export default function Homepage() {
     <div className="flex flex-col md:flex-row gap-4 h-full min-h-0 py-5 px-1">
       <div className="md:basis-[60%] min-h-0 min-w-0 h-full flex flex-col">
         <div className="w-full">
-          <Searchbar onSearch={(t) => setSubmittedSearchTerm(t)} />
+          <Searchbar onSearch={setSearch} />
           <div className="mt-4">
-            <SearchFilters
-              onSelectType={(type) => setSelectedType(type)}
-              onSelectGen={(gen) => setSelectedGen(gen)}
-              onToggleFavorites={(show) => setShowFavorites(show)}
-              onToggleCaptured={(show) => setShowCaptured(show)}
-              onResetFilters={() => {
-                setSelectedType(null);
-                setSelectedGen(null);
-                setSubmittedSearchTerm("");
-                setShowFavorites(false);
-                setShowCaptured(false);
-                setResetSignal((s) => s + 1);
-              }}
-            />
+            <SearchFilters onResetFilters={resetAll} />
           </div>
         </div>
 
         <div className="flex-1 min-h-0 mt-2">
           <Pokedex
-            submittedSearchTerm={submittedSearchTerm}
+            submittedSearchTerm={searchTerm}
             selectedType={selectedType}
             selectedGen={selectedGen}
             showFavorites={showFavorites}
@@ -61,7 +53,6 @@ export default function Homepage() {
               setHoveredPokemonId(id);
               if (id) setLastHoveredId(id);
             }}
-            scrollToTopSignal={resetSignal}
           />
         </div>
       </div>
