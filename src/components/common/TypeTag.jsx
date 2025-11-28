@@ -1,3 +1,13 @@
+/**
+ * TypeTag
+ * Small badge for a Pokémon type. Color is derived from TYPE_COLORS
+ * by lower-casing the provided type; falls back to a neutral gray when
+ * the type is missing or unmapped.
+ *
+ * Size variants:
+ * - sm, md, lg, xl — tuned for common placements (list items, headers).
+ * Pass a `className` to extend layout without altering the base style.
+ */
 import { TYPE_COLORS } from "../../constants/pokemonTypes";
 
 export default function TypeTag({ type, className = "", size = "md" }) {

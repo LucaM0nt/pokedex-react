@@ -10,6 +10,13 @@ import usePokedexQueryParams from "../../hooks/usePokedexQueryParams";
  * SearchFilters
  * Type/generation dropdowns + favorites/captured toggles + reset.
  * Uses `useClickOutside` to close dropdowns when clicking elsewhere.
+ *
+ * Notes:
+ * - Dropdowns are mutually exclusive: opening one closes the other.
+ * - Favorites/Captured toggles reuse `PokemonActions` with context-specific
+ *   labels — when active, label is "Show all" to indicate the filter effect.
+ * - `resetAll` clears every query param; optional `onResetFilters` lets
+ *   parents react (e.g., scroll to top, re-focus search input).
  */
 export default function SearchFilters({ onResetFilters }) {
   const dropdownRef = useRef(null);

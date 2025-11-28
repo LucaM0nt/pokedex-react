@@ -1,3 +1,17 @@
+/**
+ * TrainerCard
+ * Profile card for the current trainer with edit/view modes.
+ * Integrates with Redux: reads `selectTrainerProfile` and dispatches
+ * `updateTrainerProfile` on save. Avatar color follows favorite type.
+ *
+ * Props:
+ * - username: string — display name; used to generate avatar initial.
+ *
+ * Implementation notes:
+ * - Editing toggles a set of inline controls; saving persists via Redux.
+ * - Region is editable via a select; other stats handled by `TrainerStatCard`.
+ * - `formData` mirrors the profile so Cancel can restore without re-fetch.
+ */
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {

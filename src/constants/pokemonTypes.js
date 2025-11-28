@@ -1,5 +1,5 @@
 /**
- * All Pokémon types for filter dropdowns (alphabetical-ish).
+ * All Pokémon types for filter dropdowns.
  */
 export const TYPE_OPTIONS = [
   "water",

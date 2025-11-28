@@ -1,3 +1,14 @@
+/**
+ * PokemonListItem
+ * List row rendering a single Pokémon preview with types and action buttons.
+ * Handles loading/error/null states from RTK Query; on success, the entire
+ * row is a keyboard-accessible button that navigates to the entry page.
+ *
+ * Details:
+ * - Action buttons call stopPropagation to avoid triggering row navigation.
+ * - `onMouseEnter` is used to hint prefetching/preview outside this component.
+ * - `FallbackImage` defends against missing sprite URLs.
+ */
 import { useNavigate } from "react-router-dom";
 
 import { useGetPokemonQuery } from "../../store/pokeApiSlice";
