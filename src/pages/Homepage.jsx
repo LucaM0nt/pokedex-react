@@ -11,6 +11,14 @@ import Searchbar from "../components/pokedex/Searchbar";
 import SearchFilters from "../components/pokedex/SearchFilters";
 import PokedexProgress from "../components/pokedex/PokedexProgress";
 
+/**
+ * Homepage
+ * Main Pokédex view with split layout:
+ * - Left (60%): Searchbar, filters, and scrollable list
+ * - Right (40%): Sticky preview that updates on hover
+ * 
+ * Uses URL query params for filters/search; dispatches full list to Redux on mount.
+ */
 export default function Homepage() {
   const [hoveredPokemonId, setHoveredPokemonId] = useState(null);
   const [lastHoveredId, setLastHoveredId] = useState(1);
