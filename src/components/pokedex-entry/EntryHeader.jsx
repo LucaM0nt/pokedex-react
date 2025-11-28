@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import PokemonCryButton from "../common/PokemonCryButton";
 import { useGetLastPokemonQuery } from "../../store/pokeApiSlice";
 import PrevNextButton from "./PrevNextButton";
 import useCurrentPokemonId from "../../hooks/useCurrentPokemonId";
@@ -47,9 +48,12 @@ export default function EntryHeader({ pokemonId, pokemonName, speciesData }) {
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800">
           #{currentId ?? "--"} {(pokemonName || "").toUpperCase()}
         </h2>
-        <p className="text-gray-500 text-base md:text-lg lg:text-xl font-medium text-center italic mt-2 mb-1">
-          {speciesData.genera.find((g) => g.language.name === "en")?.genus ||
-            "Unknown"}
+        <p className="text-gray-500 text-base md:text-lg lg:text-xl font-medium text-center italic mt-2 mb-1 flex items-center justify-center gap-2">
+          <span>
+            {speciesData.genera.find((g) => g.language.name === "en")?.genus ||
+              "Unknown"}
+          </span>
+          {currentId && <PokemonCryButton pokemonId={currentId} />}
         </p>
       </div>
 
