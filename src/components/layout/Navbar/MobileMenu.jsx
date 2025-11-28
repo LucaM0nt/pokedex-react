@@ -1,8 +1,7 @@
 import Footer from "../Footer";
-import siteRoutes from "../../../siteRoutes";
 import PokedexProgress from "../../pokedex/PokedexProgress";
 
-export default function MobileMenu({ isOpen, headerHeight, children }) {
+export default function MobileMenu({ isOpen, children }) {
   return (
     <>
       {/* Backdrop overlay - fades in/out, blocks interaction when menu closed */}
