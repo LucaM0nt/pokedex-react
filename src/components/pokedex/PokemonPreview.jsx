@@ -8,6 +8,11 @@ import {
 } from "../../store/pokeApiSlice";
 import { Link } from "react-router-dom";
 
+/**
+ * PokemonPreview
+ * Displays a card with artwork, types, height/weight, and abilities.
+ * Wraps the entire card in a link to the full entry page.
+ */
 export default function PokemonPreview({ id = 1 }) {
   const { data, error, isLoading } = useGetPokemonQuery(id);
   const { data: speciesData } = useGetPokemonSpeciesQuery(id);

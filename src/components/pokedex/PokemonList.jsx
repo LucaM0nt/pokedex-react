@@ -12,7 +12,8 @@ export default function PokemonList({
   const containerRef = useRef(null);
 
   /**
-   * Lazy loading con scroll
+   * Lazy loading on scroll
+   * Attaches a scroll handler to detect near-bottom and trigger `onLoadMore`.
    */
   useEffect(() => {
     const container = containerRef.current;
@@ -31,7 +32,7 @@ export default function PokemonList({
     return () => container.removeEventListener("scroll", handleScroll);
   }, [hasMore, onLoadMore]);
 
-  // Scroll to top quando scrollSignal cambia
+  // Scroll to top when `scrollSignal` changes (e.g., filters applied)
   useEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollTo({ top: 0, behavior: "smooth" });
@@ -58,7 +59,7 @@ export default function PokemonList({
           )}
         </ul>
       </div>
-      {/* Fade bianco fisso sopra il fondo della lista */}
+      {/* Fixed white gradient fade at the bottom to soften cutoff */}
       <div className="pointer-events-none absolute bottom-0 left-0 w-full h-20 bg-linear-to-t from-white to-transparent" />
     </div>
   );

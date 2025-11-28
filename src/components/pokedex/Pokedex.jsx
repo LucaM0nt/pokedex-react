@@ -3,6 +3,15 @@ import PokemonList from "./PokemonList";
 import Alert from "../common/Alert";
 import EmptyState from "../common/EmptyState";
 
+/**
+ * Pokedex
+ * Orchestrates filters/search → list fetching and renders results with lazy loading.
+ *
+ * Props:
+ * - submittedSearchTerm, selectedType, selectedGen: filter inputs from Searchbar/Filters
+ * - showFavorites, showCaptured: list toggles
+ * - onHoverPokemon: hover callback to preview sprite/artwork outside the list
+ */
 export default function Pokedex({
   submittedSearchTerm = "",
   selectedType = null,

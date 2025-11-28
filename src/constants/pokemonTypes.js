@@ -1,3 +1,6 @@
+/**
+ * All Pokémon types for filter dropdowns (alphabetical-ish).
+ */
 export const TYPE_OPTIONS = [
   "water",
   "normal",
@@ -19,6 +22,10 @@ export const TYPE_OPTIONS = [
   "fairy",
 ];
 
+/**
+ * Tailwind bg + text color classes per type.
+ * Used by TypeTag component for consistent theming.
+ */
 export const TYPE_COLORS = {
   normal: "bg-gray-400 text-white",
   fighting: "bg-red-700 text-white",

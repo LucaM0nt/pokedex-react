@@ -1,3 +1,7 @@
+/**
+ * Generation options for filter dropdowns.
+ * Maps generation ID (1-9) to display label.
+ */
 export const GEN_OPTIONS = [
   { id: 1, label: "Gen 1" },
   { id: 2, label: "Gen 2" },

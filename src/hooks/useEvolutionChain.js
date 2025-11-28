@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import { fetchEvolutionTree } from "../utils/pokemonEntryUtils.jsx";
 
+/**
+ * useEvolutionChain
+ * Fetches and parses evolution chain with AbortController cleanup.
+ * @returns {Object} - { evolutionTree, isLoading, error }
+ */
 export default function useEvolutionChain(evolutionChainUrl) {
   const [evolutionTree, setEvolutionTree] = useState(null);
   const [isLoading, setIsLoading] = useState(false);

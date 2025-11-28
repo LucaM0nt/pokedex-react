@@ -1,3 +1,7 @@
+/**
+ * normalizeAndSort
+ * Extracts numeric ID from URL and sorts list by ascending ID.
+ */
 export const normalizeAndSort = (list) =>
   (list ?? [])
     .map((p) => ({
@@ -6,6 +10,10 @@ export const normalizeAndSort = (list) =>
     }))
     .sort((a, b) => a.id - b.id);
 
+/**
+ * filterPokemon
+ * Applies search term, excludes mega/high-IDs, then filters by favorites/captured.
+ */
 export const filterPokemon = (list, filters = {}) => {
   const {
     searchTerm = "",
@@ -41,6 +49,10 @@ export const filterPokemon = (list, filters = {}) => {
   return filtered;
 };
 
+/**
+ * deduplicateById
+ * Removes duplicate Pokémon entries by ID (keeps first occurrence).
+ */
 export const deduplicateById = (list) => {
   if (!list?.length) return [];
   const seen = new Set();
@@ -51,6 +63,10 @@ export const deduplicateById = (list) => {
   });
 };
 
+/**
+ * combineTypeAndGen
+ * Returns intersection of type-filtered and gen-filtered lists (by ID).
+ */
 export const combineTypeAndGen = (typeData, genData) => {
   if (!typeData || !genData) return [];
   const fullType = normalizeAndSort(typeData);

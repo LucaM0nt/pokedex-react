@@ -14,6 +14,19 @@ import {
   combineTypeAndGen,
 } from "../utils/pokemonListUtils";
 
+/**
+ * usePokemonList
+ * Complex hook managing Pokémon list with pagination, filters, and search.
+ * 
+ * Behavior:
+ * - Uses paginated API by default; switches to full list for favorites/captured filters
+ * - Type + gen filters use intersection logic
+ * - Search triggers full list fetching
+ * - Lazy loading appends pages; filter changes reset the list and scroll position
+ * 
+ * @returns {Object} - { items, loading, error, hasMore, scrollSignal, onLoadMore }
+ */
+
 const PAGE_SIZE = 30;
 
 export default function usePokemonList({

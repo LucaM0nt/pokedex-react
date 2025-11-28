@@ -1,6 +1,10 @@
 import React from "react";
 
 // ---------- TEXT PARSER ----------
+/**
+ * parseText
+ * Normalizes flavor text by replacing control chars and correcting "POKéMON" casing.
+ */
 export const parseText = (text) => {
   if (!text) return null;
   const parsedText = text
@@ -17,6 +21,10 @@ export const parseText = (text) => {
 };
 
 // ---------- EVOLUTION TREE BUILDER ----------
+/**
+ * buildEvolutionTree
+ * Recursively maps evolution chain node to a simpler tree structure (name, url, evolves_to).
+ */
 export const buildEvolutionTree = (node) => {
   if (!node) return null;
   return {
@@ -27,7 +35,10 @@ export const buildEvolutionTree = (node) => {
 };
 
 // ---------- FETCH EVOLUTION TREE ----------
-// Simple retry helper for fetch with Abort support
+/**
+ * fetchWithRetry
+ * Retries fetch on failure with exponential backoff; immediately propagates AbortErrors.
+ */
 async function fetchWithRetry(url, options = {}, retries = 3, delayMs = 1000) {
   try {
     const res = await fetch(url, options);
@@ -44,6 +55,11 @@ async function fetchWithRetry(url, options = {}, retries = 3, delayMs = 1000) {
   }
 }
 
+/**
+ * buildEvolutionNode
+ * Recursively builds evolution node, fetching Pokémon data to include type info.
+ * Continues on fetch errors (logs warning), propagates aborts.
+ */
 const buildEvolutionNode = async (node, signal) => {
   const speciesUrl = node.species.url;
   const id = speciesUrl.split("/").filter(Boolean).pop();
@@ -73,6 +89,11 @@ const buildEvolutionNode = async (node, signal) => {
   };
 };
 
+/**
+ * fetchEvolutionTree
+ * Main entry: fetches chain URL, builds full tree with types.
+ * Supports AbortSignal for cleanup.
+ */
 export const fetchEvolutionTree = async (url, signal) => {
   const res = await fetchWithRetry(url, { signal });
   const data = await res.json();

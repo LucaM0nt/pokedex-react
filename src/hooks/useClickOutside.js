@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 
 /**
- * Custom hook per gestire i click al di fuori di un elemento
- * @param {React.RefObject} ref - Riferimento all'elemento da monitorare
- * @param {Function} handler - Callback da eseguire al click fuori
+ * useClickOutside
+ * Triggers a handler when user clicks outside the referenced element.
+ * @param {React.RefObject} ref - Element reference to monitor
+ * @param {Function} handler - Callback executed on outside click
  */
 export default function useClickOutside(ref, handler) {
   useEffect(() => {
