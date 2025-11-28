@@ -24,8 +24,9 @@ export const parseText = (text) => {
 /**
  * buildEvolutionTree
  * Recursively maps evolution chain node to a simpler tree structure (name, url, evolves_to).
+ * (Internal helper - not exported)
  */
-export const buildEvolutionTree = (node) => {
+const buildEvolutionTree = (node) => {
   if (!node) return null;
   return {
     name: node.species.name,
@@ -67,7 +68,10 @@ const buildEvolutionNode = async (node, signal) => {
   // Fetch Pokémon data to get types
   let pokeData = { types: [] };
   try {
-    const pokeRes = await fetchWithRetry(`https://pokeapi.co/api/v2/pokemon/${id}`, { signal });
+    const pokeRes = await fetchWithRetry(
+      `https://pokeapi.co/api/v2/pokemon/${id}`,
+      { signal }
+    );
     pokeData = await pokeRes.json();
   } catch (err) {
     // If a child fetch fails (network or 404), continue with empty types
